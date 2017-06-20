@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/swipe">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/bottom_wrapper"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp">
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#43d358">
+            <ImageButton
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:id="@+id/editButton"
+                android:src="@drawable/pen"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:background="?android:selectableItemBackground" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#ff707d">
+            <ImageButton
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:id="@+id/deleteButton"
+                android:src="@drawable/trash_can"
+                android:layout_gravity="center"
+                android:background="?android:selectableItemBackground" />
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#eaeaea">
+            <TextView
+                android:layout_width="197dp"
+                android:layout_height="match_parent"
+                android:text="New Text"
+                android:id="@+id/goal_task_textView"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textColor="#969696"
+                android:gravity="center_vertical" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:id="@+id/failedButtonLayout"
+                android:background="#EEEEFF">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:id="@+id/failedButton"
+                    android:src="@drawable/x_mark"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:background="?android:selectableItemBackground"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:id="@+id/completedButtonLayout"
+                android:background="#EEEEFF">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/completedButton"
+                    android:src="@drawable/check_mark"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:background="?android:selectableItemBackground"
+                    android:scaleType="fitXY" />
+            </FrameLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+</com.daimajia.swipe.SwipeLayout>
