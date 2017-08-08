@@ -7,64 +7,151 @@
     android:padding="5dp"
     android:weightSum="1">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorWhite"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">>
-        <RelativeLayout
+        android:layout_weight="0.5"
+        android:layout_margin="10dp">
+        <com.weiwangcn.betterspinner.library.BetterSpinner
+            android:id="@+id/spinner1"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
-            <com.weiwangcn.betterspinner.library.BetterSpinner
-                android:id="@+id/spinner1"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Improvement Type" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textTitle"
-                android:hint="Title"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_below="@+id/spinner1"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textDescription"
-                android:hint="Description"
-                android:textColor="@color/colorPrimaryDark"
-                android:textAlignment="textStart"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:hint="Improvement Type" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTitle"
+            android:hint="Title"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="13dp"
+            android:layout_above="@+id/textDescription"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textDescription"
+            android:hint="Description"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="20dp"
+            android:layout_above="@+id/btn_user_accept_goal_task"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Add Goal or Task"
+            android:id="@+id/btn_user_accept_goal_task"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
-            <Button
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Add Goal or Task"
-                android:id="@+id/btn_user_accept_goal_task"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:text="Skill Type"
+                android:id="@+id/textView" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health and Exercise"
+                android:id="@+id/checkBox"
+                android:paddingTop="5dp"
+                android:checked="false" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Work"
+                android:id="@+id/checkBox3"
+                android:paddingTop="5dp"
+                android:checked="false" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="School"
+                android:id="@+id/checkBox4"
+                android:paddingTop="5dp"
+                android:checked="false" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Family and Friends"
+                android:id="@+id/checkBox5"
+                android:paddingTop="5dp"
+                android:checked="false" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Silver Amount"
+            android:id="@+id/silverLabel"
+            android:layout_marginTop="36dp"
+            android:layout_below="@+id/checkBox6"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/silver_amount_text_view"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/silverLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/silver_seek_bar"
+            android:indeterminate="false"
+            android:max="100"
+            android:layout_alignBottom="@+id/silver_amount_text_view"
+            android:layout_toEndOf="@+id/silver_amount_text_view" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Education"
+            android:id="@+id/checkBox2"
+            android:paddingTop="5dp"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:checked="false" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:id="@+id/checkBox6"
+            android:paddingTop="5dp"
+            android:checked="false"
+            android:layout_below="@+id/checkBox2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 </LinearLayout>

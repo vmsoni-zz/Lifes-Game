@@ -1,13 +1,11 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.helper;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+
+import lifesgame.tapstudios.ca.lifesgame.DialogAddGoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.MainActivity;
 
 /**
  * Created by Vidit Soni on 6/3/2017.

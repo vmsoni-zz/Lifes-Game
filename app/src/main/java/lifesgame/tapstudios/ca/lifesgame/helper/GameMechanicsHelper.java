@@ -1,10 +1,11 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.helper;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by Vidit Soni on 6/3/2017.
@@ -13,25 +14,35 @@ public class GameMechanicsHelper {
     private TextView charHealth;
     private TextView charXp;
     private TextView charLevel;
+    private TextView silverAmountTextView;
     private int maxHealth;
     private int maxXp;
     private int currentXp;
     private int currentLvl;
     private int currentHealth;
+    private Long totalSilver;
     private DatabaseHelper databaseHelper;
     private RoundCornerProgressBar healthBar;
     private RoundCornerProgressBar xpBar;
 
-    public GameMechanicsHelper(TextView charHealth, TextView charXp, TextView charLevel, DatabaseHelper databaseHelper, RoundCornerProgressBar healthBar, RoundCornerProgressBar xpBar) {
+    public GameMechanicsHelper(TextView charHealth,
+                               TextView charXp,
+                               TextView charLevel,
+                               TextView silverAmountTextView,
+                               DatabaseHelper databaseHelper,
+                               RoundCornerProgressBar healthBar,
+                               RoundCornerProgressBar xpBar) {
         this.charHealth = charHealth;
         this.charXp = charXp;
         this.charLevel = charLevel;
+        this.silverAmountTextView = silverAmountTextView;
         this.databaseHelper = databaseHelper;
         this.maxHealth = 100;
         this.currentHealth = 100;
         this.currentXp = 0;
         this.currentLvl = 1;
         this.maxXp = 1000;
+        this.totalSilver = 0L;
         this.healthBar = healthBar;
         this.xpBar = xpBar;
     }
@@ -43,6 +54,7 @@ public class GameMechanicsHelper {
             currentXp = Integer.parseInt(databaseHelper.getValue(databaseHelper.CHAR_XP));
             maxXp = Integer.parseInt(databaseHelper.getValue(databaseHelper.CHAR_MAX_XP));
             currentLvl = Integer.parseInt(databaseHelper.getValue(databaseHelper.CHAR_LVL));
+            totalSilver = Long.valueOf(databaseHelper.getValue(databaseHelper.SILVER_AMOUNT_TOTAL));
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
             healthBar.setProgress(currentHealth);
@@ -55,12 +67,19 @@ public class GameMechanicsHelper {
         charHealth.setText(Integer.toString(currentHealth) + "/" + Integer.toString(maxHealth));
         charXp.setText(Integer.toString(currentXp) + "/" + Integer.toString(maxXp));
         charLevel.setText(Integer.toString(currentLvl));
+        silverAmountTextView.setText(Long.toString(totalSilver));
     }
 
     public void updateGameTextViews() {
         charHealth.setText(Integer.toString(currentHealth) + "/" + Integer.toString(maxHealth));
         charXp.setText(Integer.toString(currentXp) + "/" + Integer.toString(maxXp));
         charLevel.setText(Integer.toString(currentLvl));
+    }
+
+    public void addSilver(Long addSilver) {
+        totalSilver += addSilver;
+        databaseHelper.updateValue(databaseHelper.SILVER_AMOUNT_TOTAL, Long.toString(totalSilver));
+        silverAmountTextView.setText(Long.toString(totalSilver));
     }
 
     public void removeHealth() {

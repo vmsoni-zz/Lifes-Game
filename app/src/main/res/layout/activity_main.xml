@@ -5,9 +5,9 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     xmlns:design="http://schemas.android.com/apk/res-auto"
-    tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity">
+    tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_weight="0.6"
@@ -99,6 +99,54 @@
             android:layout_alignTop="@+id/CharLevelLabel"
             android:layout_alignLeft="@+id/charXp"
             android:layout_alignStart="@+id/charXp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/healthBar"
+            android:layout_toStartOf="@+id/healthBar"
+            android:id="@+id/unityGame"></FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gold:"
+            android:id="@+id/gold"
+            android:layout_alignTop="@+id/goldAmount"
+            android:layout_toRightOf="@+id/unityGame"
+            android:layout_toEndOf="@+id/unityGame" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/goldAmount"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/charLevel"
+            android:layout_alignStart="@+id/charLevel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Silver:"
+            android:id="@+id/silver"
+            android:layout_above="@+id/gold"
+            android:layout_toRightOf="@+id/unityGame"
+            android:layout_toEndOf="@+id/unityGame"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/silver_amount_text_view"
+            android:layout_alignBottom="@+id/silver"
+            android:layout_alignLeft="@+id/goldAmount"
+            android:layout_alignStart="@+id/goldAmount" />
+
     </RelativeLayout>
 
     <RelativeLayout
