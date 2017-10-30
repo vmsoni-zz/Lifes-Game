@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -8,184 +8,16 @@
     xmlns:design="http://schemas.android.com/apk/res-auto"
     tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity"
     android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_weight="0.6"
+    <FrameLayout
+        android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/RelativeLayout">
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-            android:layout_width="160dp"
-            android:layout_height="10dp"
-            app:rcBackgroundColor="#3c3a3b"
-            app:rcBackgroundPadding="1dp"
-            app:rcProgressColor="#ff4444"
-            app:rcRadius="30dp"
-            android:id="@+id/healthBar"
-            android:layout_marginTop="7dp"
-            android:layout_below="@+id/charHealth"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-            android:layout_width="160dp"
-            android:layout_height="10dp"
-            app:rcBackgroundColor="#3c3a3b"
-            app:rcBackgroundPadding="1dp"
-            app:rcProgressColor="#33b5e5"
-            app:rcRadius="30dp"
-            android:id="@+id/xpBar"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charHealth"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:textSize="12dp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/charHealthLabel"
-            android:layout_toEndOf="@+id/charHealthLabel" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="XP:"
-            android:id="@+id/charXpLabel"
-            android:textSize="15dp"
-            android:layout_below="@+id/healthBar"
-            android:layout_alignLeft="@+id/xpBar"
-            android:layout_alignStart="@+id/xpBar"
-            android:layout_marginTop="11dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Level:"
-            android:id="@+id/CharLevelLabel"
-            android:layout_marginTop="31dp"
-            android:layout_below="@+id/charXpLabel"
-            android:layout_alignLeft="@+id/charHealthLabel"
-            android:layout_alignStart="@+id/charHealthLabel" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Health:"
-            android:id="@+id/charHealthLabel"
-            android:textSize="15dp"
-            android:layout_above="@+id/healthBar"
-            android:layout_alignLeft="@+id/healthBar"
-            android:layout_alignStart="@+id/healthBar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charXp"
-            android:textSize="12dp"
-            android:layout_alignTop="@+id/charXpLabel"
-            android:layout_alignLeft="@+id/charHealth"
-            android:layout_alignStart="@+id/charHealth" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charLevel"
-            android:layout_alignTop="@+id/CharLevelLabel"
-            android:layout_alignLeft="@+id/charXp"
-            android:layout_alignStart="@+id/charXp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/healthBar"
-            android:layout_toStartOf="@+id/healthBar"
-            android:id="@+id/unityGame"></FrameLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gold:"
-            android:id="@+id/gold"
-            android:layout_alignTop="@+id/goldAmount"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/goldAmount"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/charLevel"
-            android:layout_alignStart="@+id/charLevel" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Silver:"
-            android:id="@+id/silver"
-            android:layout_above="@+id/gold"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/silver_amount_text_view"
-            android:layout_alignBottom="@+id/silver"
-            android:layout_alignLeft="@+id/goldAmount"
-            android:layout_alignStart="@+id/goldAmount" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_weight="0.4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/goals_tasks"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="#ffffff"
-                android:layout_alignParentBottom="true" />
-
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="+"
-            android:textSize="30dp"
-            android:id="@+id/add_item"
-            android:background="@drawable/roundedbutton"
-            android:height="20dp"
-            android:width="4dp"
-            android:textColor="@color/colorWhite"
-            android:layout_marginRight="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="14dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
+        android:layout_above="@+id/NavBot" />
     <android.support.design.widget.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/NavBot"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         design:menu="@menu/menu_nav"
         />
-</LinearLayout>
+</RelativeLayout>

@@ -13,6 +13,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
@@ -83,6 +84,12 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
                 notifyDataSetChanged();
                 gameMechanicsHelper.addSilver(goalsAndTasks.get(position).getSilver());
                 databaseHelper.deleteData(goalsAndTasks.get(position).getId(), true, currentTime);
+                Map<String, Boolean> improvementType = goalsAndTasks.get(position).getImprovementTypeMap();
+                for (String type : improvementType.keySet()) {
+                    if (improvementType.get(type)) {
+                        gameMechanicsHelper.addImprovementType(type);
+                    }
+                }
                 goalsAndTasks.remove(position);
                 gameMechanicsHelper.addXp();
             }

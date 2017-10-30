@@ -11,7 +11,7 @@
         android:id="@+id/statistics"
         />
     <item
-        android:title="Settings"
+        android:title="Shop"
         android:icon="@drawable/ic_home"
         android:id="@+id/settings"
         />

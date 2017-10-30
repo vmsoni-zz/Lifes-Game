@@ -24,6 +24,24 @@ public class GameMechanicsHelper {
     private DatabaseHelper databaseHelper;
     private RoundCornerProgressBar healthBar;
     private RoundCornerProgressBar xpBar;
+    private int healthExercise;
+    private int work;
+    private int school;
+    private int familyFriends;
+    private int learning;
+    private int other;
+    private int maxHealthExercise;
+    private int maxWork;
+    private int maxSchool;
+    private int maxFamilyFriends;
+    private int maxLearning;
+    private int maxOther;
+    private int lvlHealthExercise;
+    private int lvlWork;
+    private int lvlSchool;
+    private int lvlFamilyFriends;
+    private int lvlLearning;
+    private int lvlOther;
 
     public GameMechanicsHelper(TextView charHealth,
                                TextView charXp,
@@ -45,6 +63,24 @@ public class GameMechanicsHelper {
         this.totalSilver = 0L;
         this.healthBar = healthBar;
         this.xpBar = xpBar;
+        this.healthExercise = 0;
+        this.work = 0;
+        this.school = 0;
+        this.familyFriends = 0;
+        this.learning = 0;
+        this.other = 0;
+        this.maxHealthExercise = 0;
+        this.maxWork = 0;
+        this.maxSchool = 0;
+        this.maxFamilyFriends = 0;
+        this.maxLearning = 0;
+        this.maxOther = 0;
+        lvlHealthExercise = 0;
+        lvlWork = 0;
+        lvlSchool = 0;
+        lvlFamilyFriends = 0;
+        lvlLearning = 0;
+        lvlOther = 0;
     }
 
     public void setUpGameTextViews() {
@@ -55,6 +91,20 @@ public class GameMechanicsHelper {
             maxXp = Integer.parseInt(databaseHelper.getValue(databaseHelper.CHAR_MAX_XP));
             currentLvl = Integer.parseInt(databaseHelper.getValue(databaseHelper.CHAR_LVL));
             totalSilver = Long.valueOf(databaseHelper.getValue(databaseHelper.SILVER_AMOUNT_TOTAL));
+
+            healthExercise = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_HEALTH_EXERCISE));
+            work = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_WORK));
+            school = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_SCHOOL));
+            familyFriends = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_FAMILY_FRIENDS));
+            learning = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_LEARNING));
+            other = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_OTHER));
+            maxHealthExercise = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_HEALTH_EXERCISE));
+            maxWork = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_WORK));
+            maxSchool = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_SCHOOL));
+            maxFamilyFriends = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_FAMILY_FRIENDS));
+            maxLearning = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_LEARNING));
+            maxOther = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_OTHER));
+
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
             healthBar.setProgress(currentHealth);
@@ -62,6 +112,10 @@ public class GameMechanicsHelper {
         }
         catch(Exception e) {
             databaseHelper.initiateKeys();
+            xpBar.setMax(maxXp);
+            xpBar.setProgress(currentXp);
+            healthBar.setProgress(currentHealth);
+            healthBar.setMax(maxHealth);
             Log.d("Error", "Error asserted: " + e);
         }
         charHealth.setText(Integer.toString(currentHealth) + "/" + Integer.toString(maxHealth));
@@ -122,5 +176,76 @@ public class GameMechanicsHelper {
         currentLvl += 1;
         databaseHelper.updateValue(databaseHelper.CHAR_LVL, Integer.toString(currentLvl));
         charLevel.setText(Integer.toString(currentLvl));
+    }
+
+    public void addImprovementType(String type) {
+        switch (type) {
+            case "health_exercise":
+                healthExercise += 50;
+                if (healthExercise == maxHealthExercise) {
+                    maxHealthExercise *= 2;
+                    healthExercise = 0;
+                    lvlHealthExercise += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_HEALTH_EXERCISE_LVL, Integer.toString(lvlHealthExercise));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_HEALTH_EXERCISE, Integer.toString(maxHealthExercise));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_HEALTH_EXERCISE, Integer.toString(healthExercise));
+                break;
+            case "work":
+                work += 50;
+                if (work == maxWork) {
+                    maxWork *= 2;
+                    work = 0;
+                    lvlWork += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_WORK_LVL, Integer.toString(lvlWork));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_WORK, Integer.toString(maxWork));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_WORK, Integer.toString(work));
+                break;
+            case "school":
+                school += 50;
+                if (school == maxSchool) {
+                    maxSchool *= 2;
+                    school = 0;
+                    lvlSchool += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_SCHOOL_LVL, Integer.toString(lvlSchool));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_SCHOOL, Integer.toString(maxSchool));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_SCHOOL, Integer.toString(school));
+                break;
+            case "family_friends":
+                familyFriends += 50;
+                if (familyFriends == maxFamilyFriends) {
+                    maxFamilyFriends *= 2;
+                    familyFriends = 0;
+                    lvlFamilyFriends += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_FAMILY_FRIENDS_LVL, Integer.toString(lvlFamilyFriends));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_FAMILY_FRIENDS, Integer.toString(maxFamilyFriends));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_FAMILY_FRIENDS, Integer.toString(familyFriends));
+                break;
+            case "learning":
+                learning += 50;
+                if (learning == maxLearning) {
+                    maxLearning *= 2;
+                    learning = 0;
+                    lvlLearning += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_LEARNING_LVL, Integer.toString(lvlLearning));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_LEARNING, Integer.toString(maxLearning));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_LEARNING, Integer.toString(learning));
+                break;
+            case "other":
+                other += 50;
+                if (other == maxOther) {
+                    maxOther *= 2;
+                    other = 0;
+                    lvlOther += 1;
+                    databaseHelper.updateValue(databaseHelper.USER_OTHER_LVL, Integer.toString(lvlOther));
+                    databaseHelper.updateValue(databaseHelper.USER_MAX_OTHER, Integer.toString(maxOther));
+                }
+                databaseHelper.updateValue(databaseHelper.USER_OTHER, Integer.toString(other));
+                break;
+        }
     }
 }

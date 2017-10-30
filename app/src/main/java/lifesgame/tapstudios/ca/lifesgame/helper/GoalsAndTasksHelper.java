@@ -1,5 +1,7 @@
 package lifesgame.tapstudios.ca.lifesgame.helper;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +14,11 @@ import lifesgame.tapstudios.ca.lifesgame.MainActivity;
  */
 public class GoalsAndTasksHelper {
     public Button addItemToListBtn;
-    public MainActivity mainActivity = new MainActivity();
-    public GoalsAndTasksFormHelper goalsAndTasksFormHelper;
+    private final Context context;
 
-    public GoalsAndTasksHelper(Button addItemToListBtn, MainActivity mainActivity){
+    public GoalsAndTasksHelper(Button addItemToListBtn, Context context){
         this.addItemToListBtn = addItemToListBtn;
-        this.mainActivity = mainActivity;
+        this.context = context;
         goalsAndTasksRegisterButtons();
     }
     public void goalsAndTasksRegisterButtons(){
@@ -30,12 +31,12 @@ public class GoalsAndTasksHelper {
     }
 
     public void displayGoalsAndTasksAddMenu(){
-        Intent intent = new Intent(mainActivity, DialogAddGoalsAndTasks.class);
-        mainActivity.startActivity(intent);
+        Intent intent = new Intent(context, DialogAddGoalsAndTasks.class);
+        context.startActivity(intent);
     }
 
     public void displayGoalsAndTasksEditMenu(final int position) {
-        Intent intent = new Intent(mainActivity, DialogAddGoalsAndTasks.class);
-        mainActivity.startActivity(intent);
+        Intent intent = new Intent(context, DialogAddGoalsAndTasks.class);
+        context.startActivity(intent);
     }
 }
