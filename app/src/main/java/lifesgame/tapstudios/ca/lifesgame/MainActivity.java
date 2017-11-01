@@ -1,12 +1,12 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,10 @@ import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
 public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     private FragmentManager fragmentManager;
+    private Fragment currentFragment;
+
+    private Integer currentFragmentPriority;
+    private Integer newFragmentPriority;
 
     ListView listView;
 
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     RoundCornerProgressBar healthBar;
     RoundCornerProgressBar xpBar;
+    FragmentTransactionExtended fragmentTransactionExtended;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,30 +89,48 @@ public class MainActivity extends AppCompatActivity {
 
         setupBottomNavigation();
 
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager = getFragmentManager();
         fragment = new HomeFragment();
+        currentFragmentPriority = 0;
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.main_fragment, fragment).commit();
 
     }
 
     public void setupBottomNavigation() {
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager = getFragmentManager();
+        currentFragment = fragment;
         BottomNavigationView mBottomNavigation;
         mBottomNavigation = (BottomNavigationView) findViewById(R.id.NavBot);
         mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.home:
                         fragment = new HomeFragment();
+                        newFragmentPriority = 0;
                         break;
                     case R.id.statistics:
                         fragment = new StatisticsFragment();
+                        newFragmentPriority = 1;
                         break;
                 }
+                if(currentFragmentPriority == newFragmentPriority) {
+                    return true;
+                }
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.main_fragment, fragment).commit();
+                if(currentFragmentPriority > newFragmentPriority){
+                    transaction.addToBackStack(fragment.getClass().getName());
+                    getFragmentManager().popBackStack();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else {
+                    fragmentTransactionExtended = new FragmentTransactionExtended(getApplicationContext(), transaction, currentFragment, fragment, R.id.main_fragment);
+                    fragmentTransactionExtended.addTransition(FragmentTransactionExtended.SLIDE_HORIZONTAL);
+                    fragmentTransactionExtended.commit();
+                }
+                currentFragmentPriority = newFragmentPriority;
                 return true;
             }
         });

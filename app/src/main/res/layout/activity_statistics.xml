@@ -1,132 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/tools"
-    android:background="#6a737d"
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
+    android:background="#ffffff"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:id="@+id/completionPercentageGraph"
-            android:layout_alignParentTop="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TODOs Completion Percentage"
-                android:id="@+id/todoCompTV"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp" />
+            android:layout_width="wrap_content"
+            android:orientation="vertical">
             <RelativeLayout
-                android:layout_below="@+id/todoCompTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-                <com.timqi.sectorprogressview.ColorfulRingProgressView
-                    android:id="@+id/compToDoGraph"
-                    android:layout_width="350px"
-                    android:layout_height="350px"
-                    app:bgColor="#e1e1e1"
-                    app:fgColorEnd="#ff4800"
-                    app:fgColorStart="#ffe400"
-                    app:percent="0"
-                    app:startAngle="0"
-                    app:strokeWidth="2dp" />
+                android:id="@+id/completionPercentageGraph"
+                android:layout_alignParentTop="true">
                 <TextView
-                    android:id="@+id/tvCompToDo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="TODOs Completion Percentage"
+                    android:id="@+id/todoCompTV"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="75"
-                    android:textColor="#000"
-                    android:textSize="34sp" />
+                    android:layout_marginTop="15dp" />
+                <RelativeLayout
+                    android:layout_below="@+id/todoCompTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
+                    <com.timqi.sectorprogressview.ColorfulRingProgressView
+                        android:id="@+id/compToDoGraph"
+                        android:layout_width="350px"
+                        android:layout_height="350px"
+                        app:bgColor="#e1e1e1"
+                        app:fgColorEnd="#ff4800"
+                        app:fgColorStart="#ffe400"
+                        app:percent="0"
+                        app:startAngle="0"
+                        app:strokeWidth="2dp" />
+                    <TextView
+                        android:id="@+id/tvCompToDo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="75"
+                        android:textColor="#000"
+                        android:textSize="34sp" />
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout"
-            android:layout_alignParentTop="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total TODOs Completed This Week"
-                android:id="@+id/todoTV"
-                android:layout_marginTop="15dp"
-                android:layout_centerHorizontal="true" />
-            <com.db.chart.view.LineChartView
-                android:id="@+id/mainChart"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:padding="13dp"
-                android:layout_below="@+id/todoTV"
-                williamchart:chart_axis="false"
-                williamchart:chart_labelColor="#ffffff"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:layout_marginBottom="15dp"/>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout2"
-            android:layout_below="@+id/relativeLayout">
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Silver This Week"
-                android:id="@+id/silverTV"
-                android:layout_centerHorizontal="true" />
-            <com.db.chart.view.LineChartView
-                android:id="@+id/silverChart"
-                android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:padding="13dp"
-                android:layout_below="@+id/silverTV"
-                williamchart:chart_axis="false"
-                williamchart:chart_labelColor="#ffffff"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:layout_marginBottom="15dp"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout3"
-            android:layout_below="@+id/relativeLayout2">
+                android:id="@+id/relativeLayout"
+                android:layout_alignParentTop="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total TODOs Completed This Week"
+                    android:id="@+id/todoTV"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true" />
+                <com.db.chart.view.LineChartView
+                    android:id="@+id/mainChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:padding="13dp"
+                    android:layout_below="@+id/todoTV"
+                    williamchart:chart_axis="false"
+                    williamchart:chart_labelColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginBottom="15dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total XP per Improvement Type"
-                android:id="@+id/xpImprovTV"
-                android:layout_centerHorizontal="true" />
-
-            <com.db.chart.view.BarChartView
-                android:id="@+id/improvementTypesChart"
+                android:id="@+id/relativeLayout2"
+                android:layout_below="@+id/relativeLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Silver This Week"
+                    android:id="@+id/silverTV"
+                    android:layout_centerHorizontal="true" />
+                <com.db.chart.view.LineChartView
+                    android:id="@+id/silverChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:padding="13dp"
+                    android:layout_below="@+id/silverTV"
+                    williamchart:chart_axis="false"
+                    williamchart:chart_labelColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginBottom="15dp"/>
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:layout_below="@+id/xpImprovTV"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:padding="13dp"
-                williamchart:chart_axis="false"
-                williamchart:chart_barSpacing="20dp"
-                williamchart:chart_cornerRadius="2dp"
-                williamchart:chart_fontSize="7dp"
-                williamchart:chart_labelColor="#ffffff"
-                android:layout_marginBottom="15dp" />
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayout3"
+                android:layout_below="@+id/relativeLayout2">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total XP per Improvement Type"
+                    android:id="@+id/xpImprovTV"
+                    android:layout_centerHorizontal="true" />
+
+                <com.db.chart.view.BarChartView
+                    android:id="@+id/improvementTypesChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_below="@+id/xpImprovTV"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
+                    android:padding="13dp"
+                    williamchart:chart_axis="false"
+                    williamchart:chart_barSpacing="20dp"
+                    williamchart:chart_cornerRadius="2dp"
+                    williamchart:chart_fontSize="7dp"
+                    williamchart:chart_labelColor="#ffffff"
+                    android:layout_marginBottom="15dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>

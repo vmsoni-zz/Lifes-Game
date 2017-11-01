@@ -1,6 +1,7 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
 import android.animation.PropertyValuesHolder;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -9,7 +10,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,185 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#6a737d">
-    <RelativeLayout
-        android:layout_weight="0.6"
+    android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/RelativeLayout">
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-            android:layout_width="160dp"
-            android:layout_height="10dp"
-            app:rcBackgroundColor="#3c3a3b"
-            app:rcBackgroundPadding="0dp"
-            app:rcProgressColor="#ff4444"
-            app:rcRadius="30dp"
-            android:id="@+id/healthBar"
-            android:paddingRight="5dp"
-            android:layout_below="@+id/charHealth"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-            android:layout_width="160dp"
-            android:layout_height="10dp"
-            app:rcBackgroundColor="#3c3a3b"
-            app:rcBackgroundPadding="0dp"
-            android:paddingRight="5dp"
-            app:rcProgressColor="#33b5e5"
-            app:rcRadius="30dp"
-            android:id="@+id/xpBar"
-            android:layout_below="@+id/charXpLabel"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <TextView
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Health:"
-            android:id="@+id/charHealthLabel"
-            android:textSize="15dp"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame" />
-        <TextView
-            android:maxLines="1"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charHealth"
-            android:textSize="15dp"
-            android:layout_alignRight="@+id/healthBar" />
-
-        <TextView
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="XP:"
-            android:id="@+id/charXpLabel"
-            android:textSize="15dp"
-            android:layout_below="@+id/healthBar"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame" />
-
-        <TextView
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Level:"
-            android:id="@+id/CharLevelLabel"
-            android:layout_below="@+id/xpBar"
-            android:layout_alignLeft="@+id/charHealthLabel"
-            android:layout_alignStart="@+id/charHealthLabel" />
-
-        <TextView
-            android:paddingTop="15dp"
-            android:paddingRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charXp"
-            android:textSize="15dp"
-            android:layout_below="@+id/healthBar"
-            android:layout_alignRight="@+id/charHealth" />
-
-        <TextView
-            android:maxLines="1"
-            android:paddingTop="15dp"
-            android:paddingRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/charLevel"
-            android:layout_below="@+id/xpBar"
-            android:layout_alignRight="@+id/charXp" />
-
-        <TextView
-            android:maxLines="1"
-            android:paddingRight="5dp"
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Silver:"
-            android:id="@+id/silver"
-            android:layout_below="@+id/charLevel"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame" />
-
-        <TextView
-            android:maxLines="1"
-            android:paddingRight="5dp"
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/silver_amount_text_view"
-            android:layout_alignRight="@+id/charLevel"
-            android:layout_below="@+id/charLevel" />
-        <TextView
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gold:"
-            android:id="@+id/gold"
-            android:layout_below="@+id/silver"
-            android:layout_toRightOf="@+id/unityGame"
-            android:layout_toEndOf="@+id/unityGame" />d
-        <TextView
-            android:maxLines="1"
-            android:paddingRight="5dp"
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/goldAmount"
-            android:layout_below="@id/silver"
-            android:layout_alignRight="@+id/charLevel" />
-
-        <FrameLayout
+        android:orientation="vertical"
+        android:background="#30b7ec">
+        <RelativeLayout
+            android:layout_weight="0.6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/healthBar"
-            android:layout_toStartOf="@+id/healthBar"
-            android:id="@+id/unityGame"></FrameLayout>
-    </RelativeLayout>
+            android:id="@+id/RelativeLayout">
+            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+                android:layout_width="160dp"
+                android:layout_height="10dp"
+                app:rcBackgroundColor="#3c3a3b"
+                app:rcBackgroundPadding="0dp"
+                app:rcProgressColor="#ff4444"
+                app:rcRadius="30dp"
+                android:id="@+id/healthBar"
+                android:paddingRight="5dp"
+                android:layout_below="@+id/charHealth"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+                android:layout_width="160dp"
+                android:layout_height="10dp"
+                app:rcBackgroundColor="#3c3a3b"
+                app:rcBackgroundPadding="0dp"
+                android:paddingRight="5dp"
+                app:rcProgressColor="#33b5e5"
+                app:rcRadius="30dp"
+                android:id="@+id/xpBar"
+                android:layout_below="@+id/charXpLabel"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <TextView
+                android:paddingTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health:"
+                android:id="@+id/charHealthLabel"
+                android:textSize="15dp"
+                android:layout_toRightOf="@+id/unityGame"
+                android:layout_toEndOf="@+id/unityGame" />
+            <TextView
+                android:maxLines="1"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/charHealth"
+                android:textSize="15dp"
+                android:layout_alignRight="@+id/healthBar" />
 
-    <RelativeLayout
-        android:layout_weight="0.4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <TextView
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XP:"
+                android:id="@+id/charXpLabel"
+                android:textSize="15dp"
+                android:layout_below="@+id/healthBar"
+                android:layout_toRightOf="@+id/unityGame"
+                android:layout_toEndOf="@+id/unityGame" />
 
-        <ListView
+            <TextView
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level:"
+                android:id="@+id/CharLevelLabel"
+                android:layout_below="@+id/xpBar"
+                android:layout_alignLeft="@+id/charHealthLabel"
+                android:layout_alignStart="@+id/charHealthLabel" />
+
+            <TextView
+                android:paddingTop="15dp"
+                android:paddingRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/charXp"
+                android:textSize="15dp"
+                android:layout_below="@+id/healthBar"
+                android:layout_alignRight="@+id/charHealth" />
+
+            <TextView
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/charLevel"
+                android:layout_below="@+id/xpBar"
+                android:layout_alignRight="@+id/charXp" />
+
+            <TextView
+                android:maxLines="1"
+                android:paddingRight="5dp"
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Silver:"
+                android:id="@+id/silver"
+                android:layout_below="@+id/charLevel"
+                android:layout_toRightOf="@+id/unityGame"
+                android:layout_toEndOf="@+id/unityGame" />
+
+            <TextView
+                android:maxLines="1"
+                android:paddingRight="5dp"
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/silver_amount_text_view"
+                android:layout_alignRight="@+id/charLevel"
+                android:layout_below="@+id/charLevel" />
+            <TextView
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gold:"
+                android:id="@+id/gold"
+                android:layout_below="@+id/silver"
+                android:layout_toRightOf="@+id/unityGame"
+                android:layout_toEndOf="@+id/unityGame" />d
+            <TextView
+                android:maxLines="1"
+                android:paddingRight="5dp"
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/goldAmount"
+                android:layout_below="@id/silver"
+                android:layout_alignRight="@+id/charLevel" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/healthBar"
+                android:layout_toStartOf="@+id/healthBar"
+                android:id="@+id/unityGame"></FrameLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="0.4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/goals_tasks"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="#ffffff"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="+"
-            android:textSize="30dp"
-            android:id="@+id/add_item"
-            android:background="@drawable/roundedbutton"
-            android:height="20dp"
-            android:width="4dp"
-            android:textColor="@color/colorWhite"
-            android:layout_marginRight="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="14dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-</LinearLayout>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/goals_tasks"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="#ffffff"
+                android:layout_alignParentBottom="true" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="+"
+                android:textSize="30dp"
+                android:id="@+id/add_item"
+                android:background="@drawable/roundedbutton"
+                android:height="20dp"
+                android:width="4dp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginRight="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>

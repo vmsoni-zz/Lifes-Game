@@ -8,7 +8,7 @@
     xmlns:design="http://schemas.android.com/apk/res-auto"
     tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity"
     android:orientation="vertical">
-    <FrameLayout
+    <com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/NavBot"
+        design:itemBackground="@color/navbar"
+        design:itemIconTint="@drawable/selector_navigation"
+        design:itemTextColor="@drawable/selector_navigation"
         android:layout_alignParentBottom="true"
-        design:menu="@menu/menu_nav"
-        />
+        design:menu="@menu/menu_nav" />
 </RelativeLayout>
