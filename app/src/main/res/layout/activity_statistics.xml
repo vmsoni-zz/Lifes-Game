@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/tools"
-    android:background="#ffffff"
+    android:background="#58C6F0"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,8 @@
                     android:text="TODOs Completion Percentage"
                     android:id="@+id/todoCompTV"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp" />
+                    android:layout_marginTop="15dp"
+                    android:textColor="#ffffff" />
                 <RelativeLayout
                     android:layout_below="@+id/todoCompTV"
                     android:layout_width="wrap_content"
@@ -36,11 +37,11 @@
                         android:layout_width="350px"
                         android:layout_height="350px"
                         app:bgColor="#e1e1e1"
-                        app:fgColorEnd="#ff4800"
-                        app:fgColorStart="#ffe400"
+                        app:fgColorEnd="#00a4ff"
+                        app:fgColorStart="#02fef1"
                         app:percent="0"
                         app:startAngle="0"
-                        app:strokeWidth="2dp" />
+                        app:strokeWidth="1dp" />
                     <TextView
                         android:id="@+id/tvCompToDo"
                         android:layout_width="wrap_content"
@@ -62,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="Total TODOs Completed This Week"
                     android:id="@+id/todoTV"
+                    android:textColor="#ffffff"
                     android:layout_marginTop="15dp"
                     android:layout_centerHorizontal="true" />
                 <com.db.chart.view.LineChartView
@@ -88,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:text="Total Silver This Week"
                     android:id="@+id/silverTV"
+                    android:textColor="#ffffff"
                     android:layout_centerHorizontal="true" />
                 <com.db.chart.view.LineChartView
                     android:id="@+id/silverChart"
@@ -113,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:text="Total XP per Improvement Type"
                     android:id="@+id/xpImprovTV"
+                    android:textColor="#ffffff"
                     android:layout_centerHorizontal="true" />
 
                 <com.db.chart.view.BarChartView

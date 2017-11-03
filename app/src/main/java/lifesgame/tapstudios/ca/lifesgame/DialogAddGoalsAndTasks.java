@@ -90,6 +90,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
     private void goalSelection() {
 
+
+
         endDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +122,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 else {
                     endDateLl.setVisibility(View.GONE);
                 }
+                improvementCategory.onItemClick(parent, view, position, id);
             }
         });
     }

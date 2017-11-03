@@ -19,9 +19,9 @@
             <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                 android:layout_width="160dp"
                 android:layout_height="10dp"
-                app:rcBackgroundColor="#3c3a3b"
+                app:rcBackgroundColor="#86D6F4"
                 app:rcBackgroundPadding="0dp"
-                app:rcProgressColor="#ff4444"
+                app:rcProgressColor="#EA3546"
                 app:rcRadius="30dp"
                 android:id="@+id/healthBar"
                 android:paddingRight="5dp"
@@ -31,24 +31,26 @@
             <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                 android:layout_width="160dp"
                 android:layout_height="10dp"
-                app:rcBackgroundColor="#3c3a3b"
+                app:rcBackgroundColor="#86D6F4"
                 app:rcBackgroundPadding="0dp"
                 android:paddingRight="5dp"
-                app:rcProgressColor="#33b5e5"
+                app:rcProgressColor="#35FF69"
                 app:rcRadius="30dp"
                 android:id="@+id/xpBar"
                 android:layout_below="@+id/charXpLabel"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+
             <TextView
-                android:paddingTop="5dp"
+                android:id="@+id/charHealthLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Health:"
-                android:id="@+id/charHealthLabel"
-                android:textSize="15dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/unityGame"
                 android:layout_toRightOf="@+id/unityGame"
-                android:layout_toEndOf="@+id/unityGame" />
+                android:paddingTop="5dp"
+                android:text="Health:"
+                android:textSize="15dp" />
             <TextView
                 android:maxLines="1"
                 android:paddingRight="5dp"
