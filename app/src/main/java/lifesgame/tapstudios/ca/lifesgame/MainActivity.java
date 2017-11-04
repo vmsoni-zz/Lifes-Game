@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,9 +26,9 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     private FragmentManager fragmentManager;
-    private Fragment currentFragment;
-    private Integer currentFragmentPriority;
-    private Integer newFragmentPriority;
+    private ViewPager viewPager;
+    private BottomNavigationView mBottomNavigation;
+
 
     DatabaseHelper databaseHelper;
     FragmentTransactionExtended fragmentTransactionExtended;
@@ -64,19 +66,21 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Inserted " + dataCategory, Toast.LENGTH_LONG).show();
         }
 
-        setupBottomNavBar();
-
         fragmentManager = getFragmentManager();
         fragment = new HomeFragment();
-        currentFragmentPriority = 0;
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.main_fragment, fragment).commit();
+
+        setupSwipeFragments();
+        setupBottomNavBar();
+    }
+
+    private void setupSwipeFragments() {
+        viewPager = (ViewPager) findViewById(R.id.main_fragment);
+        viewPager.setAdapter(new MyPagerAdapter(fragmentManager));
     }
 
     public void setupBottomNavBar() {
-        fragmentManager = getFragmentManager();
-        currentFragment = fragment;
-        BottomNavigationView mBottomNavigation;
         mBottomNavigation = (BottomNavigationView) findViewById(R.id.NavBot);
         mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -84,28 +88,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        fragment = new HomeFragment();
-                        newFragmentPriority = 0;
+                        viewPager.setCurrentItem(0, true);
                         break;
                     case R.id.statistics:
-                        fragment = new StatisticsFragment();
-                        newFragmentPriority = 1;
+                        viewPager.setCurrentItem(1, true);
                         break;
                 }
-                if (currentFragmentPriority == newFragmentPriority) {
-                    return true;
-                }
-                final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                if (currentFragmentPriority > newFragmentPriority) {
-                    transaction.addToBackStack(fragment.getClass().getName());
-                    getFragmentManager().popBackStack();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else {
-                    fragmentTransactionExtended = new FragmentTransactionExtended(getApplicationContext(), transaction, currentFragment, fragment, R.id.main_fragment);
-                    fragmentTransactionExtended.addTransition(FragmentTransactionExtended.SLIDE_HORIZONTAL);
-                    fragmentTransactionExtended.commit();
-                }
-                currentFragmentPriority = newFragmentPriority;
                 return true;
             }
         });
@@ -114,5 +102,29 @@ public class MainActivity extends AppCompatActivity {
     public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, Date dataEndDate) {
         Long goalTaskId = databaseHelper.addData(description, category, title, silver, improvementType, dataEndDate);
         return goalTaskId;
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos) {
+                case 0:
+                    return new HomeFragment();
+                case 1:
+                    return new StatisticsFragment();
+                default:
+                    return new HomeFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 }

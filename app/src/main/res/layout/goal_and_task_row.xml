@@ -22,8 +22,8 @@
 
             <ImageButton
                 android:id="@+id/editButton"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="?android:selectableItemBackground"
                 android:scaleType="fitXY"
@@ -38,8 +38,8 @@
 
             <ImageButton
                 android:id="@+id/deleteButton"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="?android:selectableItemBackground"
                 android:src="@drawable/trash_can" />
@@ -56,7 +56,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
+            android:background="#e3ecf5"
             android:minHeight="90dp">
 
             <FrameLayout
@@ -64,12 +64,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:background="#ffffff">
+                android:background="#b4e0e1">
 
                 <ImageButton
                     android:id="@+id/failedButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:background="?android:selectableItemBackground"
@@ -82,12 +82,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:background="#ffffff">
+                android:background="#b4e0e1">
 
                 <ImageButton
                     android:id="@+id/completedButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:background="?android:selectableItemBackground"
