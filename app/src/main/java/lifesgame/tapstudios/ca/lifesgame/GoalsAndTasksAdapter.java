@@ -31,7 +31,7 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
     private GameMechanicsHelper gameMechanicsHelper;
     private GoalsAndTasksHelper goalsAndTasksHelper;
 
-    public GoalsAndTasksAdapter(Context context, int resource, GameMechanicsHelper gameMechanicsHelper, DatabaseHelper databaseHelper,  List<GoalsAndTasks> objects, GoalsAndTasksHelper goalsAndTasksHelper){
+    public GoalsAndTasksAdapter(Context context, int resource, GameMechanicsHelper gameMechanicsHelper, DatabaseHelper databaseHelper, List<GoalsAndTasks> objects, GoalsAndTasksHelper goalsAndTasksHelper) {
         this.context = context;
         this.resource = resource;
         this.gameMechanicsHelper = gameMechanicsHelper;
@@ -47,7 +47,7 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
     }
 
     @Override
-    public View generateView(final int position, ViewGroup parent){
+    public View generateView(final int position, ViewGroup parent) {
         View convertView = LayoutInflater.from(context).inflate(R.layout.goal_and_task_row, null);
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(getSwipeLayoutResourceId(position));
 
@@ -56,14 +56,14 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
         ImageButton completedBtn = (ImageButton) convertView.findViewById(R.id.completedButton);
         ImageButton failedBtn = (ImageButton) convertView.findViewById(R.id.failedButton);
 
-        editBtn.setOnClickListener(new View.OnClickListener(){
+        editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goalsAndTasksHelper.displayGoalsAndTasksEditMenu(position);
             }
         });
 
-        deleteBtn.setOnClickListener(new View.OnClickListener(){
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date dt = new Date();

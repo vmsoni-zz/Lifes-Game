@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:design="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:design="http://schemas.android.com/apk/res-auto"
-    tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="lifesgame.tapstudios.ca.lifesgame.MainActivity">
+
     <com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/NavBot" />
+
     <android.support.design.widget.BottomNavigationView
+        android:id="@+id/NavBot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/NavBot"
+        android:layout_alignParentBottom="true"
         design:itemBackground="@color/navbar"
         design:itemIconTint="@drawable/selector_navigation"
         design:itemTextColor="@drawable/selector_navigation"
-        android:layout_alignParentBottom="true"
         design:menu="@menu/menu_nav" />
 </RelativeLayout>

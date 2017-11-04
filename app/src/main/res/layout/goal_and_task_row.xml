@@ -1,113 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/swipe">
+    android:layout_height="wrap_content">
+
     <LinearLayout
+        android:id="@+id/bottom_wrapper"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/bottom_wrapper"
-        android:orientation="horizontal"
         android:layout_gravity="center"
+        android:orientation="horizontal"
         android:paddingRight="5dp"
         android:paddingTop="5dp">
+
         <FrameLayout
             android:layout_width="63dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="#43d358">
+
             <ImageButton
+                android:id="@+id/editButton"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:id="@+id/editButton"
-                android:src="@drawable/pen"
                 android:layout_gravity="center"
+                android:background="?android:selectableItemBackground"
                 android:scaleType="fitXY"
-                android:background="?android:selectableItemBackground" />
+                android:src="@drawable/pen" />
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="63dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="#ff707d">
+
             <ImageButton
+                android:id="@+id/deleteButton"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:id="@+id/deleteButton"
-                android:src="@drawable/trash_can"
                 android:layout_gravity="center"
-                android:background="?android:selectableItemBackground" />
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/trash_can" />
         </FrameLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:paddingRight="5dp"
+        android:paddingTop="5dp">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="90dp"
-            android:background="#eaeaea">
+            android:background="#ffffff"
+            android:minHeight="90dp">
 
             <FrameLayout
+                android:id="@+id/failedButtonLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:id="@+id/failedButtonLayout"
-                android:background="#EEEEFF">
+                android:background="#ffffff">
 
                 <ImageButton
+                    android:id="@+id/failedButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_margin="10dp"
-                    android:id="@+id/failedButton"
-                    android:src="@drawable/x_mark"
                     android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="?android:selectableItemBackground"
                     android:scaleType="fitXY"
-                    android:background="?android:selectableItemBackground"/>
+                    android:src="@drawable/x_mark" />
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/completedButtonLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:id="@+id/completedButtonLayout"
-                android:background="#EEEEFF">
+                android:background="#ffffff">
 
                 <ImageButton
+                    android:id="@+id/completedButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:id="@+id/completedButton"
-                    android:src="@drawable/check_mark"
-                    android:layout_margin="10dp"
                     android:layout_gravity="center"
+                    android:layout_margin="10dp"
                     android:background="?android:selectableItemBackground"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/check_mark" />
             </FrameLayout>
 
             <TextView
+                android:id="@+id/goal_task_description"
                 android:layout_width="197dp"
                 android:layout_height="52dp"
-                android:text="New Text"
-                android:id="@+id/goal_task_description"
                 android:layout_gravity="center_horizontal|bottom"
-                android:textSize="20dp"
+                android:gravity="center_vertical"
+                android:text="New Text"
                 android:textColor="#969696"
-                android:gravity="center_vertical" />
+                android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/goal_task_title"
                 android:layout_width="197dp"
                 android:layout_height="38dp"
-                android:text="New Text"
-                android:id="@+id/goal_task_title"
-                android:textStyle="bold"
                 android:layout_gravity="center_horizontal|top"
-                android:textSize="20dp"
+                android:gravity="center_vertical"
+                android:text="New Text"
                 android:textColor="#969696"
-                android:gravity="center_vertical" />
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
         </FrameLayout>
 

@@ -2,28 +2,19 @@ package lifesgame.tapstudios.ca.lifesgame;
 
 import android.animation.PropertyValuesHolder;
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 
-
 import com.db.chart.animation.Animation;
-import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;
@@ -42,7 +33,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 
 public class StatisticsFragment extends Fragment {
-    public LineChartView mChart;
+    public LineChartView completedToDoGraph;
     public LineChartView silverChart;
     public BarChartView improvementTypeXpChart;
     public DatabaseHelper databaseHelper;
@@ -51,14 +42,15 @@ public class StatisticsFragment extends Fragment {
     private ColorfulRingProgressView completedToDoPercentageGraph;
     private TextView tvCompToDo;
 
-    public StatisticsFragment () {}
+    public StatisticsFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         databaseHelper = new DatabaseHelper(getContext());
         statisticsView = inflater.inflate(R.layout.activity_statistics, container, false);
         mTip = new Tooltip(statisticsView.getContext(), R.layout.linechart_tooltip, R.id.value);
-        mChart = (LineChartView) statisticsView.findViewById(R.id.mainChart);
+        completedToDoGraph = (LineChartView) statisticsView.findViewById(R.id.mainChart);
         completedToDoPercentageGraph = (ColorfulRingProgressView) statisticsView.findViewById(R.id.compToDoGraph);
         improvementTypeXpChart = (BarChartView) statisticsView.findViewById(R.id.improvementTypesChart);
         silverChart = (LineChartView) statisticsView.findViewById(R.id.silverChart);
@@ -84,23 +76,26 @@ public class StatisticsFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
 
-        // Data
-        List <LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
+        //Graph Data
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
         BarSet barSet = databaseHelper.getImprovementTypesXP();
 
-        int toDoCompPercentage = databaseHelper.getCompletedToDoPercentage();
-        completedToDoPercentageGraph.setPercent(toDoCompPercentage);
-        tvCompToDo.setText(String.valueOf(toDoCompPercentage));
-        completedToDoPercentageGraph.setStrokeWidthDp(12f);
+        Paint gridPaint = new Paint();
+        gridPaint.setColor(Color.parseColor("#ffffff"));
+        gridPaint.setStyle(Paint.Style.STROKE);
+        gridPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
+        gridPaint.setAntiAlias(true);
+        gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        dataSet.get(0)
-                .setColor(Color.WHITE)
-                .setDotsStrokeColor(Color.WHITE)
-                .setDotsStrokeThickness(6)
-                .setDotsColor(Color.parseColor("#DC602E"))
-                .setThickness(6)
-                .setSmooth(false);
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage());
+        setupCompletedToDoGraph(dataSet, gridPaint);
+        setupSilverChart(dataSet, gridPaint);
+        setupImprovementTypeXpChart(barSet, gridPaint);
 
+        return statisticsView;
+    }
+
+    public void setupCompletedToDoGraph(List<LineSet> dataSet, Paint gridPaint) {
         dataSet.get(1)
                 .setColor(Color.WHITE)
                 .setDotsStrokeColor(Color.WHITE)
@@ -108,21 +103,8 @@ public class StatisticsFragment extends Fragment {
                 .setDotsColor(Color.parseColor("#04baa6"))
                 .setThickness(6)
                 .setSmooth(false);
-
-        barSet.setColor(Color.parseColor("#fc2a53"));
-        improvementTypeXpChart.addData(barSet);
-
-        mChart.addData(dataSet.get(1));
-        silverChart.addData(dataSet.get(0));
-
-        Paint gridPaint = new Paint();
-        gridPaint.setColor(Color.parseColor("#ffffff"));
-        gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-        gridPaint.setAntiAlias(true);
-        gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-
-        mChart.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
+        completedToDoGraph.addData(dataSet.get(1));
+        completedToDoGraph.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsFormat(new DecimalFormat("0"))
                 .setAxisThickness(6)
                 .setAxisLabelsSpacing(35)
@@ -131,8 +113,18 @@ public class StatisticsFragment extends Fragment {
                 .show(new Animation()
                         .setInterpolator(new BounceInterpolator())
                         .fromAlpha(0));
-        mChart.setBackgroundColor(Color.parseColor("#04baa6"));
+        completedToDoGraph.setBackgroundColor(Color.parseColor("#04baa6"));
+    }
 
+    public void setupSilverChart(List<LineSet> dataSet, Paint gridPaint) {
+        dataSet.get(0)
+                .setColor(Color.WHITE)
+                .setDotsStrokeColor(Color.WHITE)
+                .setDotsStrokeThickness(6)
+                .setDotsColor(Color.parseColor("#DC602E"))
+                .setThickness(6)
+                .setSmooth(false);
+        silverChart.addData(dataSet.get(0));
         silverChart.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsFormat(new DecimalFormat("0"))
                 .setAxisThickness(6)
@@ -142,7 +134,11 @@ public class StatisticsFragment extends Fragment {
                 .show(new Animation().setInterpolator(new BounceInterpolator())
                         .fromAlpha(0));
         silverChart.setBackgroundColor(Color.parseColor("#DC602E"));
+    }
 
+    public void setupImprovementTypeXpChart(BarSet barSet, Paint gridPaint) {
+        barSet.setColor(Color.parseColor("#fc2a53"));
+        improvementTypeXpChart.addData(barSet);
         improvementTypeXpChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
                 .setYLabels(YRenderer.LabelPosition.OUTSIDE)
                 .setLabelsFormat(new DecimalFormat("0"))
@@ -151,7 +147,12 @@ public class StatisticsFragment extends Fragment {
                 .setGrid(7, 0, gridPaint)
                 .show(new Animation());
         improvementTypeXpChart.setBackgroundColor(Color.parseColor("#04baa6"));
-
-        return statisticsView;
     }
+
+    public void setupCompletedToDoPercentageGraph(int toDoCompPercentage) {
+        completedToDoPercentageGraph.setPercent(toDoCompPercentage);
+        tvCompToDo.setText(String.valueOf(toDoCompPercentage));
+        completedToDoPercentageGraph.setStrokeWidthDp(12f);
+    }
+
 }

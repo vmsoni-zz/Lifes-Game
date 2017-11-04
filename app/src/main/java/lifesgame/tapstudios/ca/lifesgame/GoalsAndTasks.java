@@ -50,7 +50,9 @@ public class GoalsAndTasks {
         return id;
     }
 
-    public Long getSilver() { return  silver; }
+    public Long getSilver() {
+        return silver;
+    }
 
     public void setToDoType(String type, Boolean value) {
         improvementType.put(type, value);

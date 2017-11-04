@@ -5,8 +5,6 @@ import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by Vidit Soni on 6/3/2017.
  */
@@ -105,12 +103,13 @@ public class GameMechanicsHelper {
             maxLearning = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_LEARNING));
             maxOther = Integer.parseInt(databaseHelper.getValue(databaseHelper.USER_MAX_OTHER));
 
+            //setup progress bars for health and xp
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
+
             healthBar.setProgress(currentHealth);
             healthBar.setMax(maxHealth);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             databaseHelper.initiateKeys();
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);

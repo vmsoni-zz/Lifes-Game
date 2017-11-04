@@ -7,7 +7,7 @@ public class GraphData {
     public Float silver;
     public Float totalCompleted;
 
-    public GraphData () {
+    public GraphData() {
         this.silver = 0F;
         this.totalCompleted = 0F;
     }

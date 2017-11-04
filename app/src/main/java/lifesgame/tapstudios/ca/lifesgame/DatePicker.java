@@ -19,24 +19,17 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class DatePicker extends DialogFragment {
-    // Date & Time formatter used for formatting
-    // text on the switcher button
     DateFormat mDateFormatter, mTimeFormatter;
 
-    // Picker
     SublimePicker mSublimePicker;
-
-    // Callback to activity
     Callback mCallback;
 
     SublimeListenerAdapter mListener = new SublimeListenerAdapter() {
         @Override
         public void onCancelled() {
-            if (mCallback!= null) {
+            if (mCallback != null) {
                 mCallback.onCancelled();
             }
-
-            // Should actually be called by activity inside `Callback.onCancelled()`
             dismiss();
         }
 
@@ -50,12 +43,8 @@ public class DatePicker extends DialogFragment {
                 mCallback.onDateTimeRecurrenceSet(selectedDate,
                         hourOfDay, minute, recurrenceOption, recurrenceRule);
             }
-
-            // Should actually be called by activity inside `Callback.onCancelled()`
             dismiss();
         }
-// You can also override 'formatDate(Date)' & 'formatTime(Date)'
-        // to supply custom formatters.
     };
 
     public DatePicker() {
@@ -73,25 +62,13 @@ public class DatePicker extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /*try {
-            //getActivity().getLayoutInflater()
-                    //.inflate(R.layout.sublime_recurrence_picker, new FrameLayout(getActivity()), true);
-            getActivity().getLayoutInflater()
-                    .inflate(R.layout.sublime_date_picker, new FrameLayout(getActivity()), true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }*/
 
         mSublimePicker = (SublimePicker) getActivity()
                 .getLayoutInflater().inflate(R.layout.sublime_picker, container);
 
-        // Retrieve SublimeOptions
         Bundle arguments = getArguments();
         SublimeOptions options = null;
 
-        // Options can be null, in which case, default
-        // options are used.
         if (arguments != null) {
             options = arguments.getParcelable("SUBLIME_OPTIONS");
         }
@@ -100,7 +77,6 @@ public class DatePicker extends DialogFragment {
         return mSublimePicker;
     }
 
-    // For communicating with the activity
     public interface Callback {
         void onCancelled();
 
