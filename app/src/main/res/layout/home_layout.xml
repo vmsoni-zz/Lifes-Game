@@ -169,14 +169,20 @@
             android:layout_height="match_parent"
             android:layout_weight="0.4">
 
-            <ListView
+            <!--<ListView
                 android:id="@+id/goals_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="#ececec" />
+                android:background="#ececec" />-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/goals_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ececec">
+            </android.support.v7.widget.RecyclerView>
 
             <Button
                 android:id="@+id/add_item"

@@ -57,14 +57,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#e3ecf5"
-            android:minHeight="90dp">
+            android:minHeight="80dp">
 
             <FrameLayout
                 android:id="@+id/failedButtonLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:background="#b4e0e1">
+                android:background="#c8e3f9">
 
                 <ImageButton
                     android:id="@+id/failedButton"
@@ -72,7 +72,7 @@
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:background="?android:selectableItemBackground"
+                    android:background="@drawable/ripple_effect"
                     android:scaleType="fitXY"
                     android:src="@drawable/x_mark" />
             </FrameLayout>
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:background="#b4e0e1">
+                android:background="#c8e3f9">
 
                 <ImageButton
                     android:id="@+id/completedButton"
@@ -90,7 +90,7 @@
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:background="?android:selectableItemBackground"
+                    android:background="@drawable/ripple_effect"
                     android:scaleType="fitXY"
                     android:src="@drawable/check_mark" />
             </FrameLayout>
@@ -102,7 +102,7 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:gravity="center_vertical"
                 android:text="New Text"
-                android:textColor="#969696"
+                android:textColor="#09A8E5"
                 android:textSize="20dp" />
 
             <TextView
@@ -112,7 +112,7 @@
                 android:layout_gravity="center_horizontal|top"
                 android:gravity="center_vertical"
                 android:text="New Text"
-                android:textColor="#969696"
+                android:textColor="#038EC3"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 

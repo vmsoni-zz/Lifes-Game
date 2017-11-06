@@ -1,19 +1,14 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
@@ -22,7 +17,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
 /**
  * Created by Vidit Soni on 5/24/2017.
  */
-public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
+public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHolder> {
     public List<GoalsAndTasks> goalsAndTasks;
     public LayoutInflater inflater;
     public DatabaseHelper databaseHelper;
@@ -31,7 +26,12 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
     private GameMechanicsHelper gameMechanicsHelper;
     private GoalsAndTasksHelper goalsAndTasksHelper;
 
-    public GoalsAndTasksAdapter(Context context, int resource, GameMechanicsHelper gameMechanicsHelper, DatabaseHelper databaseHelper, List<GoalsAndTasks> objects, GoalsAndTasksHelper goalsAndTasksHelper) {
+    public GoalsAndTasksAdapter(Context context,
+                                int resource,
+                                GameMechanicsHelper gameMechanicsHelper,
+                                DatabaseHelper databaseHelper,
+                                List<GoalsAndTasks> objects,
+                                GoalsAndTasksHelper goalsAndTasksHelper) {
         this.context = context;
         this.resource = resource;
         this.gameMechanicsHelper = gameMechanicsHelper;
@@ -42,83 +42,15 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
     }
 
     @Override
-    public int getSwipeLayoutResourceId(int position) {
-        return R.id.swipe;
+    public GoalsAndTasksHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+        return new GoalsAndTasksHolder(context, view, goalsAndTasksHelper, this, gameMechanicsHelper);
     }
 
     @Override
-    public View generateView(final int position, ViewGroup parent) {
-        View convertView = LayoutInflater.from(context).inflate(R.layout.goal_and_task_row, null);
-        final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(getSwipeLayoutResourceId(position));
-
-        ImageButton editBtn = (ImageButton) convertView.findViewById(R.id.editButton);
-        ImageButton deleteBtn = (ImageButton) convertView.findViewById(R.id.deleteButton);
-        ImageButton completedBtn = (ImageButton) convertView.findViewById(R.id.completedButton);
-        ImageButton failedBtn = (ImageButton) convertView.findViewById(R.id.failedButton);
-
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goalsAndTasksHelper.displayGoalsAndTasksEditMenu(position);
-            }
-        });
-
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Date dt = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String currentTime = sdf.format(dt);
-                notifyDataSetChanged();
-                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), false, currentTime);
-                goalsAndTasks.remove(position);
-            }
-        });
-
-        completedBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Date dt = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String currentTime = sdf.format(dt);
-                notifyDataSetChanged();
-                gameMechanicsHelper.addSilver(goalsAndTasks.get(position).getSilver());
-                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), true, currentTime);
-                Map<String, Boolean> improvementType = goalsAndTasks.get(position).getImprovementTypeMap();
-                for (String type : improvementType.keySet()) {
-                    if (improvementType.get(type)) {
-                        gameMechanicsHelper.addImprovementType(type);
-                    }
-                }
-                goalsAndTasks.remove(position);
-                gameMechanicsHelper.addXp();
-            }
-        });
-
-        failedBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Date dt = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String currentTime = sdf.format(dt);
-                notifyDataSetChanged();
-                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), false, currentTime);
-                goalsAndTasks.remove(position);
-                gameMechanicsHelper.removeHealth();
-            }
-        });
-
-        return convertView;
-    }
-
-    @Override
-    public int getCount() {
-        return goalsAndTasks.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
+    public void onBindViewHolder(GoalsAndTasksHolder holder, int position) {
+        GoalsAndTasks goalsAndTasks = this.goalsAndTasks.get(position);
+        holder.bindGoalsAndTasks(goalsAndTasks, position);
     }
 
     @Override
@@ -127,12 +59,17 @@ public class GoalsAndTasksAdapter extends BaseSwipeAdapter {
     }
 
     @Override
-    public void fillValues(int position, View convertView) {
-        final TextView goalsAndTasksTitle;
-        final TextView goalsAndTasksDescription;
-        goalsAndTasksTitle = (TextView) convertView.findViewById(R.id.goal_task_title);
-        goalsAndTasksTitle.setText(goalsAndTasks.get(position).getTitle());
-        goalsAndTasksDescription = (TextView) convertView.findViewById(R.id.goal_task_description);
-        goalsAndTasksDescription.setText(goalsAndTasks.get(position).getDescription());
+    public int getItemCount() {
+        return goalsAndTasks.size();
+    }
+
+    public void removeItem(int position, Boolean completed) {
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = sdf.format(dt);
+        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime);
+        goalsAndTasks.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, goalsAndTasks.size());
     }
 }

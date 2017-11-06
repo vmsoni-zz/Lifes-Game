@@ -2,11 +2,12 @@ package lifesgame.tapstudios.ca.lifesgame;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -21,7 +22,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
  * Created by Vidit Soni on 8/12/2017.
  */
 public class HomeFragment extends Fragment {
-    ListView listView;
+    RecyclerView listView;
     TextView charHealth;
     TextView charXp;
     TextView charLevel;
@@ -48,6 +49,10 @@ public class HomeFragment extends Fragment {
         databaseHelper = new DatabaseHelper(getContext());
         gameMechanicsHelper = new GameMechanicsHelper(charHealth, charXp, charLevel, silverAmountTextView, databaseHelper, healthBar, xpBar);
         goalsAndTasksAdapter = new GoalsAndTasksAdapter(getContext(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        listView.setLayoutManager(linearLayoutManager);
+        listView.setHasFixedSize(true);
         listView.setAdapter(goalsAndTasksAdapter);
 
         gameMechanicsHelper.setUpGameTextViews();
@@ -61,7 +66,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void setupFragmentElements() {
-        listView = (ListView) homeFragment.findViewById(R.id.goals_tasks);
+        listView = (RecyclerView) homeFragment.findViewById(R.id.goals_tasks);
         charHealth = (TextView) homeFragment.findViewById(R.id.charHealth);
         charLevel = (TextView) homeFragment.findViewById(R.id.charLevel);
         charXp = (TextView) homeFragment.findViewById(R.id.charXp);

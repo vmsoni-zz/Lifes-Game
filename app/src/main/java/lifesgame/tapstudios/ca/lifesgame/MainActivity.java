@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     DatabaseHelper databaseHelper;
-    FragmentTransactionExtended fragmentTransactionExtended;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
