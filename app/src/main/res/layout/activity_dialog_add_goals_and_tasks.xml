@@ -16,15 +16,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            android:id="@+id/relativeLayout">
 
-            <com.weiwangcn.betterspinner.library.BetterSpinner
+            <TextView
+                android:id="@+id/todoTypeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="13dp"
+                android:text="ToDo Type"
+                android:textColor="@color/colorAccent" />
+
+            <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="TODO Type"
-                android:textColor="@color/colorPrimaryDark" />
+                android:layout_below="@+id/todoTypeLabel"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginBottom="13dp"
+                android:theme="@android:style/Theme.Holo.Light" />
+            <!--<com.weiwangcn.betterspinner.library.BetterSpinner-->
+            <!--android:id="@+id/spinner1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+            <!--android:hint="TODO Type"-->
+            <!--android:textColor="@color/colorPrimaryDark" />-->
 
             <EditText
                 android:id="@+id/textTitle"
@@ -33,7 +52,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/sliderAndPoints_layout"
-                android:layout_marginBottom="13dp"
                 android:hint="Title"
                 android:textColor="@color/colorPrimaryDark" />
 

@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
@@ -36,13 +38,13 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private RelativeLayout rlDateTimeRecurrenceInfo;
     private String mRecurrenceOption, mRecurrenceRule;
     private MainActivity mainActivity;
-    BetterSpinner improvementCategory;
+    Spinner improvementCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_goals_and_tasks);
-        improvementCategory = (BetterSpinner) findViewById(R.id.spinner1);
+        improvementCategory = (Spinner) findViewById(R.id.spinner1);
         endDateEt = (EditText) findViewById(R.id.endDateTv);
         endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
 
@@ -50,8 +52,10 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         endDateLl.setVisibility(View.GONE);
 
         final String[] improvementCategories = new String[]{"Task", "Goal", "Quest", "Epic"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, improvementCategories);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, improvementCategories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         improvementCategory.setAdapter(spinnerAdapter);
+
         mainActivity = new MainActivity();
         addItem();
         silverSeekBar();
@@ -95,19 +99,23 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
                 pickerFrag.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
                 pickerFrag.show(getSupportFragmentManager(), "SUBLIME_PICKER");
+
             }
         });
 
-        //Onclick Goal category within ToDo spinner
-        improvementCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        improvementCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 1) {
                     endDateLl.setVisibility(View.VISIBLE);
                 } else {
                     endDateLl.setVisibility(View.GONE);
                 }
-                improvementCategory.onItemClick(parent, view, position, id);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
@@ -180,7 +188,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 if (!userTaskGoalDescription.getText().toString().isEmpty() && !userTaskGoalTitle.getText().toString().isEmpty()) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("DATA_DESCRIPTION", userTaskGoalDescription.getText().toString());
-                    intent.putExtra("DATA_CATEGORY", improvementCategory.getText().toString());
+                    intent.putExtra("DATA_CATEGORY", improvementCategory.getSelectedItem().toString());
                     intent.putExtra("DATA_TITLE", userTaskGoalTitle.getText().toString());
                     intent.putExtra("DATA_SILVER", Long.valueOf(userTaskGoalSilver.getText().toString()));
                     intent.putExtra("DATA_IMPROVEMENT_TYPE", improvementType);
