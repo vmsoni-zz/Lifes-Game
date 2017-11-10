@@ -11,9 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private ViewPager viewPager;
     private BottomNavigationView mBottomNavigation;
+    private Map<Integer, String> mFragmentTags;
+    private MyPagerAdapter mAdapterViewPager;
 
-
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupSwipeFragments() {
         viewPager = (ViewPager) findViewById(R.id.main_fragment);
-        viewPager.setAdapter(new MyPagerAdapter(fragmentManager));
+        mAdapterViewPager = new MyPagerAdapter(fragmentManager);
+        viewPager.setAdapter(mAdapterViewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 1) {
+                    Fragment fragment = mAdapterViewPager.getFragment(position);
+                    if (fragment != null) {
+                        fragment.onResume();
+                    }
+                }
+            }
+
+            public void onPageSelected(int position) {
+            }
+        });
     }
 
     public void setupBottomNavBar() {
@@ -107,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentTags = new HashMap<Integer, String>();
         }
 
         @Override
@@ -124,6 +143,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return 2;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Object object = super.instantiateItem(container, position);
+            if (object instanceof Fragment) {
+                Fragment fragment = (Fragment) object;
+                String tag = fragment.getTag();
+                mFragmentTags.put(position, tag);
+            }
+            return object;
+        }
+
+        public Fragment getFragment(int position) {
+            Fragment fragment = null;
+            String tag = mFragmentTags.get(position);
+            if (tag != null) {
+                fragment = fragmentManager.findFragmentByTag(tag);
+            }
+            return fragment;
         }
     }
 }

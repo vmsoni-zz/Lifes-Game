@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
+import com.db.chart.model.ChartSet;
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.renderer.XRenderer;
@@ -27,6 +28,7 @@ import com.db.chart.view.LineChartView;
 import com.timqi.sectorprogressview.ColorfulRingProgressView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
@@ -75,7 +77,6 @@ public class StatisticsFragment extends Fragment {
             mTip.setPivotX(Tools.fromDpToPx(65) / 2);
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
-
         //Graph Data
         List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
         BarSet barSet = databaseHelper.getImprovementTypesXP();
@@ -93,6 +94,16 @@ public class StatisticsFragment extends Fragment {
         setupImprovementTypeXpChart(barSet, gridPaint);
 
         return statisticsView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Graph Data
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
+        BarSet barSet = databaseHelper.getImprovementTypesXP();
+
+        updateGraphs(dataSet, barSet, databaseHelper.getCompletedToDoPercentage());
     }
 
     public void setupCompletedToDoGraph(List<LineSet> dataSet, Paint gridPaint) {
@@ -149,10 +160,29 @@ public class StatisticsFragment extends Fragment {
         improvementTypeXpChart.setBackgroundColor(Color.parseColor("#04baa6"));
     }
 
+    private void updateGraphs(List<LineSet> dataSet, BarSet barSet, int toDoCompPercentage) {
+        improvementTypeXpChart.reset();
+        completedToDoGraph.reset();
+        silverChart.reset();
+
+        setupCompletedToDoPercentageGraph(toDoCompPercentage);
+
+        Paint gridPaint = new Paint();
+        gridPaint.setColor(Color.parseColor("#ffffff"));
+        gridPaint.setStyle(Paint.Style.STROKE);
+        gridPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
+        gridPaint.setAntiAlias(true);
+        gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
+
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage());
+        setupCompletedToDoGraph(dataSet, gridPaint);
+        setupSilverChart(dataSet, gridPaint);
+        setupImprovementTypeXpChart(barSet, gridPaint);
+    }
+
     public void setupCompletedToDoPercentageGraph(int toDoCompPercentage) {
         completedToDoPercentageGraph.setPercent(toDoCompPercentage);
         tvCompToDo.setText(String.valueOf(toDoCompPercentage));
         completedToDoPercentageGraph.setStrokeWidthDp(12f);
     }
-
 }
