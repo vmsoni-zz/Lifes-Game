@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private BottomNavigationView mBottomNavigation;
     private Map<Integer, String> mFragmentTags;
-    private MyPagerAdapter mAdapterViewPager;
+    private PagerAdapter mAdapterViewPager;
 
     private DatabaseHelper databaseHelper;
 
@@ -66,17 +66,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fragmentManager = getFragmentManager();
-        fragment = new HomeFragment();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.main_fragment, fragment).commit();
-
         setupSwipeFragments();
         setupBottomNavBar();
     }
 
     private void setupSwipeFragments() {
         viewPager = (ViewPager) findViewById(R.id.main_fragment);
-        mAdapterViewPager = new MyPagerAdapter(fragmentManager);
+        mAdapterViewPager = new PagerAdapter(fragmentManager);
+        mAdapterViewPager.addFragment(new HomeFragment(), "Home");
+        mAdapterViewPager.addFragment(new StatisticsFragment(), "Statistics");
         viewPager.setAdapter(mAdapterViewPager);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == 1) {
-                    Fragment fragment = mAdapterViewPager.getFragment(position);
+                    Fragment fragment = mAdapterViewPager.getItem(position);
                     if (fragment != null) {
                         fragment.onResume();
                     }
@@ -119,50 +117,5 @@ public class MainActivity extends AppCompatActivity {
     public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, Date dataEndDate) {
         Long goalTaskId = databaseHelper.addData(description, category, title, silver, improvementType, dataEndDate);
         return goalTaskId;
-    }
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-            mFragmentTags = new HashMap<Integer, String>();
-        }
-
-        @Override
-        public Fragment getItem(int pos) {
-            switch (pos) {
-                case 0:
-                    return new HomeFragment();
-                case 1:
-                    return new StatisticsFragment();
-                default:
-                    return new HomeFragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Object object = super.instantiateItem(container, position);
-            if (object instanceof Fragment) {
-                Fragment fragment = (Fragment) object;
-                String tag = fragment.getTag();
-                mFragmentTags.put(position, tag);
-            }
-            return object;
-        }
-
-        public Fragment getFragment(int position) {
-            Fragment fragment = null;
-            String tag = mFragmentTags.get(position);
-            if (tag != null) {
-                fragment = fragmentManager.findFragmentByTag(tag);
-            }
-            return fragment;
-        }
     }
 }

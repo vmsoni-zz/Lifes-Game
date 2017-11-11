@@ -106,15 +106,14 @@ public class GameMechanicsHelper {
             //setup progress bars for health and xp
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
-
-            healthBar.setProgress(currentHealth);
             healthBar.setMax(maxHealth);
+            healthBar.setProgress(currentHealth);
         } catch (Exception e) {
             databaseHelper.initiateKeys();
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
-            healthBar.setProgress(currentHealth);
             healthBar.setMax(maxHealth);
+            healthBar.setProgress(currentHealth);
             Log.d("Error", "Error asserted: " + e);
         }
         charHealth.setText(Integer.toString(currentHealth) + "/" + Integer.toString(maxHealth));

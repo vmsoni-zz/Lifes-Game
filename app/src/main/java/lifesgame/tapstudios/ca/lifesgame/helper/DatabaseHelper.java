@@ -2,14 +2,11 @@ package lifesgame.tapstudios.ca.lifesgame.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteTableLockedException;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
@@ -367,5 +364,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return (int) Math.round((countComp / countTotal) * 100);
         }
         return 0;
+    }
+
+    public int getTotalDeletedCount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 ";
+        int countTotal = 0;
+        try {
+            Cursor c = db.rawQuery(queryDel, null);
+            if (null != c) {
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                    countTotal = c.getInt(0);
+                }
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.w("Error: ", e);
+        }
+        return countTotal;
     }
 }

@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
-import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 import java.text.DateFormat;
 import java.util.HashMap;
