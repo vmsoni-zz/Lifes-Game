@@ -243,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(TABLE_TASKS_GOALS_COMPLETED, completed);
         cv.put(TABLE_TASKS_GOALS_COMPLETION_DATE, completionDate);
-        cv.put(TABLE_TASKS_GOALS_DELETED, true);
+        cv.put(TABLE_TASKS_GOALS_DELETED, completed);
         database.update(TABLE_TASKS_GOALS, cv, TABLE_ID + "= " + id, null);
         database.close();
     }

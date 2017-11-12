@@ -33,4 +33,5 @@ dependencies {
     compile 'com.akexorcist:RoundCornerProgressBar:2.0.3'
     compile 'com.diogobernardino:williamchart:+'
     compile 'com.desarrollodroide:fragmenttransactionextended:1'
+    compile 'info.hoang8f:fbutton:1.0.5'
 }

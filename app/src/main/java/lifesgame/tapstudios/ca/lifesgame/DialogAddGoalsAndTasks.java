@@ -29,14 +29,12 @@ import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicke
 import java.text.DateFormat;
 import java.util.HashMap;
 
+import info.hoang8f.widget.FButton;
+
 public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private SelectedDate mSelectedDate;
     private EditText endDateEt;
     private LinearLayout endDateLl;
-    private int mHour, mMinute;
-    private RelativeLayout rlDateTimeRecurrenceInfo;
-    private String mRecurrenceOption, mRecurrenceRule;
-    private MainActivity mainActivity;
     Spinner improvementCategory;
 
     @Override
@@ -54,8 +52,6 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, improvementCategories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         improvementCategory.setAdapter(spinnerAdapter);
-
-        mainActivity = new MainActivity();
         addItem();
         silverSeekBar();
         goalSelection();
@@ -72,10 +68,6 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                                             SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
                                             String recurrenceRule) {
             mSelectedDate = selectedDate;
-            mHour = hourOfDay;
-            mMinute = minute;
-            mRecurrenceOption = recurrenceOption != null ? recurrenceOption.name() : "n/a";
-            mRecurrenceRule = recurrenceRule != null ? recurrenceRule : "n/a";
             updateInfoView();
         }
     };
@@ -162,7 +154,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     }
 
     private void addItem() {
-        Button userAcceptTaskGoalBtn = (Button) findViewById(R.id.btn_user_accept_goal_task);
+        FButton userAcceptTaskGoalBtn = (FButton) findViewById(R.id.btn_user_accept_goal_task);
         userAcceptTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
