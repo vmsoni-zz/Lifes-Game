@@ -63,11 +63,11 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         return goalsAndTasks.size();
     }
 
-    public void removeItem(int position, Boolean completed) {
+    public void removeItem(int position, Boolean completed, Boolean deleted) {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(dt);
-        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime);
+        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
         goalsAndTasks.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, goalsAndTasks.size());

@@ -4,9 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
@@ -23,12 +26,21 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
     private final ImageButton failedBtn;
     private final TextView goalsAndTasksTitle;
     private final TextView goalsAndTasksDescription;
+    private final TextView goalsAndTasksRemainingTime;
+    private final LinearLayout goalsAndTasksRemainingTimeLL;
     private GoalsAndTasks goalsAndTasks;
     private Context context;
     private GoalsAndTasksHelper goalsAndTasksHelper;
     private GoalsAndTasksAdapter goalsAndTasksAdapter;
     private GameMechanicsHelper gameMechanicsHelper;
+    private Map<String, ImageView> improvementTypeImageViews;
 
+    private static final String TABLE_TASKS_GOALS_HEALTH_EXERCISE = "health_exercise";
+    private static final String TABLE_TASKS_GOALS_WORK = "work";
+    private static final String TABLE_TASKS_GOALS_SCHOOL = "school";
+    private static final String TABLE_TASKS_GOALS_FAMILY_FRIENDS = "family_friends";
+    private static final String TABLE_TASKS_GOALS_LEARNING = "learning";
+    private static final String TABLE_TASKS_GOALS_OTHER = "other";
 
     public GoalsAndTasksHolder(Context context,
                                View itemView,
@@ -48,8 +60,11 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         failedBtn = (ImageButton) itemView.findViewById(R.id.failedButton);
         goalsAndTasksTitle = (TextView) itemView.findViewById(R.id.goal_task_title);
         goalsAndTasksDescription = (TextView) itemView.findViewById(R.id.goal_task_description);
-
+        goalsAndTasksRemainingTime = (TextView) itemView.findViewById(R.id.goal_task_remaining_time);
+        goalsAndTasksRemainingTimeLL = (LinearLayout) itemView.findViewById(R.id.goal_task_remaining_time_ll);
+        improvementTypeImageViews = new HashMap<>();
         itemView.setOnClickListener(this);
+        initializeImprovementTypeImageViews();
     }
 
     @Override
@@ -64,7 +79,34 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         this.goalsAndTasks = goalsAndTasks;
         goalsAndTasksTitle.setText(goalsAndTasks.getTitle());
         goalsAndTasksDescription.setText(goalsAndTasks.getDescription());
+        if (!goalsAndTasks.getCategory().equals("Goal")) {
+            goalsAndTasksRemainingTimeLL.setVisibility(View.GONE);
+        }
+        else {
+            goalsAndTasksRemainingTime.setText(goalsAndTasks.getDeadlineDateString());
+        }
+        initializeImprovementTypeImages(goalsAndTasks);
         initializeOnClickListeners(position);
+    }
+
+    public void initializeImprovementTypeImageViews() {
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, (ImageView) itemView.findViewById(R.id.health_exercise));
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_WORK, (ImageView) itemView.findViewById(R.id.work_img));
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_SCHOOL, (ImageView) itemView.findViewById(R.id.school_img));
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, (ImageView) itemView.findViewById(R.id.family_friends));
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_LEARNING, (ImageView) itemView.findViewById(R.id.learning_img));
+        improvementTypeImageViews.put(TABLE_TASKS_GOALS_OTHER, (ImageView) itemView.findViewById(R.id.other_img));
+    }
+
+    public void initializeImprovementTypeImages(GoalsAndTasks goalsAndTasks) {
+        Map<String, Boolean> improvementTypes = goalsAndTasks.getImprovementTypeMap();
+        for (Map.Entry<String, Boolean> improvement : improvementTypes.entrySet()) {
+            if (improvement.getValue()) {
+                improvementTypeImageViews.get(improvement.getKey())
+                        .setImageResource(itemView.getResources()
+                                .getIdentifier(improvement.getKey(), "drawable", "lifesgame.tapstudios.ca.lifesgame"));
+            }
+        }
     }
 
     public void initializeOnClickListeners(final int position) {
@@ -78,7 +120,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goalsAndTasksAdapter.removeItem(position, false);
+                goalsAndTasksAdapter.removeItem(position, false, true);
 
             }
         });
@@ -93,7 +135,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                         gameMechanicsHelper.addImprovementType(type);
                     }
                 }
-                goalsAndTasksAdapter.removeItem(position, true);
+                goalsAndTasksAdapter.removeItem(position, true, true);
                 gameMechanicsHelper.addXp();
             }
         });
@@ -101,7 +143,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         failedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goalsAndTasksAdapter.removeItem(position, false);
+                goalsAndTasksAdapter.removeItem(position, false, true);
                 gameMechanicsHelper.removeHealth();
             }
         });

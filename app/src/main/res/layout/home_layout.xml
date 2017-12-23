@@ -52,6 +52,7 @@
                 android:layout_toEndOf="@+id/unityGame"
                 android:layout_toRightOf="@+id/unityGame"
                 android:paddingTop="5dp"
+                android:textColor="@color/colorWhite"
                 android:text="Health:"
                 android:textSize="15dp" />
 
@@ -64,6 +65,7 @@
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
                 android:text="New Text"
+                android:textColor="@color/colorWhite"
                 android:textSize="15dp" />
 
             <TextView
@@ -74,6 +76,7 @@
                 android:layout_toEndOf="@+id/unityGame"
                 android:layout_toRightOf="@+id/unityGame"
                 android:paddingTop="15dp"
+                android:textColor="@color/colorWhite"
                 android:text="XP:"
                 android:textSize="15dp" />
 
@@ -84,6 +87,7 @@
                 android:layout_alignLeft="@+id/charHealthLabel"
                 android:layout_alignStart="@+id/charHealthLabel"
                 android:layout_below="@+id/xpBar"
+                android:textColor="@color/colorWhite"
                 android:paddingTop="15dp"
                 android:text="Level:" />
 
@@ -96,6 +100,7 @@
                 android:paddingRight="5dp"
                 android:paddingTop="15dp"
                 android:text="New Text"
+                android:textColor="@color/colorWhite"
                 android:textSize="15dp" />
 
             <TextView
@@ -106,6 +111,7 @@
                 android:layout_below="@+id/xpBar"
                 android:maxLines="1"
                 android:paddingRight="5dp"
+                android:textColor="@color/colorWhite"
                 android:paddingTop="15dp"
                 android:text="New Text" />
 
@@ -117,6 +123,7 @@
                 android:layout_toEndOf="@+id/unityGame"
                 android:layout_toRightOf="@+id/unityGame"
                 android:maxLines="1"
+                android:textColor="@color/colorWhite"
                 android:paddingRight="5dp"
                 android:paddingTop="15dp"
                 android:text="Silver:" />
@@ -129,6 +136,7 @@
                 android:layout_below="@+id/charLevel"
                 android:maxLines="1"
                 android:paddingRight="5dp"
+                android:textColor="@color/colorWhite"
                 android:paddingTop="15dp"
                 android:text="New Text" />
 
@@ -137,10 +145,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/silver"
+                android:textColor="@color/colorWhite"
                 android:layout_toEndOf="@+id/unityGame"
                 android:layout_toRightOf="@+id/unityGame"
                 android:paddingTop="15dp"
-                android:text="Gold:" />d
+                android:text="Gold:" />
 
             <TextView
                 android:id="@+id/goldAmount"
@@ -149,6 +158,7 @@
                 android:layout_alignRight="@+id/charLevel"
                 android:layout_below="@id/silver"
                 android:maxLines="1"
+                android:textColor="@color/colorWhite"
                 android:paddingRight="5dp"
                 android:paddingTop="15dp"
                 android:text="New Text" />

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
@@ -27,7 +28,7 @@ public class HomeFragment extends Fragment {
     TextView charXp;
     TextView charLevel;
     TextView silverAmountTextView;
-    ArrayList<GoalsAndTasks> arrayList;
+    List<GoalsAndTasks> arrayList;
     Button addItemToListBtn;
     GoalsAndTasksAdapter goalsAndTasksAdapter;
     GoalsAndTasksHelper goalsAndTasksHelper;
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment {
         listView.setAdapter(goalsAndTasksAdapter);
 
         gameMechanicsHelper.setUpGameTextViews();
-
+        databaseHelper.resetExpiredGoalsAndTasks();
         //Setup listview with all goals and tasks
         arrayList.addAll(databaseHelper.loadAllGoalsAndTask());
         if (arrayList != null) {

@@ -40,25 +40,12 @@ public class MainActivity extends AppCompatActivity {
         String dataCategory = intent.getStringExtra("DATA_CATEGORY");
         String dataTitle = intent.getStringExtra("DATA_TITLE");
         Long dataSilver = intent.getLongExtra("DATA_SILVER", 0);
-        Date dataEndDate = new Date();
-
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        try {
-            String endDate = intent.getStringExtra("DATA_ENDDATE");
-            if (endDate != null) {
-                dataEndDate = format.parse(intent.getStringExtra("DATA_ENDDATE"));
-            } else {
-                dataEndDate = null;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            dataEndDate = null;
-        }
+        String deadlineDate = intent.getStringExtra("DATA_ENDDATE");
 
         Map<String, Boolean> improvementType = (HashMap<String, Boolean>) intent.getSerializableExtra("DATA_IMPROVEMENT_TYPE");
 
         if (dataDescription != null || dataTitle != null) {
-            Long goalTaskId = addData(dataDescription, dataCategory, dataTitle, dataSilver, improvementType, dataEndDate);
+            Long goalTaskId = addData(dataDescription, dataCategory, dataTitle, dataSilver, improvementType, deadlineDate);
             Toast.makeText(getApplicationContext(), "Inserted " + dataCategory, Toast.LENGTH_LONG).show();
         }
 
@@ -111,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, Date dataEndDate) {
-        Long goalTaskId = databaseHelper.addData(description, category, title, silver, improvementType, dataEndDate);
+    public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate) {
+        Long goalTaskId = databaseHelper.addData(description, category, title, silver, improvementType, deadlineDate);
         return goalTaskId;
     }
 }

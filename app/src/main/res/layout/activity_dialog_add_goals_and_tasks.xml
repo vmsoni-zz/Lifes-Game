@@ -50,7 +50,8 @@
                 android:layout_below="@+id/sliderAndPoints_layout"
                 android:hint="Title"
                 android:textColor="#038EC3"
-                android:textColorHint="#B6E8FB" />
+                android:textColorHint="#B6E8FB"
+                android:imeOptions="actionDone" />
 
             <EditText
                 android:id="@+id/textDescription"
@@ -63,7 +64,8 @@
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="#B6E8FB" />
+                android:textColorHint="#B6E8FB"
+                android:imeOptions="actionDone" />
 
             <LinearLayout
                 android:id="@+id/ButtonHolder"
@@ -80,17 +82,12 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1"
-                    android:background="#9BC53D"
                     android:gravity="center"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
                     android:text="Save"
                     android:textColor="@android:color/white"
-                    fbutton:buttonColor="@color/fbutton_color_emerald"
-                    fbutton:cornerRadius="5dp"
-                    fbutton:shadowColor="@color/fbutton_color_green_sea"
-                    fbutton:shadowEnabled="true"
-                    fbutton:shadowHeight="5dp" />
+                    fbutton:buttonColor="@color/fbutton_color_emerald" />
 
                 <info.hoang8f.widget.FButton
                     android:id="@+id/btn_user_cancel_goal_task"
@@ -99,17 +96,12 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="3dp"
                     android:layout_weight="1"
-                    android:background="#9BC53D"
                     android:gravity="center"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
-                    android:text="Delete"
+                    android:text="Cancel"
                     android:textColor="@android:color/white"
-                    fbutton:buttonColor="@color/fbutton_color_alizarin"
-                    fbutton:cornerRadius="5dp"
-                    fbutton:shadowColor="@color/fbutton_color_pomegranate"
-                    fbutton:shadowEnabled="true"
-                    fbutton:shadowHeight="5dp" />
+                    fbutton:buttonColor="@color/fbutton_color_alizarin" />
             </LinearLayout>
 
             <LinearLayout

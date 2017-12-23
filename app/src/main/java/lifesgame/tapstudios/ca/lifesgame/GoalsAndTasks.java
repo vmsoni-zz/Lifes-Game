@@ -1,6 +1,8 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
 import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Vidit Soni on 8/5/2017.
@@ -11,15 +13,17 @@ public class GoalsAndTasks {
     private String category;
     private Long id;
     private Long silver;
+    private Date deadlineDate;
     private Map<String, Boolean> improvementType;
 
-    public GoalsAndTasks(String title, String description, String category, Long id, Long silver, Map<String, Boolean> improvementType) {
+    public GoalsAndTasks(String title, String description, String category, Long id, Long silver, Map<String, Boolean> improvementType, Date deadlineDate) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.id = id;
         this.silver = silver;
         this.improvementType = improvementType;
+        this.deadlineDate = deadlineDate;
     }
 
     public void setTitle(String title) {
@@ -44,6 +48,18 @@ public class GoalsAndTasks {
 
     public String getCategory() {
         return category;
+    }
+
+    public Date getDeadlineDate() {
+        return deadlineDate;
+    }
+
+    public String getDeadlineDateString() {
+        if (deadlineDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        return sdf.format(deadlineDate);
     }
 
     public Long getId() {

@@ -1,5 +1,6 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.DialogFragment;
@@ -9,8 +10,11 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +31,9 @@ import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import info.hoang8f.widget.FButton;
@@ -35,6 +42,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private SelectedDate mSelectedDate;
     private EditText endDateEt;
     private LinearLayout endDateLl;
+    private EditText userTaskGoalTitle;
+    private EditText userTaskGoalDescription;
     Spinner improvementCategory;
 
     @Override
@@ -44,6 +53,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         improvementCategory = (Spinner) findViewById(R.id.spinner1);
         endDateEt = (EditText) findViewById(R.id.endDateTv);
         endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
+        userTaskGoalDescription = (EditText) findViewById(R.id.textDescription);
+        userTaskGoalTitle = (EditText) findViewById(R.id.textTitle);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
         endDateLl.setVisibility(View.GONE);
@@ -53,6 +64,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         improvementCategory.setAdapter(spinnerAdapter);
         addItem();
+        deleteItem();
+        categoryTitleEditListener();
         silverSeekBar();
         goalSelection();
     }
@@ -155,11 +168,14 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
     private void addItem() {
         FButton userAcceptTaskGoalBtn = (FButton) findViewById(R.id.btn_user_accept_goal_task);
+        userAcceptTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_emerald));
+        userAcceptTaskGoalBtn.setShadowColor(getResources().getColor(R.color.fbutton_color_green_sea));
+        userAcceptTaskGoalBtn.setShadowEnabled(true);
+        userAcceptTaskGoalBtn.setShadowHeight(8);
+        userAcceptTaskGoalBtn.setCornerRadius(15);
         userAcceptTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText userTaskGoalDescription = (EditText) findViewById(R.id.textDescription);
-                final EditText userTaskGoalTitle = (EditText) findViewById(R.id.textTitle);
                 final TextView userTaskGoalSilver = (TextView) findViewById(R.id.silver_amount_text_view);
                 final CheckBox userHealthExercise = (CheckBox) findViewById(R.id.healthExercise);
                 final CheckBox userWork = (CheckBox) findViewById(R.id.work);
@@ -183,11 +199,57 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                     intent.putExtra("DATA_TITLE", userTaskGoalTitle.getText().toString());
                     intent.putExtra("DATA_SILVER", Long.valueOf(userTaskGoalSilver.getText().toString()));
                     intent.putExtra("DATA_IMPROVEMENT_TYPE", improvementType);
-                    if (endDateLl.getVisibility() == View.VISIBLE) {
-                        intent.putExtra("DATA_ENDDATE", mSelectedDate.getEndDate());
+                    if (improvementCategory.getSelectedItem().toString().equals("Goal")) {
+                        Calendar calendarDeadline = mSelectedDate.getEndDate();
+                        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        intent.putExtra("DATA_ENDDATE", formatter.format(calendarDeadline.getTime()));
                     }
                     startActivity(intent);
                 }
+            }
+        });
+    }
+
+    private void deleteItem() {
+        FButton userCancelTaskGoalBtn = (FButton) findViewById(R.id.btn_user_cancel_goal_task);
+        userCancelTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_alizarin));
+        userCancelTaskGoalBtn.setShadowColor(getResources().getColor(R.color.fbutton_color_pomegranate));
+        userCancelTaskGoalBtn.setShadowEnabled(true);
+        userCancelTaskGoalBtn.setShadowHeight(8);
+        userCancelTaskGoalBtn.setCornerRadius(15);
+        userCancelTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void categoryTitleEditListener() {
+        userTaskGoalTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE)) {
+                    // hide virtual keyboard
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return false;
+
+            }
+        });
+
+        userTaskGoalDescription.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE)) {
+                    // hide virtual keyboard
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return false;
+
             }
         });
     }

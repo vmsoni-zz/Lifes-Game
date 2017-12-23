@@ -11,8 +11,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:orientation="horizontal"
+        android:paddingBottom="2.5dp"
         android:paddingRight="5dp"
-        android:paddingTop="5dp">
+        android:paddingTop="2.5dp">
 
         <FrameLayout
             android:layout_width="63dp"
@@ -49,15 +50,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="2.5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="5dp">
+        android:paddingTop="2.5dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#e3ecf5"
-            android:minHeight="80dp">
+            android:minHeight="90dp">
 
             <FrameLayout
                 android:id="@+id/failedButtonLayout"
@@ -95,28 +97,129 @@
                     android:src="@drawable/check_mark" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/goal_task_description"
-                android:layout_width="197dp"
-                android:layout_height="52dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:gravity="center_vertical"
-                android:text="New Text"
-                android:textColor="#09A8E5"
-                android:textSize="20dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/goal_task_title"
-                android:layout_width="197dp"
-                android:layout_height="38dp"
-                android:layout_gravity="center_horizontal|top"
-                android:gravity="center_vertical"
-                android:text="New Text"
-                android:textColor="#038EC3"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/goal_task_title"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
+                    android:text="New Text"
+                    android:textColor="#038EC3"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/goal_task_description"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/goal_task_title"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
+                    android:text="New Text"
+                    android:textColor="#09A8E5"
+                    android:textSize="20dp" />
+
+                <LinearLayout
+                    android:id="@+id/goal_task_remaining_time_ll"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/goal_task_description"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/goal_task_remaining_time_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Deadline: "
+                        android:textColor="#ed2c2b"
+                        android:textSize="19dp" />
+                    <TextView
+                        android:id="@+id/goal_task_remaining_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="#09A8E5"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/goal_task_remaining_time_ll"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/health_exercise"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_health_exercise" />
+
+                    <ImageView
+                        android:id="@+id/work_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_work" />
+
+                    <ImageView
+                        android:id="@+id/school_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_school" />
+
+                    <ImageView
+                        android:id="@+id/family_friends"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_family_friends" />
+
+                    <ImageView
+                        android:id="@+id/learning_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_learning" />
+
+                    <ImageView
+                        android:id="@+id/other_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/not_selected_other" />
+
+                </LinearLayout>
+            </RelativeLayout>
         </FrameLayout>
-
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>
