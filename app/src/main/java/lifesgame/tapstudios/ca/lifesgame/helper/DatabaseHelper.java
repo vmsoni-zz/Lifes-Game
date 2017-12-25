@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import lifesgame.tapstudios.ca.lifesgame.GoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.GraphData;
+import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
 
 /**
  * Created by Vidit Soni on 5/24/2017.
@@ -186,6 +188,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_KEY, USER_OTHER_LVL);
         contentValues.put(TABLE_VALUES, "0");
         db.insert(TABLE_KEY_VALUES, null, contentValues);
+        db.close();
     }
 
     public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate) {
@@ -204,6 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_TASKS_GOALS_OTHER, improvementType.get(TABLE_TASKS_GOALS_OTHER));
         Log.d(TAG, "addData: Adding " + description + " to " + TABLE_TASKS_GOALS + " under category " + category);
         Long result = db.insert(TABLE_TASKS_GOALS, null, contentValues);
+        db.close();
         return result;
     }
 
@@ -229,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
                         Date deadlineDate = null;
-                        if(deadlineDateString != null) {
+                        if (deadlineDateString != null) {
                             try {
                                 deadlineDate = formatter.parse(deadlineDateString);
                             } catch (ParseException e) {
@@ -251,16 +255,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (SQLiteException se) {
             Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
         }
 
         for (GoalsAndTasks goalsAndTasks : expiredGoalsAndTasksArrayList) {
             Date dt = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentTime = sdf.format(dt);
-            if(!goalsAndTasks.getCategory().equals("Goal")) {
+            if (!goalsAndTasks.getCategory().equals("Goal")) {
                 deleteData(goalsAndTasks.getId(), false, currentTime, true);
             }
         }
+        db.close();
     }
 
     public ArrayList loadAllGoalsAndTask() {
@@ -279,12 +285,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         improvementType.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAMILY_FRIENDS)) > 0);
                         improvementType.put(TABLE_TASKS_GOALS_LEARNING, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_LEARNING)) > 0);
                         improvementType.put(TABLE_TASKS_GOALS_OTHER, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_OTHER)) > 0);
-                        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
                         Date deadlineDate = null;
-                        if(deadlineDateString != null) {
+                        if (deadlineDateString != null) {
                             try {
-                                 deadlineDate = formatter.parse(deadlineDateString);
+                                deadlineDate = formatter.parse(deadlineDateString);
                             } catch (ParseException e) {
                                 Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
                             }
@@ -304,7 +310,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (SQLiteException se) {
             Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
         }
+        db.close();
         return goalsAndTasksArrayList;
     }
 
@@ -318,11 +326,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
+    public boolean deleteDataPermanent(Long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TASKS_GOALS, TABLE_ID + " = " + id, null);
+        db.close();
+        return true;
+    }
+
     public void addKey(String key) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_KEY_VALUES, key);
         db.insert(TABLE_KEY_VALUES, null, contentValues);
+        db.close();
     }
 
     public String getValue(String key) {
@@ -335,6 +351,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             values = null;
         }
+        db.close();
+        return values;
+    }
+
+    public String getImprovementValue(String key, StatisticFilters dataRange) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_KEY_VALUES + " WHERE " + TABLE_KEY + " = " + "'" + key + "'";
+        Cursor value = db.rawQuery(query, null);
+        String values;
+        if (value.moveToFirst()) {
+            values = value.getString(2);
+        } else {
+            values = null;
+        }
+        db.close();
         return values;
     }
 
@@ -345,17 +376,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_KEY_VALUES, contentValues, TABLE_KEY + " = " + "'" + key + "'", null);
     }
 
-    public void deleteValue(String key) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.execSQL("DELETE FROM " + TABLE_KEY_VALUES + " WHERE " + TABLE_KEY + "= " + "'" + key + "'");
-    }
-
-    public BarSet getImprovementTypesXP() {
+    public BarSet getImprovementTypesXP(StatisticFilters dataRange) {
         Map<String, Float> improvementTypesLevel = new HashMap<>();
-        improvementTypesLevel.put("Health and Exercise", Float.valueOf(getValue(USER_HEALTH_EXERCISE)));
+        improvementTypesLevel.put("Health", Float.valueOf(getValue(USER_HEALTH_EXERCISE)));
         improvementTypesLevel.put("Work", Float.valueOf(getValue(USER_WORK)));
         improvementTypesLevel.put("School", Float.valueOf(getValue(USER_SCHOOL)));
-        improvementTypesLevel.put("Family and Friends", Float.valueOf(getValue(USER_FAMILY_FRIENDS)));
+        improvementTypesLevel.put("Family", Float.valueOf(getValue(USER_FAMILY_FRIENDS)));
         improvementTypesLevel.put("Learning", Float.valueOf(getValue(USER_LEARNING)));
         improvementTypesLevel.put("Other", Float.valueOf(getValue(USER_OTHER)));
         BarSet barSetImprovementTypesLevel = new BarSet();
@@ -365,18 +391,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return barSetImprovementTypesLevel;
     }
 
-    public List<LineSet> getCompletedGoalTasks() {
+    public List<LineSet> getCompletedGoalTasks(StatisticFilters dataRange) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<LineSet> graphDataLineSet = new ArrayList<>();
         Map<String, GraphData> graphData = new HashMap<>();
-        String[] namesOfDays = new String[]{
-                "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-        };
+        String namesOfDays[];
+        String query = null;
+        String keyValue = null;
+        DateFormat dateFormat = null;
+        switch (dataRange) {
+            case DAILY:
+                DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                namesOfDays = new String[]{
+                        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+                };
+                query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + ", " + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
+                        " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
+                break;
+            case WEEKLY:
+                namesOfDays = new String[]{
+                        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+                };
+                query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + ", " + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
+                        " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
+                break;
+            case MONTHLY:
+                String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                namesOfDays = new String[]{
+                        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                };
+                query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + " ," + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
+                        " WHERE strftime('%Y', " + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = '" + year + "' " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
+                break;
+            default:
+                namesOfDays = new String[]{
+                        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+                };
+                query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + " ," + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
+                        " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
+                break;
+        }
+
         for (int i = 0; i < namesOfDays.length; i++) {
             graphData.put(namesOfDays[i], new GraphData());
         }
-        String query = "SELECT * FROM " + TABLE_TASKS_GOALS + " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
-        DateFormat dateFormat = new SimpleDateFormat("E");
         try {
             Cursor c = db.rawQuery(query, null);
             if (c != null) {
@@ -384,31 +451,105 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     do {
                         String dateTime = c.getString(c.getColumnIndexOrThrow(TABLE_TASKS_GOALS_COMPLETION_DATE));
                         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime);
-                        String dayOfWeek = dateFormat.format(date).toString();
-                        graphData.get(dayOfWeek).addSilver(c.getFloat(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)));
-                        graphData.get(dayOfWeek).addCompletedAmount(1F);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        switch (dataRange) {
+                            case DAILY:
+                                int hours = calendar.get(Calendar.HOUR_OF_DAY);
+                                keyValue = String.valueOf(hours);
+                                break;
+                            case WEEKLY:
+                                dateFormat = new SimpleDateFormat("E");
+                                keyValue = dateFormat.format(date);
+                                break;
+                            case MONTHLY:
+                                dateFormat = new SimpleDateFormat("MMM");
+                                keyValue = dateFormat.format(date);
+                                break;
+                        }
+                        graphData.get(keyValue).addSilver(c.getFloat(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)));
+                        graphData.get(keyValue).addCompletedAmount(1F);
                     } while (c.moveToNext());
                 }
             }
         } catch (Exception e) {
+            db.close();
             Log.println(Log.ERROR, "Error: ", "issue is " + e);
+
         }
         LineSet dataSetCompletedTaskGoals = new LineSet();
         LineSet dataSetTotalSilver = new LineSet();
         int i = 0;
-        for (String date : graphData.keySet()) {
-            dataSetTotalSilver.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getSilverAmount());
-            dataSetCompletedTaskGoals.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getCompletedAmount());
-            i++;
+        if (dataRange == StatisticFilters.DAILY) {
+            for (String date : graphData.keySet()) {
+                if (Integer.valueOf(namesOfDays[i]) % 6 == 0 || Integer.valueOf(namesOfDays[i]) == 1) {
+                    dataSetTotalSilver.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getSilverAmount());
+                    dataSetCompletedTaskGoals.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getCompletedAmount());
+                } else {
+                    dataSetTotalSilver.addPoint("", graphData.get(namesOfDays[i]).getSilverAmount());
+                    dataSetCompletedTaskGoals.addPoint("", graphData.get(namesOfDays[i]).getCompletedAmount());
+                }
+                i++;
+            }
+        } else {
+            for (String date : graphData.keySet()) {
+                dataSetTotalSilver.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getSilverAmount());
+                dataSetCompletedTaskGoals.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getCompletedAmount());
+                i++;
+            }
         }
         graphDataLineSet.addAll(Arrays.asList(dataSetTotalSilver, dataSetCompletedTaskGoals));
+        db.close();
         return graphDataLineSet;
     }
 
-    public int getCompletedToDoPercentage() {
+    public int getCompletedToDoPercentage(StatisticFilters dataRange) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1";
-        String queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 ";
+        String queryComp;
+        String queryDel;
+        switch (dataRange) {
+            case DAILY:
+                DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') ";
+                queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') ";
+                break;
+            case WEEKLY:
+                queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+
+                queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        " AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+                break;
+            case MONTHLY:
+                String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND strftime('%Y', " + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = '" + year + "' ";
+                queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND strftime('%Y', " + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = '" + year + "' ";
+                break;
+            default:
+                queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+
+                queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        " AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+                break;
+        }
+
         double countTotal = 0;
         double countComp = 0;
         try {
@@ -428,15 +569,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             c.close();
         } catch (Exception e) {
+            db.close();
             Log.w("Error: ", e);
         }
         if (countTotal > 0 && countComp > 0) {
             return (int) Math.round((countComp / countTotal) * 100);
         }
+        db.close();
         return 0;
     }
 
-    public int getTotalDeletedCount() {
+    public int getTotalDeletedCount(StatisticFilters dataRange) {
         SQLiteDatabase db = this.getWritableDatabase();
         String queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 ";
         int countTotal = 0;
@@ -450,8 +593,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             c.close();
         } catch (Exception e) {
+            db.close();
             Log.w("Error: ", e);
         }
+        db.close();
         return countTotal;
     }
 }

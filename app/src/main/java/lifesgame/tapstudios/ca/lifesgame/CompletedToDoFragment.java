@@ -12,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
+import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.tooltip.Tooltip;
@@ -37,9 +40,18 @@ public class CompletedToDoFragment extends Fragment {
     private Tooltip mTip;
     private View completedToDoView;
     private ColorfulRingProgressView completedToDoPercentageGraph;
+    private TextView tvCompLineChart;
+    private TextView tvCompPercChart;
     private TextView tvCompToDo;
-    private  List<LineSet> dataSet;
+    private List<LineSet> dataSet;
     private int totalDeleted;
+    private ImageButton dailyButton;
+    private ImageButton weeklyButton;
+    private ImageButton monthlyButton;
+    private StatisticFilters statisticsRange;
+    private String toDoCompletionPrefixSentence = "Total TODOs Completed ";
+    private String toDoCompletionPercPrefixSentence = "TODOs Completion Percentage ";
+
 
     public CompletedToDoFragment() {
     }
@@ -52,6 +64,12 @@ public class CompletedToDoFragment extends Fragment {
         completedToDoGraph = (LineChartView) completedToDoView.findViewById(R.id.mainChart);
         completedToDoPercentageGraph = (ColorfulRingProgressView) completedToDoView.findViewById(R.id.compToDoGraph);
         tvCompToDo = (TextView) completedToDoView.findViewById(R.id.tvCompToDo);
+        tvCompLineChart = (TextView) completedToDoView.findViewById(R.id.todoTV);
+        tvCompPercChart = (TextView) completedToDoView.findViewById(R.id.todoCompTV);
+        dailyButton = (ImageButton) completedToDoView.findViewById(R.id.daily_completed_todo);
+        weeklyButton = (ImageButton) completedToDoView.findViewById(R.id.weekly_completed_todo);
+        monthlyButton = (ImageButton) completedToDoView.findViewById(R.id.monthly_completed_todo);
+        statisticsRange = StatisticFilters.WEEKLY;
 
         ((TextView) mTip.findViewById(R.id.value)).setTypeface(
                 Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Semibold.ttf"));
@@ -73,8 +91,8 @@ public class CompletedToDoFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
         //Graph Data
-        dataSet = databaseHelper.getCompletedGoalTasks();
-        totalDeleted = databaseHelper.getTotalDeletedCount();
+        dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+        totalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
 
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -83,9 +101,9 @@ public class CompletedToDoFragment extends Fragment {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage());
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange));
         setupCompletedToDoGraph(dataSet, gridPaint);
-
+        setupDateRangeFilters();
         return completedToDoView;
     }
 
@@ -94,23 +112,33 @@ public class CompletedToDoFragment extends Fragment {
         super.onResume();
 
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount();
-        if(databaseHelper.getTotalDeletedCount() != totalDeleted) {
-            List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks();
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+            List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
             totalDeleted = updatedTotalDeleted;
-            updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage());
+            updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
         }
     }
 
     public void setupCompletedToDoGraph(List<LineSet> dataSet, Paint gridPaint) {
-        dataSet.get(1)
-                .setColor(Color.WHITE)
-                .setDotsStrokeColor(Color.WHITE)
-                .setDotsStrokeThickness(6)
-                .setDotsColor(Color.parseColor("#04baa6"))
-                .setThickness(6)
-                .setSmooth(false);
+        if (statisticsRange == StatisticFilters.DAILY) {
+            dataSet.get(1)
+                    .setColor(Color.WHITE)
+                    .setThickness(6)
+                    .setSmooth(true);
+        } else {
+            dataSet.get(1)
+                    .setColor(Color.WHITE)
+                    .setDotsStrokeColor(Color.WHITE)
+                    .setDotsStrokeThickness(6)
+                    .setDotsColor(Color.parseColor("#04baa6"))
+                    .setThickness(6)
+                    .setSmooth(false);
+        }
         completedToDoGraph.addData(dataSet.get(1));
+        if (dataSet.get(1).getMax().getValue() <= 2F) {
+            completedToDoGraph.setAxisBorderValues(0, 3, 1);
+        }
         completedToDoGraph.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsFormat(new DecimalFormat("0"))
                 .setAxisThickness(6)
@@ -118,15 +146,14 @@ public class CompletedToDoFragment extends Fragment {
                 .setGrid(7, 0, gridPaint)
                 .setTooltips(mTip)
                 .show(new Animation()
-                        .setInterpolator(new BounceInterpolator())
+                        .setInterpolator(new LinearInterpolator())
+                        .setDuration(200)
                         .fromAlpha(0));
         completedToDoGraph.setBackgroundColor(Color.parseColor("#04baa6"));
     }
 
     private void updateGraphs(List<LineSet> dataSet, int toDoCompPercentage) {
         completedToDoGraph.reset();
-
-        setupCompletedToDoPercentageGraph(toDoCompPercentage);
 
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -135,7 +162,7 @@ public class CompletedToDoFragment extends Fragment {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage());
+        setupCompletedToDoPercentageGraph(toDoCompPercentage);
         setupCompletedToDoGraph(dataSet, gridPaint);
     }
 
@@ -145,5 +172,59 @@ public class CompletedToDoFragment extends Fragment {
         completedToDoPercentageGraph.setFgColorEnd(0xFF02FEF1);
         completedToDoPercentageGraph.setPercent(toDoCompPercentage);
         tvCompToDo.setText(String.valueOf(toDoCompPercentage));
+    }
+
+    private void setupDateRangeFilters() {
+        dailyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.DAILY;
+                resetAllButtonState();
+                dailyButton.setImageResource(R.drawable.selected_daily);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
+                tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
+                tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
+
+            }
+        });
+
+        weeklyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.WEEKLY;
+                resetAllButtonState();
+                weeklyButton.setImageResource(R.drawable.selected_weekly);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
+                tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
+                tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
+            }
+        });
+
+        monthlyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.MONTHLY;
+                resetAllButtonState();
+                monthlyButton.setImageResource(R.drawable.selected_monthly);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
+                tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
+                tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
+            }
+        });
+    }
+
+    private void resetAllButtonState() {
+        dailyButton.setImageResource(R.drawable.daily);
+        weeklyButton.setImageResource(R.drawable.weekly);
+        monthlyButton.setImageResource(R.drawable.monthly);
     }
 }

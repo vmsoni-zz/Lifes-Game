@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapterViewPager.addFragment(new HomeFragment(), "Home");
         mAdapterViewPager.addFragment(new StatisticsFragment(), "Statistics");
         viewPager.setAdapter(mAdapterViewPager);
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {
             }

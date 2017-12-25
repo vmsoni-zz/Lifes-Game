@@ -120,7 +120,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goalsAndTasksAdapter.removeItem(position, false, true);
+                goalsAndTasksAdapter.deleteItemPermanent(position);
 
             }
         });

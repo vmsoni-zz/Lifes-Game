@@ -201,7 +201,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                     intent.putExtra("DATA_IMPROVEMENT_TYPE", improvementType);
                     if (improvementCategory.getSelectedItem().toString().equals("Goal")) {
                         Calendar calendarDeadline = mSelectedDate.getEndDate();
-                        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         intent.putExtra("DATA_ENDDATE", formatter.format(calendarDeadline.getTime()));
                     }
                     startActivity(intent);

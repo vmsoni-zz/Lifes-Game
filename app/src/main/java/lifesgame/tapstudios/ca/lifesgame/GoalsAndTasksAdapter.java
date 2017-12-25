@@ -72,4 +72,11 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, goalsAndTasks.size());
     }
+
+    public void deleteItemPermanent(int position) {
+        databaseHelper.deleteDataPermanent(goalsAndTasks.get(position).getId());
+        goalsAndTasks.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, goalsAndTasks.size());
+    }
 }

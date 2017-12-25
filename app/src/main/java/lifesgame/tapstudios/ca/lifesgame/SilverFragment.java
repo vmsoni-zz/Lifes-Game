@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -37,6 +39,10 @@ public class SilverFragment extends Fragment {
     private Tooltip mTip;
     private View silverView;
     private int totalDeleted;
+    private ImageButton dailyButton;
+    private ImageButton weeklyButton;
+    private ImageButton monthlyButton;
+    private StatisticFilters statisticsRange;
 
     public SilverFragment() {
     }
@@ -47,6 +53,10 @@ public class SilverFragment extends Fragment {
         silverView = inflater.inflate(R.layout.activity_silver, container, false);
         mTip = new Tooltip(silverView.getContext(), R.layout.linechart_tooltip, R.id.value);
         silverChart = (LineChartView) silverView.findViewById(R.id.silverChart);
+        statisticsRange = StatisticFilters.WEEKLY;
+        dailyButton = (ImageButton) silverView.findViewById(R.id.daily_silver);
+        weeklyButton = (ImageButton) silverView.findViewById(R.id.weekly_silver);
+        monthlyButton = (ImageButton) silverView.findViewById(R.id.monthly_silver);
 
         ((TextView) mTip.findViewById(R.id.value)).setTypeface(
                 Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Semibold.ttf"));
@@ -68,7 +78,7 @@ public class SilverFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
         //Graph Data
-        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
 
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -78,6 +88,7 @@ public class SilverFragment extends Fragment {
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
         setupSilverChart(dataSet, gridPaint);
+        setupDateRangeFilters();
 
         return silverView;
     }
@@ -86,37 +97,47 @@ public class SilverFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount();
-        if(databaseHelper.getTotalDeletedCount() != totalDeleted) {
-            List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks();
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+            List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
             totalDeleted = updatedTotalDeleted;
             updateGraphs(dataSet);
         }
     }
 
     public void setupSilverChart(List<LineSet> dataSet, Paint gridPaint) {
-        dataSet.get(0)
-                .setColor(Color.WHITE)
-                .setDotsStrokeColor(Color.WHITE)
-                .setDotsStrokeThickness(6)
-                .setDotsColor(Color.parseColor("#DC602E"))
-                .setThickness(6)
-                .setSmooth(false);
+        if (statisticsRange == StatisticFilters.DAILY) {
+            dataSet.get(0)
+                    .setColor(Color.WHITE)
+                    .setThickness(6)
+                    .setSmooth(true);
+        } else {
+            dataSet.get(0)
+                    .setColor(Color.WHITE)
+                    .setDotsStrokeColor(Color.WHITE)
+                    .setDotsStrokeThickness(6)
+                    .setDotsColor(Color.parseColor("#DC602E"))
+                    .setThickness(6)
+                    .setSmooth(false);
+        }
         silverChart.addData(dataSet.get(0));
+        if (dataSet.get(0).getMax().getValue() <= 2F) {
+            silverChart.setAxisBorderValues(0, 3, 1);
+        }
         silverChart.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsFormat(new DecimalFormat("0"))
                 .setAxisThickness(6)
                 .setAxisLabelsSpacing(35)
                 .setGrid(7, 0, gridPaint)
                 .setTooltips(mTip)
-                .show(new Animation().setInterpolator(new BounceInterpolator())
+                .show(new Animation().setInterpolator(new LinearInterpolator())
+                        .setDuration(200)
                         .fromAlpha(0));
         silverChart.setBackgroundColor(Color.parseColor("#DC602E"));
     }
 
     private void updateGraphs(List<LineSet> dataSet) {
         silverChart.reset();
-
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
         gridPaint.setStyle(Paint.Style.STROKE);
@@ -125,5 +146,52 @@ public class SilverFragment extends Fragment {
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
         setupSilverChart(dataSet, gridPaint);
+    }
+
+    private void setupDateRangeFilters() {
+        dailyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.DAILY;
+                resetAllButtonState();
+                dailyButton.setImageResource(R.drawable.selected_daily);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(dataSet);
+            }
+        });
+
+        weeklyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.WEEKLY;
+                resetAllButtonState();
+                weeklyButton.setImageResource(R.drawable.selected_weekly);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(dataSet);
+            }
+        });
+
+        monthlyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.MONTHLY;
+                resetAllButtonState();
+                monthlyButton.setImageResource(R.drawable.selected_monthly);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(dataSet);
+            }
+        });
+    }
+
+    private void resetAllButtonState() {
+        dailyButton.setImageResource(R.drawable.daily);
+        weeklyButton.setImageResource(R.drawable.weekly);
+        monthlyButton.setImageResource(R.drawable.monthly);
     }
 }

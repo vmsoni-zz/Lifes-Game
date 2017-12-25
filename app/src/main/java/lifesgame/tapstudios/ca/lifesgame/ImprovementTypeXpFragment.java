@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -25,6 +27,7 @@ import java.text.DecimalFormat;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
+
 /**
  * Created by viditsoni on 2017-11-09.
  */
@@ -34,7 +37,11 @@ public class ImprovementTypeXpFragment extends Fragment {
     public DatabaseHelper databaseHelper;
     private Tooltip mTip;
     private View improvementView;
+    private ImageButton dailyButton;
+    private ImageButton weeklyButton;
+    private ImageButton monthlyButton;
     private int totalDeleted;
+    private StatisticFilters statisticsRange;
 
     public ImprovementTypeXpFragment() {
     }
@@ -45,28 +52,13 @@ public class ImprovementTypeXpFragment extends Fragment {
         improvementView = inflater.inflate(R.layout.activity_improvement, container, false);
         mTip = new Tooltip(improvementView.getContext(), R.layout.linechart_tooltip, R.id.value);
         improvementTypeXpChart = (BarChartView) improvementView.findViewById(R.id.improvementTypesChart);
+        dailyButton = (ImageButton) improvementView.findViewById(R.id.daily_improvement);
+        weeklyButton = (ImageButton) improvementView.findViewById(R.id.weekly_improvement);
+        monthlyButton = (ImageButton) improvementView.findViewById(R.id.monthly_improvement);
+        statisticsRange = StatisticFilters.DAILY;
 
-        ((TextView) mTip.findViewById(R.id.value)).setTypeface(
-                Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Semibold.ttf"));
-
-        mTip.setVerticalAlignment(Tooltip.Alignment.BOTTOM_TOP);
-        mTip.setDimensions((int) Tools.fromDpToPx(58), (int) Tools.fromDpToPx(25));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-
-            mTip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 1f)).setDuration(200);
-
-            mTip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 0f)).setDuration(200);
-
-            mTip.setPivotX(Tools.fromDpToPx(65) / 2);
-            mTip.setPivotY(Tools.fromDpToPx(25));
-        }
         //Graph Data
-        BarSet barSet = databaseHelper.getImprovementTypesXP();
+        BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
 
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -76,6 +68,7 @@ public class ImprovementTypeXpFragment extends Fragment {
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
         setupImprovementTypeXpChart(barSet, gridPaint);
+        setupDateRangeFilters();
 
         return improvementView;
     }
@@ -85,15 +78,15 @@ public class ImprovementTypeXpFragment extends Fragment {
         super.onResume();
         //Graph Data
 
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount();
-        if(databaseHelper.getTotalDeletedCount() != totalDeleted) {
-            BarSet barSet = databaseHelper.getImprovementTypesXP();
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        if (updatedTotalDeleted != totalDeleted) {
+            BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
             totalDeleted = updatedTotalDeleted;
             updateGraphs(barSet);
         }
     }
 
-    public void setupImprovementTypeXpChart(BarSet barSet, Paint gridPaint) {
+    private void setupImprovementTypeXpChart(BarSet barSet, Paint gridPaint) {
         barSet.setColor(Color.parseColor("#fc2a53"));
         improvementTypeXpChart.addData(barSet);
         improvementTypeXpChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
@@ -102,20 +95,61 @@ public class ImprovementTypeXpFragment extends Fragment {
                 .setAxisThickness(6)
                 .setAxisLabelsSpacing(35)
                 .setGrid(7, 0, gridPaint)
-                .show(new Animation());
+                .show(new Animation()
+                        .setInterpolator(new LinearInterpolator())
+                        .setDuration(200)
+                        .fromAlpha(0));
         improvementTypeXpChart.setBackgroundColor(Color.parseColor("#04baa6"));
     }
 
     private void updateGraphs(BarSet barSet) {
         improvementTypeXpChart.reset();
-
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
         gridPaint.setStyle(Paint.Style.STROKE);
         gridPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-
         setupImprovementTypeXpChart(barSet, gridPaint);
+    }
+
+    private void setupDateRangeFilters() {
+        dailyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.DAILY;
+                resetAllButtonState();
+                dailyButton.setImageResource(R.drawable.selected_daily);
+                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+                BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
+                totalDeleted = updatedTotalDeleted;
+                updateGraphs(barSet);
+            }
+        });
+
+        weeklyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.WEEKLY;
+                resetAllButtonState();
+                weeklyButton.setImageResource(R.drawable.selected_weekly);
+
+            }
+        });
+
+        monthlyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsRange = StatisticFilters.MONTHLY;
+                resetAllButtonState();
+                monthlyButton.setImageResource(R.drawable.selected_monthly);
+            }
+        });
+    }
+
+    private void resetAllButtonState() {
+        dailyButton.setImageResource(R.drawable.daily);
+        weeklyButton.setImageResource(R.drawable.weekly);
+        monthlyButton.setImageResource(R.drawable.monthly);
     }
 }

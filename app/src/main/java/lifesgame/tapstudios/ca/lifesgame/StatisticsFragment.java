@@ -42,6 +42,7 @@ public class StatisticsFragment extends Fragment {
     private PagerAdapter adapter;
     private DatabaseHelper databaseHelper;
     private int totalDeleted;
+    private StatisticFilters statisticsRange;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,9 @@ public class StatisticsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        statisticsRange = StatisticFilters.WEEKLY;
         databaseHelper = new DatabaseHelper(getContext());
-        totalDeleted = databaseHelper.getTotalDeletedCount();
+        totalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
         view = inflater.inflate(R.layout.statistics_tabs, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -68,7 +70,7 @@ public class StatisticsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount();
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
         if(updatedTotalDeleted != totalDeleted) {
             adapter.getItem(0).onResume();
             totalDeleted = updatedTotalDeleted;
@@ -78,7 +80,7 @@ public class StatisticsFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         adapter = new PagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new CompletedToDoFragment(), "Completed ToDo");
+        adapter.addFragment(new CompletedToDoFragment(), "Completed ToDos");
         adapter.addFragment(new SilverFragment(), "Silver");
         adapter.addFragment(new ImprovementTypeXpFragment(), "Improvement");
         viewPager.setAdapter(adapter);

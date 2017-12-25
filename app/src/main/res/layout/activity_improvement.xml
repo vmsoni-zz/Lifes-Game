@@ -4,7 +4,8 @@
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#58C6F0">
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,6 +16,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/daily_improvement"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:src="@drawable/daily" />
+
+                <ImageButton
+                    android:id="@+id/weekly_improvement"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:src="@drawable/selected_weekly" />
+
+                <ImageButton
+                    android:id="@+id/monthly_improvement"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:src="@drawable/monthly" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/relativeLayout3"
@@ -29,7 +77,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     android:text="Total XP per Improvement Type"
-                    android:textColor="#ffffff" />
+                    android:textColor="#000000" />
 
                 <com.db.chart.view.BarChartView
                     android:id="@+id/improvementTypesChart"
@@ -42,9 +90,7 @@
                     android:layout_marginTop="15dp"
                     android:padding="13dp"
                     williamchart:chart_axis="false"
-                    williamchart:chart_barSpacing="20dp"
                     williamchart:chart_cornerRadius="2dp"
-                    williamchart:chart_fontSize="7dp"
                     williamchart:chart_labelColor="#ffffff" />
             </RelativeLayout>
         </LinearLayout>
