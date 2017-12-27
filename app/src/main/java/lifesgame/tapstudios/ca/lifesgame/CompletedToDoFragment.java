@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class CompletedToDoFragment extends Fragment {
     private TextView tvCompLineChart;
     private TextView tvCompPercChart;
     private TextView tvCompToDo;
-    private RelativeLayout rlDayOfWeekPicker;
+    private CardView cvDayOfWeekPicker;
 
     private List<LineSet> dataSet;
     private int totalDeleted;
@@ -77,7 +78,7 @@ public class CompletedToDoFragment extends Fragment {
         tvCompToDo = (TextView) completedToDoView.findViewById(R.id.tvCompToDo);
         tvCompLineChart = (TextView) completedToDoView.findViewById(R.id.todoTV);
         tvCompPercChart = (TextView) completedToDoView.findViewById(R.id.todoCompTV);
-        rlDayOfWeekPicker = (RelativeLayout) completedToDoView.findViewById(R.id.rlDayOfWeekPicker);
+        cvDayOfWeekPicker = (CardView) completedToDoView.findViewById(R.id.card_view_daily_filter);
         dailyButton = (ImageButton) completedToDoView.findViewById(R.id.daily_completed_todo);
         weeklyButton = (ImageButton) completedToDoView.findViewById(R.id.weekly_completed_todo);
         monthlyButton = (ImageButton) completedToDoView.findViewById(R.id.monthly_completed_todo);
@@ -88,7 +89,7 @@ public class CompletedToDoFragment extends Fragment {
         thursdayButton = (ImageButton) completedToDoView.findViewById(R.id.thursday);
         fridayButton = (ImageButton) completedToDoView.findViewById(R.id.friday);
         saturdayButton = (ImageButton) completedToDoView.findViewById(R.id.saturday);
-        rlDayOfWeekPicker.setVisibility(View.GONE);
+        cvDayOfWeekPicker.setVisibility(View.GONE);
         statisticsRange = StatisticFilters.WEEKLY;
         dayOfWeek = 1;
 
@@ -122,7 +123,7 @@ public class CompletedToDoFragment extends Fragment {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange));
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange, dayOfWeek));
         setupCompletedToDoGraph(dataSet, gridPaint);
         setupDateRangeFilters();
         setupDayOfWeekButtonFilters();
@@ -183,7 +184,7 @@ public class CompletedToDoFragment extends Fragment {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange));
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange, dayOfWeek));
         setupCompletedToDoGraph(dataSet, gridPaint);
     }
 
@@ -272,8 +273,7 @@ public class CompletedToDoFragment extends Fragment {
                 dailyButton.setImageResource(R.drawable.selected_daily);
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
-                //changeViewWithAnimation(rlDayOfWeekPicker, View.VISIBLE);
-                rlDayOfWeekPicker.setVisibility(View.VISIBLE);
+                cvDayOfWeekPicker.setVisibility(View.VISIBLE);
                 setDayOfWeekButtonSelected(dayOfWeek);
             }
         });
@@ -287,7 +287,7 @@ public class CompletedToDoFragment extends Fragment {
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
-                rlDayOfWeekPicker.setVisibility(View.GONE);
+                cvDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
 
@@ -300,7 +300,7 @@ public class CompletedToDoFragment extends Fragment {
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
-                rlDayOfWeekPicker.setVisibility(View.GONE);
+                cvDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
     }

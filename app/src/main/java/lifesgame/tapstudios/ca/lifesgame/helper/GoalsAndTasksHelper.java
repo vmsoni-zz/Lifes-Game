@@ -3,6 +3,7 @@ package lifesgame.tapstudios.ca.lifesgame.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,10 +15,10 @@ import lifesgame.tapstudios.ca.lifesgame.R;
  * Created by Vidit Soni on 6/3/2017.
  */
 public class GoalsAndTasksHelper {
-    public Button addItemToListBtn;
+    public FloatingActionButton addItemToListBtn;
     private final Context context;
 
-    public GoalsAndTasksHelper(Button addItemToListBtn, Context context) {
+    public GoalsAndTasksHelper(FloatingActionButton addItemToListBtn, Context context) {
         this.addItemToListBtn = addItemToListBtn;
         this.context = context;
         goalsAndTasksRegisterButtons();

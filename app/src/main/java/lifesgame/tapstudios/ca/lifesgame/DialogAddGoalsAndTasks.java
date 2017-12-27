@@ -3,6 +3,8 @@ package lifesgame.tapstudios.ca.lifesgame;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,7 +35,6 @@ import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicke
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import info.hoang8f.widget.FButton;
@@ -42,8 +43,9 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private SelectedDate mSelectedDate;
     private EditText endDateEt;
     private LinearLayout endDateLl;
-    private EditText userTaskGoalTitle;
-    private EditText userTaskGoalDescription;
+    private TextInputEditText userTaskGoalTitle;
+    private TextInputLayout userTaskGoalTitleLayout;
+    private TextInputEditText userTaskGoalDescription;
     Spinner improvementCategory;
 
     @Override
@@ -53,8 +55,9 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         improvementCategory = (Spinner) findViewById(R.id.spinner1);
         endDateEt = (EditText) findViewById(R.id.endDateTv);
         endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
-        userTaskGoalDescription = (EditText) findViewById(R.id.textDescription);
-        userTaskGoalTitle = (EditText) findViewById(R.id.textTitle);
+        userTaskGoalDescription = (TextInputEditText) findViewById(R.id.textDescription);
+        userTaskGoalTitle = (TextInputEditText) findViewById(R.id.textTitle);
+        userTaskGoalTitleLayout = (TextInputLayout) findViewById(R.id.textTitleLayout);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
         endDateLl.setVisibility(View.GONE);
@@ -191,6 +194,10 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 improvementType.put("family_friends", userFamilyFriends.isChecked());
                 improvementType.put("learning", userLearning.isChecked());
                 improvementType.put("other", userOther.isChecked());
+
+                if(userTaskGoalTitle.getText().toString().isEmpty()) {
+                    userTaskGoalTitleLayout.setError("Title must not be blank!");
+                }
 
                 if (!userTaskGoalDescription.getText().toString().isEmpty() && !userTaskGoalTitle.getText().toString().isEmpty()) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

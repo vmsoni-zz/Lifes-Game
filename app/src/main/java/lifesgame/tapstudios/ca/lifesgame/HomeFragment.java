@@ -2,6 +2,7 @@ package lifesgame.tapstudios.ca.lifesgame;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment {
     TextView charLevel;
     TextView silverAmountTextView;
     List<GoalsAndTasks> arrayList;
-    Button addItemToListBtn;
+    FloatingActionButton addItemToListBtn;
     GoalsAndTasksAdapter goalsAndTasksAdapter;
     GoalsAndTasksHelper goalsAndTasksHelper;
     GameMechanicsHelper gameMechanicsHelper;
@@ -63,6 +64,7 @@ public class HomeFragment extends Fragment {
         if (arrayList != null) {
             goalsAndTasksAdapter.notifyDataSetChanged();
         }
+        hideFABOnScroll();
         return homeFragment;
     }
 
@@ -74,6 +76,21 @@ public class HomeFragment extends Fragment {
         silverAmountTextView = (TextView) homeFragment.findViewById(R.id.silver_amount_text_view);
         xpBar = (RoundCornerProgressBar) homeFragment.findViewById(R.id.xpBar);
         healthBar = (RoundCornerProgressBar) homeFragment.findViewById(R.id.healthBar);
-        addItemToListBtn = (Button) homeFragment.findViewById(R.id.add_item);
+        addItemToListBtn = (FloatingActionButton) homeFragment.findViewById(R.id.add_item);
+    }
+
+    public void hideFABOnScroll() {
+        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    addItemToListBtn.hide();
+                } else {
+                    addItemToListBtn.show();
+                }
+
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 }

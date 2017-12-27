@@ -1,36 +1,12 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
-import android.animation.PropertyValuesHolder;
 import android.app.Fragment;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
-import android.widget.TextView;
-
-import com.db.chart.animation.Animation;
-import com.db.chart.model.BarSet;
-import com.db.chart.model.LineSet;
-import com.db.chart.renderer.AxisRenderer;
-import com.db.chart.renderer.XRenderer;
-import com.db.chart.renderer.YRenderer;
-import com.db.chart.tooltip.Tooltip;
-import com.db.chart.util.Tools;
-import com.db.chart.view.BarChartView;
-import com.db.chart.view.LineChartView;
-import com.timqi.sectorprogressview.ColorfulRingProgressView;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
@@ -81,8 +57,8 @@ public class StatisticsFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new PagerAdapter(getChildFragmentManager());
         adapter.addFragment(new CompletedToDoFragment(), "Completed ToDos");
-        adapter.addFragment(new SilverFragment(), "Silver");
-        adapter.addFragment(new ImprovementTypeXpFragment(), "Improvement");
+        adapter.addFragment(new SilverFragment(), "silver");
+        adapter.addFragment(new ImprovementTypeFragment(), "Improvement");
         viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

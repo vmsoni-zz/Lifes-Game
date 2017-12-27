@@ -5,255 +5,347 @@
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0F7FA">
+    android:background="#f6f6f6">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
-                android:gravity="center">
-
-                <ImageButton
-                    android:id="@+id/daily_completed_todo"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/daily" />
-
-                <ImageButton
-                    android:id="@+id/weekly_completed_todo"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/selected_weekly" />
-
-                <ImageButton
-                    android:id="@+id/monthly_completed_todo"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/monthly" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlDayOfWeekPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tvDayOfWeek"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Pick a Day of the Week"
-                    android:textColor="#000000" />
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvDayOfWeek"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center">
 
                     <ImageButton
-                        android:id="@+id/sunday"
+                        android:id="@+id/daily_completed_todo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="30dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:background="@null"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/sunday" />
+                        android:src="@drawable/daily" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#e4e4e4" />
 
                     <ImageButton
-                        android:id="@+id/monday"
+                        android:id="@+id/weekly_completed_todo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:background="@null"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/monday" />
+                        android:src="@drawable/selected_weekly" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#e4e4e4" />
 
                     <ImageButton
-                        android:id="@+id/tuesday"
+                        android:id="@+id/monthly_completed_todo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:background="@null"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/tuesday" />
-
-                    <ImageButton
-                        android:id="@+id/wednesday"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/wednesday" />
-
-                    <ImageButton
-                        android:id="@+id/thursday"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/thursday" />
-
-                    <ImageButton
-                        android:id="@+id/friday"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/friday" />
-
-                    <ImageButton
-                        android:id="@+id/saturday"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/saturday" />
+                        android:src="@drawable/monthly" />
                 </LinearLayout>
-            </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout"
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view_daily_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true">
-
-                <TextView
-                    android:id="@+id/todoTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:text="Total TODOs Completed This Week"
-                    android:textColor="#000000" />
-
-                <com.db.chart.view.LineChartView
-                    android:id="@+id/mainChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="170dp"
-                    android:layout_below="@+id/todoTV"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="13dp"
-                    android:layout_marginRight="13dp"
-                    android:layout_marginTop="15dp"
-                    android:padding="13dp"
-                    williamchart:chart_axis="false"
-                    williamchart:chart_labelColor="#ffffff" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/completionPercentageGraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true">
-
-                <TextView
-                    android:id="@+id/todoCompTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="14dp"
-                    android:text="TODOs Completion Percentage This Week"
-                    android:textColor="#000000" />
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="2dp">
 
                 <RelativeLayout
+                    android:id="@+id/rlDayOfWeekPicker"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/todoCompTV"
-                    android:layout_centerHorizontal="true">
-
-                    <com.timqi.sectorprogressview.ColorfulRingProgressView
-                        android:id="@+id/compToDoGraph"
-                        android:layout_width="350px"
-                        android:layout_height="350px"
-                        app:bgColor="#e1e1e1"
-                        app:fgColorEnd="#00a4ff"
-                        app:fgColorStart="#02fef1"
-                        app:percent="0"
-                        app:startAngle="0"
-                        app:strokeWidth="0dp" />
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/tvCompToDo"
+                        android:id="@+id/tvDayOfWeek"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="75"
-                        android:textColor="#000"
-                        android:textSize="34sp" />
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Pick a Day of the Week"
+                        android:textColor="#000000" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDayOfWeek"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
+
+                        <ImageButton
+                            android:id="@+id/sunday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/sunday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/monday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/monday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/tuesday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/tuesday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/wednesday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/wednesday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/thursday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/thursday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/friday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/friday" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#e4e4e4" />
+
+                        <ImageButton
+                            android:id="@+id/saturday"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/saturday" />
+                    </LinearLayout>
                 </RelativeLayout>
-            </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view_completed_todo_graph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true">
+
+                    <TextView
+                        android:id="@+id/todoTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:text="Total TODOs Completed This Week"
+                        android:textColor="#000000" />
+
+                    <com.db.chart.view.LineChartView
+                        android:id="@+id/mainChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_below="@+id/todoTV"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginRight="13dp"
+                        android:layout_marginTop="15dp"
+                        android:padding="13dp"
+                        williamchart:chart_axis="false"
+                        williamchart:chart_labelColor="#ffffff" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view_completed_todo_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:id="@+id/completionPercentageGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true">
+
+                    <TextView
+                        android:id="@+id/todoCompTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="TODOs Completion Percentage This Week"
+                        android:textColor="#000000" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/todoCompTV"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp">
+
+                        <com.timqi.sectorprogressview.ColorfulRingProgressView
+                            android:id="@+id/compToDoGraph"
+                            android:layout_width="350px"
+                            android:layout_height="350px"
+                            app:bgColor="#e1e1e1"
+                            app:fgColorEnd="#00a4ff"
+                            app:fgColorStart="#02fef1"
+                            app:percent="0"
+                            app:startAngle="0"
+                            app:strokeWidth="0dp" />
+
+                        <TextView
+                            android:id="@+id/tvCompToDo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:text="75"
+                            android:textColor="#000"
+                            android:textSize="34sp" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

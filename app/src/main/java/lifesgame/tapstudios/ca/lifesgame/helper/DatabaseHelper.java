@@ -363,7 +363,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
                 query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
                         "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "AND " + key + "= 1 " +
@@ -419,7 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public BarSet getImprovementTypesXP(StatisticFilters dataRange, Integer dayOfWeek) {
         Map<String, Float> improvementTypesLevel = new HashMap<>();
-        improvementTypesLevel.put("Health", getImprovementValue(USER_HEALTH_EXERCISE, dataRange, dayOfWeek));
+        improvementTypesLevel.put("health", getImprovementValue(USER_HEALTH_EXERCISE, dataRange, dayOfWeek));
         improvementTypesLevel.put("Work", getImprovementValue(USER_WORK, dataRange, dayOfWeek));
         improvementTypesLevel.put("School", getImprovementValue(USER_SCHOOL, dataRange, dayOfWeek));
         improvementTypesLevel.put("Family", getImprovementValue(USER_FAMILY_FRIENDS, dataRange, dayOfWeek));
@@ -545,20 +544,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return graphDataLineSet;
     }
 
-    public int getCompletedToDoPercentage(StatisticFilters dataRange) {
+    public int getCompletedToDoPercentage(StatisticFilters dataRange, Integer dayOfWeek) {
         SQLiteDatabase db = this.getWritableDatabase();
         String queryComp;
         String queryDel;
         switch (dataRange) {
             case DAILY:
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
                 queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
                         "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
-                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') ";
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') ";
                 queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
                         " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
-                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') ";
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') ";
                 break;
             case WEEKLY:
                 queryComp = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
@@ -623,7 +623,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int getTotalDeletedCount(StatisticFilters dataRange) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 ";
+        DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String queryDel = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') ";
         int countTotal = 0;
         try {
             Cursor c = db.rawQuery(queryDel, null);

@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
  * Created by viditsoni on 2017-11-09.
  */
 
-public class ImprovementTypeXpFragment extends Fragment {
+public class ImprovementTypeFragment extends Fragment {
     public BarChartView improvementTypeXpChart;
     public DatabaseHelper databaseHelper;
     private Tooltip mTip;
@@ -49,12 +50,12 @@ public class ImprovementTypeXpFragment extends Fragment {
     private ImageButton thursdayButton;
     private ImageButton fridayButton;
     private ImageButton saturdayButton;
-    private RelativeLayout rlDayOfWeekPicker;
+    private CardView cvDayOfWeekPicker;
     private int totalDeleted;
     private StatisticFilters statisticsRange;
     private Integer dayOfWeek;
 
-    public ImprovementTypeXpFragment() {
+    public ImprovementTypeFragment() {
     }
 
     @Override
@@ -73,8 +74,8 @@ public class ImprovementTypeXpFragment extends Fragment {
         thursdayButton = (ImageButton) improvementView.findViewById(R.id.thursday);
         fridayButton = (ImageButton) improvementView.findViewById(R.id.friday);
         saturdayButton = (ImageButton) improvementView.findViewById(R.id.saturday);
-        rlDayOfWeekPicker = (RelativeLayout) improvementView.findViewById(R.id.rlDayOfWeekPicker);
-        rlDayOfWeekPicker.setVisibility(View.GONE);
+        cvDayOfWeekPicker = (CardView) improvementView.findViewById(R.id.card_view_daily_filter);
+        cvDayOfWeekPicker.setVisibility(View.GONE);
         statisticsRange = StatisticFilters.WEEKLY;
         dayOfWeek = 1;
 
@@ -209,7 +210,7 @@ public class ImprovementTypeXpFragment extends Fragment {
                 statisticsRange = StatisticFilters.DAILY;
                 resetAllButtonState();
                 dailyButton.setImageResource(R.drawable.selected_daily);
-                rlDayOfWeekPicker.setVisibility(View.VISIBLE);
+                cvDayOfWeekPicker.setVisibility(View.VISIBLE);
                 updateGraphs();
             }
         });
@@ -220,7 +221,7 @@ public class ImprovementTypeXpFragment extends Fragment {
                 statisticsRange = StatisticFilters.WEEKLY;
                 resetAllButtonState();
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
-                rlDayOfWeekPicker.setVisibility(View.GONE);
+                cvDayOfWeekPicker.setVisibility(View.GONE);
                 updateGraphs();
 
             }
@@ -232,7 +233,7 @@ public class ImprovementTypeXpFragment extends Fragment {
                 statisticsRange = StatisticFilters.MONTHLY;
                 resetAllButtonState();
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
-                rlDayOfWeekPicker.setVisibility(View.GONE);
+                cvDayOfWeekPicker.setVisibility(View.GONE);
                 updateGraphs();
             }
         });

@@ -12,204 +12,286 @@
         android:background="#00BCD4"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/RelativeLayout"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.6">
+            android:layout_weight="0.6"
+            android:orientation="horizontal">
 
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/healthBar"
-                android:layout_width="160dp"
-                android:layout_height="10dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/charHealth"
-                android:paddingRight="5dp"
-                app:rcBackgroundColor="#86D6F4"
-                app:rcBackgroundPadding="0dp"
-                app:rcProgressColor="#EA3546"
-                app:rcRadius="30dp" />
-
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/xpBar"
-                android:layout_width="160dp"
-                android:layout_height="10dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/charXpLabel"
-                android:paddingRight="5dp"
-                app:rcBackgroundColor="#86D6F4"
-                app:rcBackgroundPadding="0dp"
-                app:rcProgressColor="#35FF69"
-                app:rcRadius="30dp" />
-
-            <TextView
-                android:id="@+id/charHealthLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/unityGame"
-                android:layout_toRightOf="@+id/unityGame"
-                android:paddingTop="5dp"
-                android:textColor="@color/colorWhite"
-                android:text="Health:"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/charHealth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/healthBar"
-                android:maxLines="1"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:text="New Text"
-                android:textColor="@color/colorWhite"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/charXpLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/healthBar"
-                android:layout_toEndOf="@+id/unityGame"
-                android:layout_toRightOf="@+id/unityGame"
-                android:paddingTop="15dp"
-                android:textColor="@color/colorWhite"
-                android:text="XP:"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/CharLevelLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/charHealthLabel"
-                android:layout_alignStart="@+id/charHealthLabel"
-                android:layout_below="@+id/xpBar"
-                android:textColor="@color/colorWhite"
-                android:paddingTop="15dp"
-                android:text="Level:" />
-
-            <TextView
-                android:id="@+id/charXp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/charHealth"
-                android:layout_below="@+id/healthBar"
-                android:paddingRight="5dp"
-                android:paddingTop="15dp"
-                android:text="New Text"
-                android:textColor="@color/colorWhite"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/charLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/charXp"
-                android:layout_below="@+id/xpBar"
-                android:maxLines="1"
-                android:paddingRight="5dp"
-                android:textColor="@color/colorWhite"
-                android:paddingTop="15dp"
-                android:text="New Text" />
-
-            <TextView
-                android:id="@+id/silver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/charLevel"
-                android:layout_toEndOf="@+id/unityGame"
-                android:layout_toRightOf="@+id/unityGame"
-                android:maxLines="1"
-                android:textColor="@color/colorWhite"
-                android:paddingRight="5dp"
-                android:paddingTop="15dp"
-                android:text="Silver:" />
-
-            <TextView
-                android:id="@+id/silver_amount_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/charLevel"
-                android:layout_below="@+id/charLevel"
-                android:maxLines="1"
-                android:paddingRight="5dp"
-                android:textColor="@color/colorWhite"
-                android:paddingTop="15dp"
-                android:text="New Text" />
-
-            <TextView
-                android:id="@+id/gold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/silver"
-                android:textColor="@color/colorWhite"
-                android:layout_toEndOf="@+id/unityGame"
-                android:layout_toRightOf="@+id/unityGame"
-                android:paddingTop="15dp"
-                android:text="Gold:" />
-
-            <TextView
-                android:id="@+id/goldAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/charLevel"
-                android:layout_below="@id/silver"
-                android:maxLines="1"
-                android:textColor="@color/colorWhite"
-                android:paddingRight="5dp"
-                android:paddingTop="15dp"
-                android:text="New Text" />
-
-            <FrameLayout
-                android:id="@+id/unityGame"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/healthBar"
-                android:layout_toStartOf="@+id/healthBar"></FrameLayout>
-        </RelativeLayout>
+                android:layout_weight="1.0">
 
-        <RelativeLayout
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/healthLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <ImageView
+                        android:id="@+id/health_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:src="@drawable/health" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/charHealthLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Health:"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="15dp" />
+
+                        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+                            android:id="@+id/healthBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/charHealth"
+                            android:paddingRight="5dp"
+                            app:rcBackgroundColor="#86D6F4"
+                            app:rcBackgroundPadding="0dp"
+                            app:rcProgressColor="#EA3546"
+                            app:rcRadius="30dp" />
+
+                        <TextView
+                            android:id="@+id/charHealth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/healthBar"
+                            android:maxLines="1"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:text="New Text"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="15dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/XPLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/healthLayout"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <ImageView
+                        android:id="@+id/xp_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingTop="15dp"
+                        android:paddingRight="15dp"
+                        android:src="@drawable/experience" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/charXpLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:text="XP:"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="15dp" />
+
+                        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+                            android:id="@+id/xpBar"
+                            android:layout_width="160dp"
+                            android:layout_height="10dp"
+                            android:layout_below="@+id/charXpLabel"
+                            android:paddingRight="5dp"
+                            app:rcBackgroundColor="#86D6F4"
+                            app:rcBackgroundPadding="0dp"
+                            app:rcProgressColor="#35FF69"
+                            app:rcRadius="30dp" />
+
+                        <TextView
+                            android:id="@+id/charXp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/xpBar"
+                            android:paddingRight="5dp"
+                            android:paddingTop="15dp"
+                            android:text="New Text"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="15dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/levelLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/XPLayout"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/level_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingRight="15dp"
+                        android:src="@drawable/level" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/CharLevelLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:text="Level:"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:id="@+id/charLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:maxLines="1"
+                            android:paddingRight="5dp"
+                            android:paddingTop="15dp"
+                            android:text="New Text"
+                            android:textColor="@color/colorWhite" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/silverLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/levelLayout"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/silver_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingRight="15dp"
+                        android:src="@drawable/silver" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/silver"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:paddingRight="5dp"
+                            android:paddingTop="15dp"
+                            android:text="Silver:"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:id="@+id/silver_amount_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:maxLines="1"
+                            android:paddingRight="5dp"
+                            android:paddingTop="15dp"
+                            android:text="New Text"
+                            android:textColor="@color/colorWhite" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/goldLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/silverLayout"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/gold_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingRight="15dp"
+                        android:src="@drawable/gold" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/gold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:text="Gold:"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:id="@+id/goldAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:maxLines="1"
+                            android:paddingRight="5dp"
+                            android:paddingTop="15dp"
+                            android:text="New Text"
+                            android:textColor="@color/colorWhite" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.4">
 
-            <!--<ListView
-                android:id="@+id/goals_tasks"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="#ececec" />-->
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/goals_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ececec">
-            </android.support.v7.widget.RecyclerView>
+                android:paddingBottom="100dp"
+                android:clipToPadding="false"
+                android:background="#ececec"></android.support.v7.widget.RecyclerView>
 
-            <Button
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_item"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:width="4dp"
-                android:height="20dp"
-                android:background="@drawable/roundedbutton"
-                android:text="+"
-                android:textColor="@color/colorWhite"
-                android:textSize="30dp" />
-        </RelativeLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp"
+                app:borderWidth="0dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:src="@drawable/add"
+                android:tint="@android:color/white" />
+        </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>

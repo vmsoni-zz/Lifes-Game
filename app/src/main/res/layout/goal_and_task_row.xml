@@ -48,65 +48,65 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:paddingBottom="2.5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="2.5dp">
 
-        <FrameLayout
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#e3ecf5"
-            android:minHeight="90dp">
-
-            <FrameLayout
-                android:id="@+id/failedButtonLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="#B2EBF2">
-
-                <ImageButton
-                    android:id="@+id/failedButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/ripple_effect"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/x_mark" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/completedButtonLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:background="#B2EBF2">
-
-                <ImageButton
-                    android:id="@+id/completedButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/ripple_effect"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/check_mark" />
-            </FrameLayout>
+            android:background="#f6f6f6"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
+
+                    <ImageButton
+                        android:id="@+id/completedButton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/ripple_effect"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/check_mark" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#e4e4e4" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
 
                 <TextView
                     android:id="@+id/goal_task_title"
-                    android:layout_width="197dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
                     android:text="New Text"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
@@ -114,11 +114,13 @@
 
                 <TextView
                     android:id="@+id/goal_task_description"
-                    android:layout_width="197dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/goal_task_title"
                     android:layout_centerHorizontal="true"
                     android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:text="New Text"
                     android:textColor="#09A8E5"
                     android:textSize="14sp" />
@@ -128,16 +130,18 @@
                     android:layout_width="197dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/goal_task_description"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/goal_task_remaining_time_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:paddingLeft="15dp"
                         android:text="Deadline: "
                         android:textColor="@color/colorPrimaryRed"
                         android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/goal_task_remaining_time"
                         android:layout_width="wrap_content"
@@ -145,81 +149,128 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textColor="#09A8E5"
-                        android:textSize="14dp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/goal_task_remaining_time_ll"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp">
+
+                    <ImageButton
+                        android:id="@+id/health_exercise"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_health_exercise" />
+
+                    <ImageButton
+                        android:id="@+id/work_img"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_work" />
+
+                    <ImageButton
+                        android:id="@+id/school_img"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_school" />
+
+                    <ImageButton
+                        android:id="@+id/family_friends"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_family_friends" />
+
+                    <ImageButton
+                        android:id="@+id/learning_img"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_learning" />
+
+                    <ImageButton
+                        android:id="@+id/other_img"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/not_selected_other" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/goal_task_remaining_time_ll"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
-                    <ImageView
-                        android:id="@+id/health_exercise"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#e4e4e4" />
+
+                    <ImageButton
+                        android:id="@+id/failedButton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/ripple_effect"
                         android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_health_exercise" />
-
-                    <ImageView
-                        android:id="@+id/work_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_work" />
-
-                    <ImageView
-                        android:id="@+id/school_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_school" />
-
-                    <ImageView
-                        android:id="@+id/family_friends"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_family_friends" />
-
-                    <ImageView
-                        android:id="@+id/learning_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_learning" />
-
-                    <ImageView
-                        android:id="@+id/other_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/not_selected_other" />
-
+                        android:src="@drawable/x_mark" />
                 </LinearLayout>
             </RelativeLayout>
-        </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>
