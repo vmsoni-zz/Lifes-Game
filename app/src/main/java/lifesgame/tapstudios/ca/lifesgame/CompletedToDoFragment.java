@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
-import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.tooltip.Tooltip;
@@ -26,6 +26,7 @@ import com.db.chart.view.LineChartView;
 import com.timqi.sectorprogressview.ColorfulRingProgressView;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
@@ -43,14 +44,24 @@ public class CompletedToDoFragment extends Fragment {
     private TextView tvCompLineChart;
     private TextView tvCompPercChart;
     private TextView tvCompToDo;
+    private RelativeLayout rlDayOfWeekPicker;
+
     private List<LineSet> dataSet;
     private int totalDeleted;
     private ImageButton dailyButton;
     private ImageButton weeklyButton;
     private ImageButton monthlyButton;
+    private ImageButton sundayButton;
+    private ImageButton mondayButton;
+    private ImageButton tuesdayButton;
+    private ImageButton wednesdayButton;
+    private ImageButton thursdayButton;
+    private ImageButton fridayButton;
+    private ImageButton saturdayButton;
     private StatisticFilters statisticsRange;
     private String toDoCompletionPrefixSentence = "Total TODOs Completed ";
     private String toDoCompletionPercPrefixSentence = "TODOs Completion Percentage ";
+    private Integer dayOfWeek;
 
 
     public CompletedToDoFragment() {
@@ -66,10 +77,20 @@ public class CompletedToDoFragment extends Fragment {
         tvCompToDo = (TextView) completedToDoView.findViewById(R.id.tvCompToDo);
         tvCompLineChart = (TextView) completedToDoView.findViewById(R.id.todoTV);
         tvCompPercChart = (TextView) completedToDoView.findViewById(R.id.todoCompTV);
+        rlDayOfWeekPicker = (RelativeLayout) completedToDoView.findViewById(R.id.rlDayOfWeekPicker);
         dailyButton = (ImageButton) completedToDoView.findViewById(R.id.daily_completed_todo);
         weeklyButton = (ImageButton) completedToDoView.findViewById(R.id.weekly_completed_todo);
         monthlyButton = (ImageButton) completedToDoView.findViewById(R.id.monthly_completed_todo);
+        sundayButton = (ImageButton) completedToDoView.findViewById(R.id.sunday);
+        mondayButton = (ImageButton) completedToDoView.findViewById(R.id.monday);
+        tuesdayButton = (ImageButton) completedToDoView.findViewById(R.id.tuesday);
+        wednesdayButton = (ImageButton) completedToDoView.findViewById(R.id.wednesday);
+        thursdayButton = (ImageButton) completedToDoView.findViewById(R.id.thursday);
+        fridayButton = (ImageButton) completedToDoView.findViewById(R.id.friday);
+        saturdayButton = (ImageButton) completedToDoView.findViewById(R.id.saturday);
+        rlDayOfWeekPicker.setVisibility(View.GONE);
         statisticsRange = StatisticFilters.WEEKLY;
+        dayOfWeek = 1;
 
         ((TextView) mTip.findViewById(R.id.value)).setTypeface(
                 Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Semibold.ttf"));
@@ -91,7 +112,7 @@ public class CompletedToDoFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
         //Graph Data
-        dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+        dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange, dayOfWeek);
         totalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
 
         Paint gridPaint = new Paint();
@@ -104,19 +125,16 @@ public class CompletedToDoFragment extends Fragment {
         setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange));
         setupCompletedToDoGraph(dataSet, gridPaint);
         setupDateRangeFilters();
+        setupDayOfWeekButtonFilters();
         return completedToDoView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
         if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
-            List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-            totalDeleted = updatedTotalDeleted;
-            updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
+            updateGraphs();
         }
     }
 
@@ -152,7 +170,10 @@ public class CompletedToDoFragment extends Fragment {
         completedToDoGraph.setBackgroundColor(Color.parseColor("#04baa6"));
     }
 
-    private void updateGraphs(List<LineSet> dataSet, int toDoCompPercentage) {
+    private void updateGraphs() {
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange, dayOfWeek);
+        totalDeleted = updatedTotalDeleted;
         completedToDoGraph.reset();
 
         Paint gridPaint = new Paint();
@@ -162,7 +183,7 @@ public class CompletedToDoFragment extends Fragment {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        setupCompletedToDoPercentageGraph(toDoCompPercentage);
+        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange));
         setupCompletedToDoGraph(dataSet, gridPaint);
     }
 
@@ -174,20 +195,86 @@ public class CompletedToDoFragment extends Fragment {
         tvCompToDo.setText(String.valueOf(toDoCompPercentage));
     }
 
+    private void setupDayOfWeekButtonFilters() {
+        sundayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 1;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        mondayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 2;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        tuesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 3;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        wednesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 4;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        thursdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 5;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        fridayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 6;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        saturdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 7;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+    }
+
     private void setupDateRangeFilters() {
         dailyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar curdate = Calendar.getInstance();
+                dayOfWeek = curdate.get(Calendar.DAY_OF_WEEK);
                 statisticsRange = StatisticFilters.DAILY;
                 resetAllButtonState();
+                updateGraphs();
                 dailyButton.setImageResource(R.drawable.selected_daily);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
-
+                //changeViewWithAnimation(rlDayOfWeekPicker, View.VISIBLE);
+                rlDayOfWeekPicker.setVisibility(View.VISIBLE);
+                setDayOfWeekButtonSelected(dayOfWeek);
             }
         });
 
@@ -196,13 +283,11 @@ public class CompletedToDoFragment extends Fragment {
             public void onClick(View v) {
                 statisticsRange = StatisticFilters.WEEKLY;
                 resetAllButtonState();
+                updateGraphs();
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
+                rlDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
 
@@ -211,15 +296,56 @@ public class CompletedToDoFragment extends Fragment {
             public void onClick(View v) {
                 statisticsRange = StatisticFilters.MONTHLY;
                 resetAllButtonState();
+                updateGraphs();
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> updateDataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(updateDataSet, databaseHelper.getCompletedToDoPercentage(statisticsRange));
                 tvCompLineChart.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 tvCompPercChart.setText(toDoCompletionPercPrefixSentence + statisticsRange.getDateRange());
+                rlDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void setDayOfWeekButtonSelected(Integer dayOfWeekSelected) {
+        switch (dayOfWeekSelected) {
+            case 1:
+                resetAllDayOfWeekButtons();
+                sundayButton.setImageResource(R.drawable.selected_sunday);
+                break;
+            case 2:
+                resetAllDayOfWeekButtons();
+                mondayButton.setImageResource(R.drawable.selected_monday);
+                break;
+            case 3:
+                resetAllDayOfWeekButtons();
+                tuesdayButton.setImageResource(R.drawable.selected_tuesday);
+                break;
+            case 4:
+                resetAllDayOfWeekButtons();
+                wednesdayButton.setImageResource(R.drawable.selected_wednesday);
+                break;
+            case 5:
+                resetAllDayOfWeekButtons();
+                thursdayButton.setImageResource(R.drawable.selected_thursday);
+                break;
+            case 6:
+                resetAllDayOfWeekButtons();
+                fridayButton.setImageResource(R.drawable.selected_friday);
+                break;
+            case 7:
+                resetAllDayOfWeekButtons();
+                saturdayButton.setImageResource(R.drawable.selected_saturday);
+                break;
+        }
+    }
+
+    private void resetAllDayOfWeekButtons() {
+        sundayButton.setImageResource(R.drawable.sunday);
+        mondayButton.setImageResource(R.drawable.monday);
+        tuesdayButton.setImageResource(R.drawable.tuesday);
+        wednesdayButton.setImageResource(R.drawable.wednesday);
+        thursdayButton.setImageResource(R.drawable.thursday);
+        fridayButton.setImageResource(R.drawable.friday);
+        saturdayButton.setImageResource(R.drawable.saturday);
     }
 
     private void resetAllButtonState() {

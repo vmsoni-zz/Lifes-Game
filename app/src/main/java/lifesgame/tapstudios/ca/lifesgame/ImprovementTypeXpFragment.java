@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -24,6 +25,7 @@ import com.db.chart.util.Tools;
 import com.db.chart.view.BarChartView;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
@@ -40,8 +42,17 @@ public class ImprovementTypeXpFragment extends Fragment {
     private ImageButton dailyButton;
     private ImageButton weeklyButton;
     private ImageButton monthlyButton;
+    private ImageButton sundayButton;
+    private ImageButton mondayButton;
+    private ImageButton tuesdayButton;
+    private ImageButton wednesdayButton;
+    private ImageButton thursdayButton;
+    private ImageButton fridayButton;
+    private ImageButton saturdayButton;
+    private RelativeLayout rlDayOfWeekPicker;
     private int totalDeleted;
     private StatisticFilters statisticsRange;
+    private Integer dayOfWeek;
 
     public ImprovementTypeXpFragment() {
     }
@@ -55,11 +66,20 @@ public class ImprovementTypeXpFragment extends Fragment {
         dailyButton = (ImageButton) improvementView.findViewById(R.id.daily_improvement);
         weeklyButton = (ImageButton) improvementView.findViewById(R.id.weekly_improvement);
         monthlyButton = (ImageButton) improvementView.findViewById(R.id.monthly_improvement);
-        statisticsRange = StatisticFilters.DAILY;
+        sundayButton = (ImageButton) improvementView.findViewById(R.id.sunday);
+        mondayButton = (ImageButton) improvementView.findViewById(R.id.monday);
+        tuesdayButton = (ImageButton) improvementView.findViewById(R.id.tuesday);
+        wednesdayButton = (ImageButton) improvementView.findViewById(R.id.wednesday);
+        thursdayButton = (ImageButton) improvementView.findViewById(R.id.thursday);
+        fridayButton = (ImageButton) improvementView.findViewById(R.id.friday);
+        saturdayButton = (ImageButton) improvementView.findViewById(R.id.saturday);
+        rlDayOfWeekPicker = (RelativeLayout) improvementView.findViewById(R.id.rlDayOfWeekPicker);
+        rlDayOfWeekPicker.setVisibility(View.GONE);
+        statisticsRange = StatisticFilters.WEEKLY;
+        dayOfWeek = 1;
 
         //Graph Data
-        BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
-
+        BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange, dayOfWeek);
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
         gridPaint.setStyle(Paint.Style.STROKE);
@@ -69,6 +89,7 @@ public class ImprovementTypeXpFragment extends Fragment {
 
         setupImprovementTypeXpChart(barSet, gridPaint);
         setupDateRangeFilters();
+        setupDayOfWeekButtonFilters();
 
         return improvementView;
     }
@@ -78,11 +99,8 @@ public class ImprovementTypeXpFragment extends Fragment {
         super.onResume();
         //Graph Data
 
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-        if (updatedTotalDeleted != totalDeleted) {
-            BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
-            totalDeleted = updatedTotalDeleted;
-            updateGraphs(barSet);
+        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+            updateGraphs();
         }
     }
 
@@ -102,7 +120,10 @@ public class ImprovementTypeXpFragment extends Fragment {
         improvementTypeXpChart.setBackgroundColor(Color.parseColor("#04baa6"));
     }
 
-    private void updateGraphs(BarSet barSet) {
+    private void updateGraphs() {
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange, dayOfWeek);
+        totalDeleted = updatedTotalDeleted;
         improvementTypeXpChart.reset();
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -113,17 +134,83 @@ public class ImprovementTypeXpFragment extends Fragment {
         setupImprovementTypeXpChart(barSet, gridPaint);
     }
 
+    private void setupDayOfWeekButtonFilters() {
+        sundayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 1;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        mondayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 2;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        tuesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 3;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        wednesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 4;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        thursdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 5;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        fridayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 6;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        saturdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 7;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+    }
+
     private void setupDateRangeFilters() {
         dailyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar curdate = Calendar.getInstance();
+                dayOfWeek = curdate.get(Calendar.DAY_OF_WEEK);
+                setDayOfWeekButtonSelected(dayOfWeek);
                 statisticsRange = StatisticFilters.DAILY;
                 resetAllButtonState();
                 dailyButton.setImageResource(R.drawable.selected_daily);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                BarSet barSet = databaseHelper.getImprovementTypesXP(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(barSet);
+                rlDayOfWeekPicker.setVisibility(View.VISIBLE);
+                updateGraphs();
             }
         });
 
@@ -133,6 +220,8 @@ public class ImprovementTypeXpFragment extends Fragment {
                 statisticsRange = StatisticFilters.WEEKLY;
                 resetAllButtonState();
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
+                rlDayOfWeekPicker.setVisibility(View.GONE);
+                updateGraphs();
 
             }
         });
@@ -143,8 +232,53 @@ public class ImprovementTypeXpFragment extends Fragment {
                 statisticsRange = StatisticFilters.MONTHLY;
                 resetAllButtonState();
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
+                rlDayOfWeekPicker.setVisibility(View.GONE);
+                updateGraphs();
             }
         });
+    }
+
+    private void setDayOfWeekButtonSelected(Integer dayOfWeekSelected) {
+        switch (dayOfWeekSelected) {
+            case 1:
+                resetAllDayOfWeekButtons();
+                sundayButton.setImageResource(R.drawable.selected_sunday);
+                break;
+            case 2:
+                resetAllDayOfWeekButtons();
+                mondayButton.setImageResource(R.drawable.selected_monday);
+                break;
+            case 3:
+                resetAllDayOfWeekButtons();
+                tuesdayButton.setImageResource(R.drawable.selected_tuesday);
+                break;
+            case 4:
+                resetAllDayOfWeekButtons();
+                wednesdayButton.setImageResource(R.drawable.selected_wednesday);
+                break;
+            case 5:
+                resetAllDayOfWeekButtons();
+                thursdayButton.setImageResource(R.drawable.selected_thursday);
+                break;
+            case 6:
+                resetAllDayOfWeekButtons();
+                fridayButton.setImageResource(R.drawable.selected_friday);
+                break;
+            case 7:
+                resetAllDayOfWeekButtons();
+                saturdayButton.setImageResource(R.drawable.selected_saturday);
+                break;
+        }
+    }
+
+    private void resetAllDayOfWeekButtons() {
+        sundayButton.setImageResource(R.drawable.sunday);
+        mondayButton.setImageResource(R.drawable.monday);
+        tuesdayButton.setImageResource(R.drawable.tuesday);
+        wednesdayButton.setImageResource(R.drawable.wednesday);
+        thursdayButton.setImageResource(R.drawable.thursday);
+        fridayButton.setImageResource(R.drawable.friday);
+        saturdayButton.setImageResource(R.drawable.saturday);
     }
 
     private void resetAllButtonState() {

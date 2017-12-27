@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -24,7 +25,9 @@ import com.db.chart.tooltip.Tooltip;
 import com.db.chart.util.Tools;
 import com.db.chart.view.LineChartView;
 
+import java.net.Inet4Address;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
@@ -39,10 +42,19 @@ public class SilverFragment extends Fragment {
     private Tooltip mTip;
     private View silverView;
     private int totalDeleted;
+    private RelativeLayout rlDayOfWeekPicker;
     private ImageButton dailyButton;
     private ImageButton weeklyButton;
     private ImageButton monthlyButton;
+    private ImageButton sundayButton;
+    private ImageButton mondayButton;
+    private ImageButton tuesdayButton;
+    private ImageButton wednesdayButton;
+    private ImageButton thursdayButton;
+    private ImageButton fridayButton;
+    private ImageButton saturdayButton;
     private StatisticFilters statisticsRange;
+    private Integer dayOfWeek;
 
     public SilverFragment() {
     }
@@ -53,10 +65,20 @@ public class SilverFragment extends Fragment {
         silverView = inflater.inflate(R.layout.activity_silver, container, false);
         mTip = new Tooltip(silverView.getContext(), R.layout.linechart_tooltip, R.id.value);
         silverChart = (LineChartView) silverView.findViewById(R.id.silverChart);
-        statisticsRange = StatisticFilters.WEEKLY;
+        rlDayOfWeekPicker = (RelativeLayout) silverView.findViewById(R.id.rlDayOfWeekPicker);
         dailyButton = (ImageButton) silverView.findViewById(R.id.daily_silver);
         weeklyButton = (ImageButton) silverView.findViewById(R.id.weekly_silver);
         monthlyButton = (ImageButton) silverView.findViewById(R.id.monthly_silver);
+        rlDayOfWeekPicker.setVisibility(View.GONE);
+        statisticsRange = StatisticFilters.WEEKLY;
+        sundayButton = (ImageButton) silverView.findViewById(R.id.sunday);
+        mondayButton = (ImageButton) silverView.findViewById(R.id.monday);
+        tuesdayButton = (ImageButton) silverView.findViewById(R.id.tuesday);
+        wednesdayButton = (ImageButton) silverView.findViewById(R.id.wednesday);
+        thursdayButton = (ImageButton) silverView.findViewById(R.id.thursday);
+        fridayButton = (ImageButton) silverView.findViewById(R.id.friday);
+        saturdayButton = (ImageButton) silverView.findViewById(R.id.saturday);
+        dayOfWeek = 1;
 
         ((TextView) mTip.findViewById(R.id.value)).setTypeface(
                 Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Semibold.ttf"));
@@ -78,7 +100,7 @@ public class SilverFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
         //Graph Data
-        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange, dayOfWeek);
 
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -89,7 +111,7 @@ public class SilverFragment extends Fragment {
 
         setupSilverChart(dataSet, gridPaint);
         setupDateRangeFilters();
-
+        setupDayOfWeekButtonFilters();
         return silverView;
     }
 
@@ -97,11 +119,8 @@ public class SilverFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
         if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
-            List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-            totalDeleted = updatedTotalDeleted;
-            updateGraphs(dataSet);
+            updateGraphs();
         }
     }
 
@@ -136,7 +155,10 @@ public class SilverFragment extends Fragment {
         silverChart.setBackgroundColor(Color.parseColor("#DC602E"));
     }
 
-    private void updateGraphs(List<LineSet> dataSet) {
+    private void updateGraphs() {
+        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+        List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange, dayOfWeek);
+        totalDeleted = updatedTotalDeleted;
         silverChart.reset();
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.parseColor("#ffffff"));
@@ -148,17 +170,83 @@ public class SilverFragment extends Fragment {
         setupSilverChart(dataSet, gridPaint);
     }
 
+    private void setupDayOfWeekButtonFilters() {
+        sundayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 1;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        mondayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 2;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        tuesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 3;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        wednesdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 4;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        thursdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 5;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        fridayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 6;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+
+        saturdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayOfWeek = 7;
+                setDayOfWeekButtonSelected(dayOfWeek);
+                updateGraphs();
+            }
+        });
+    }
+
     private void setupDateRangeFilters() {
         dailyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar curdate = Calendar.getInstance();
+                dayOfWeek = curdate.get(Calendar.DAY_OF_WEEK);
                 statisticsRange = StatisticFilters.DAILY;
                 resetAllButtonState();
                 dailyButton.setImageResource(R.drawable.selected_daily);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(dataSet);
+                updateGraphs();
+                rlDayOfWeekPicker.setVisibility(View.VISIBLE);
+                setDayOfWeekButtonSelected(dayOfWeek);
             }
         });
 
@@ -168,10 +256,8 @@ public class SilverFragment extends Fragment {
                 statisticsRange = StatisticFilters.WEEKLY;
                 resetAllButtonState();
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(dataSet);
+                updateGraphs();
+                rlDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
 
@@ -181,12 +267,53 @@ public class SilverFragment extends Fragment {
                 statisticsRange = StatisticFilters.MONTHLY;
                 resetAllButtonState();
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
-                int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-                List<LineSet> dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange);
-                totalDeleted = updatedTotalDeleted;
-                updateGraphs(dataSet);
+                updateGraphs();
+                rlDayOfWeekPicker.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void setDayOfWeekButtonSelected(Integer dayOfWeekSelected) {
+        switch (dayOfWeekSelected) {
+            case 1:
+                resetAllDayOfWeekButtons();
+                sundayButton.setImageResource(R.drawable.selected_sunday);
+                break;
+            case 2:
+                resetAllDayOfWeekButtons();
+                mondayButton.setImageResource(R.drawable.selected_monday);
+                break;
+            case 3:
+                resetAllDayOfWeekButtons();
+                tuesdayButton.setImageResource(R.drawable.selected_tuesday);
+                break;
+            case 4:
+                resetAllDayOfWeekButtons();
+                wednesdayButton.setImageResource(R.drawable.selected_wednesday);
+                break;
+            case 5:
+                resetAllDayOfWeekButtons();
+                thursdayButton.setImageResource(R.drawable.selected_thursday);
+                break;
+            case 6:
+                resetAllDayOfWeekButtons();
+                fridayButton.setImageResource(R.drawable.selected_friday);
+                break;
+            case 7:
+                resetAllDayOfWeekButtons();
+                saturdayButton.setImageResource(R.drawable.selected_saturday);
+                break;
+        }
+    }
+
+    private void resetAllDayOfWeekButtons() {
+        sundayButton.setImageResource(R.drawable.sunday);
+        mondayButton.setImageResource(R.drawable.monday);
+        tuesdayButton.setImageResource(R.drawable.tuesday);
+        wednesdayButton.setImageResource(R.drawable.wednesday);
+        thursdayButton.setImageResource(R.drawable.thursday);
+        fridayButton.setImageResource(R.drawable.friday);
+        saturdayButton.setImageResource(R.drawable.saturday);
     }
 
     private void resetAllButtonState() {

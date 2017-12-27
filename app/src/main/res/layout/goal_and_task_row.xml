@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:background="#c8e3f9">
+                android:background="#B2EBF2">
 
                 <ImageButton
                     android:id="@+id/failedButton"
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:background="#c8e3f9">
+                android:background="#B2EBF2">
 
                 <ImageButton
                     android:id="@+id/completedButton"
@@ -108,8 +108,8 @@
                     android:layout_centerHorizontal="true"
                     android:gravity="center_vertical"
                     android:text="New Text"
-                    android:textColor="#038EC3"
-                    android:textSize="20dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:gravity="center_vertical"
                     android:text="New Text"
                     android:textColor="#09A8E5"
-                    android:textSize="20dp" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:id="@+id/goal_task_remaining_time_ll"
@@ -136,8 +136,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="Deadline: "
-                        android:textColor="#ed2c2b"
-                        android:textSize="19dp" />
+                        android:textColor="@color/colorPrimaryRed"
+                        android:textSize="16sp" />
                     <TextView
                         android:id="@+id/goal_task_remaining_time"
                         android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textColor="#09A8E5"
-                        android:textSize="17dp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
 

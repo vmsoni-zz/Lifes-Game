@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/tools"
+    xmlns:fbutton="http://schemas.android.com/tools"
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#E0F7FA"
     android:orientation="vertical">
 
     <ScrollView
@@ -20,8 +21,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center">
 
                 <ImageButton
@@ -30,11 +31,11 @@
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="30dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
                     android:background="@null"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/daily" />
 
                 <ImageButton
@@ -42,12 +43,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
                     android:background="@null"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/selected_weekly" />
 
                 <ImageButton
@@ -55,14 +56,129 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginRight="40dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
                     android:background="@null"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/monthly" />
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlDayOfWeekPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvDayOfWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Pick a Day of the Week"
+                    android:textColor="#000000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvDayOfWeek"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/sunday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/sunday" />
+
+                    <ImageButton
+                        android:id="@+id/monday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/monday" />
+
+                    <ImageButton
+                        android:id="@+id/tuesday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/tuesday" />
+
+                    <ImageButton
+                        android:id="@+id/wednesday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/wednesday" />
+
+                    <ImageButton
+                        android:id="@+id/thursday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/thursday" />
+
+                    <ImageButton
+                        android:id="@+id/friday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/friday" />
+
+                    <ImageButton
+                        android:id="@+id/saturday"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/saturday" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/relativeLayout3"

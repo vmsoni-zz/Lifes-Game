@@ -355,18 +355,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return values;
     }
 
-    public String getImprovementValue(String key, StatisticFilters dataRange) {
+    public float getImprovementValue(String key, StatisticFilters dataRange, Integer dayOfWeek) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_KEY_VALUES + " WHERE " + TABLE_KEY + " = " + "'" + key + "'";
-        Cursor value = db.rawQuery(query, null);
-        String values;
-        if (value.moveToFirst()) {
-            values = value.getString(2);
-        } else {
-            values = null;
+        String query;
+        switch (dataRange) {
+            case DAILY:
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+                DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND " + key + "= 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') ";
+                break;
+            case WEEKLY:
+                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND " + key + "= 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+                break;
+            case MONTHLY:
+                String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND " + key + "= 1 " +
+                        "AND strftime('%Y', " + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = '" + year + "' ";
+                break;
+            default:
+                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
+                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        "AND " + key + "= 1 " +
+                        "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
+                break;
         }
-        db.close();
-        return values;
+
+        float improvementCount = 0;
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (null != c) {
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                    improvementCount = c.getFloat(0);
+                }
+            }
+            c.close();
+        } catch (Exception e) {
+            db.close();
+            Log.w("Error: ", e);
+        }
+        return improvementCount;
     }
 
     public void updateValue(String key, String value) {
@@ -376,14 +417,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_KEY_VALUES, contentValues, TABLE_KEY + " = " + "'" + key + "'", null);
     }
 
-    public BarSet getImprovementTypesXP(StatisticFilters dataRange) {
+    public BarSet getImprovementTypesXP(StatisticFilters dataRange, Integer dayOfWeek) {
         Map<String, Float> improvementTypesLevel = new HashMap<>();
-        improvementTypesLevel.put("Health", Float.valueOf(getValue(USER_HEALTH_EXERCISE)));
-        improvementTypesLevel.put("Work", Float.valueOf(getValue(USER_WORK)));
-        improvementTypesLevel.put("School", Float.valueOf(getValue(USER_SCHOOL)));
-        improvementTypesLevel.put("Family", Float.valueOf(getValue(USER_FAMILY_FRIENDS)));
-        improvementTypesLevel.put("Learning", Float.valueOf(getValue(USER_LEARNING)));
-        improvementTypesLevel.put("Other", Float.valueOf(getValue(USER_OTHER)));
+        improvementTypesLevel.put("Health", getImprovementValue(USER_HEALTH_EXERCISE, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Work", getImprovementValue(USER_WORK, dataRange, dayOfWeek));
+        improvementTypesLevel.put("School", getImprovementValue(USER_SCHOOL, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Family", getImprovementValue(USER_FAMILY_FRIENDS, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Learning", getImprovementValue(USER_LEARNING, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Other", getImprovementValue(USER_OTHER, dataRange, dayOfWeek));
         BarSet barSetImprovementTypesLevel = new BarSet();
         for (String type : improvementTypesLevel.keySet()) {
             barSetImprovementTypesLevel.addBar(type, improvementTypesLevel.get(type));
@@ -391,7 +432,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return barSetImprovementTypesLevel;
     }
 
-    public List<LineSet> getCompletedGoalTasks(StatisticFilters dataRange) {
+    public List<LineSet> getCompletedGoalTasks(StatisticFilters dataRange, Integer dayOfWeek) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<LineSet> graphDataLineSet = new ArrayList<>();
         Map<String, GraphData> graphData = new HashMap<>();
@@ -401,13 +442,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DateFormat dateFormat = null;
         switch (dataRange) {
             case DAILY:
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
                 namesOfDays = new String[]{
                         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
                 };
                 query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + ", " + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
-                        " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(date) + "') " +
+                        " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') " +
                         "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
                 break;
