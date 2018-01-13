@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context="lifesgame.tapstudios.ca.lifesgame.activity.LoginActivity">
+
+    <TextView
+        android:id="@+id/LG_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:shadowColor="#CFCFCF"
+        android:text="Lifes Game"
+        android:fontFamily="@raw/baloo"
+        android:textColor="@color/colorWhite"
+        android:textSize="36sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LG_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:shadowColor="#CFCFCF"
+        android:fontFamily="@raw/baloo"
+        android:text="Make Everyday a Game"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/skip_sign_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/border"
+        android:clickable="true"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/skip_sign_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Skip Sign in"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+</RelativeLayout>

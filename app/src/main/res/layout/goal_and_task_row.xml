@@ -48,8 +48,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingBottom="2.5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -85,6 +85,7 @@
                         android:src="@drawable/check_mark" />
 
                     <View
+                        android:id="@+id/button_divider_completed"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:background="#e4e4e4" />
@@ -98,10 +99,60 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2">
 
+                <LinearLayout
+                    android:id="@+id/header_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/todo_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/goal_task_title"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="3"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="5dp"
+                        android:text="New Text"
+                        android:textColor="@color/fbutton_color_carrot"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/silver_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/silver" />
+
+                        <TextView
+                            android:id="@+id/silver_reward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="200" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
                 <TextView
                     android:id="@+id/goal_task_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/header_holder"
                     android:layout_centerHorizontal="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
@@ -139,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="15dp"
                         android:text="Deadline: "
-                        android:textColor="@color/colorPrimaryRed"
+                        android:textColor="@color/fbutton_color_wisteria"
                         android:textSize="16sp" />
 
                     <TextView
@@ -148,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text=""
-                        android:textColor="#09A8E5"
+                        android:textColor="@color/colorPrimaryRed"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -165,7 +216,7 @@
                     android:paddingRight="15dp"
                     android:paddingTop="5dp">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/health_exercise"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -177,7 +228,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/not_selected_health_exercise" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/work_img"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -190,7 +241,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/not_selected_work" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/school_img"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -203,7 +254,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/not_selected_school" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/family_friends"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -216,7 +267,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/not_selected_family_friends" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/learning_img"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -229,7 +280,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/not_selected_learning" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/other_img"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -256,6 +307,7 @@
                     android:paddingTop="5dp">
 
                     <View
+                        android:id="@+id/button_divider_failed"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:background="#e4e4e4" />

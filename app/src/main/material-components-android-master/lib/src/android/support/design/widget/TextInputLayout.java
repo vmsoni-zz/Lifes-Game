@@ -1104,7 +1104,7 @@ public class TextInputLayout extends LinearLayout {
       mPasswordToggleDummyDrawable.setBounds(0, 0, mPasswordToggleView.getMeasuredWidth(), 1);
 
       final Drawable[] compounds = TextViewCompat.getCompoundDrawablesRelative(mEditText);
-      // Store the user defined end compound drawable so that we can restore it later
+      // StoreFragment the user defined end compound drawable so that we can restore it later
       if (compounds[2] != mPasswordToggleDummyDrawable) {
         mOriginalEditTextEndDrawable = compounds[2];
       }
@@ -1285,7 +1285,7 @@ public class TextInputLayout extends LinearLayout {
 
   void passwordVisibilityToggleRequested() {
     if (mPasswordToggleEnabled) {
-      // Store the current cursor position
+      // StoreFragment the current cursor position
       final int selection = mEditText.getSelectionEnd();
 
       if (hasPasswordTransformation()) {

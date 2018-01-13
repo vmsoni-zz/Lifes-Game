@@ -550,7 +550,7 @@ public class NavigationMenuPresenter implements MenuPresenter {
       if (mCheckedItem != null) {
         state.putInt(STATE_CHECKED_ITEM, mCheckedItem.getItemId());
       }
-      // Store the states of the action views.
+      // StoreFragment the states of the action views.
       SparseArray<ParcelableSparseArray> actionViewStates = new SparseArray<>();
       for (int i = 0, size = mItems.size(); i < size; i++) {
         NavigationMenuItem navigationMenuItem = mItems.get(i);

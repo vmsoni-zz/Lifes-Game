@@ -3,14 +3,18 @@ package lifesgame.tapstudios.ca.lifesgame.helper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.db.chart.model.BarSet;
 import com.db.chart.model.LineSet;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,8 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lifesgame.tapstudios.ca.lifesgame.GoalsAndTasks;
-import lifesgame.tapstudios.ca.lifesgame.GraphData;
+import lifesgame.tapstudios.ca.lifesgame.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.model.GraphData;
+import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
 
 /**
@@ -31,7 +37,7 @@ import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
-    private static final String DATABASE_NAME = "lifesGame";
+    public static final String DATABASE_NAME = "lifesGame";
 
     private static final String TABLE_TASKS_GOALS = "tasks_goals";
     private static final String TABLE_ID = "ID";
@@ -39,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_TASKS_GOALS_TITLE = "title";
     private static final String TABLE_TASKS_GOALS_CATEGORY = "category";
     private static final String TABLE_TASKS_GOALS_SILVER = "silver";
+    private static final String TABLE_TASKS_GOALS_CREATION_DATE = "creation_date";
     private static final String TABLE_TASKS_GOALS_COMPLETION_DATE = "completion_date";
     private static final String TABLE_TASKS_GOALS_DEADLINE_DATE = "deadline_date";
     private static final String TABLE_TASKS_GOALS_DELETED = "deleted";
@@ -52,6 +59,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_KEY_VALUES = "key_values";
     private static final String TABLE_KEY = "key";
     private static final String TABLE_VALUES = "value";
+
+    private static final String TABLE_REWARDS = "rewards";
+    private static final String TABLE_REWARDS_TITLE = "title";
+    private static final String TABLE_REWARDS_DESCRIPTION = "description";
+    private static final String TABLE_REWARDS_COST = "cost";
+    private static final String TABLE_REWARDS_PURCHASED = "purchased";
+    private static final String TABLE_REWARDS_CREATION_DATE = "creation_date";
+    private static final String TABLE_REWARDS_PURCHASE_DATE = "purchase_date";
+    private static final String TABLE_REWARDS_UNLIMITED = "unlimited_consumption";
 
     public static final String CHAR_HEALTH = "character_health";
     public static final String CHAR_MAX_HEALTH = "character_max_health";
@@ -77,6 +93,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String USER_FAMILY_FRIENDS_LVL = "family_friends_lvl";
     public static final String USER_LEARNING_LVL = "learning_lvl";
     public static final String USER_OTHER_LVL = "other_lvl";
+    public static final String USER_PROFILE_PICTURE = "profile_picture";
+    public static final String USER_PASSCODE_SET = "passcode_set";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -89,6 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 TABLE_TASKS_GOALS_SILVER + " INTEGER, " +
                 TABLE_TASKS_GOALS_TITLE + " TEXT, " +
                 TABLE_TASKS_GOALS_CATEGORY + " TEXT, " +
+                TABLE_TASKS_GOALS_CREATION_DATE + " DATETIME, " +
                 TABLE_TASKS_GOALS_COMPLETION_DATE + " DATETIME, " +
                 TABLE_TASKS_GOALS_DEADLINE_DATE + " DATETIME, " +
                 TABLE_TASKS_GOALS_DELETED + " BOOL NOT NULL DEFAULT '0', " +
@@ -100,10 +120,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 TABLE_TASKS_GOALS_LEARNING + " BOOL, " +
                 TABLE_TASKS_GOALS_OTHER + " BOOL, " +
                 TABLE_TASKS_GOALS_DATA + " TEXT )";
+
         String createTableKeyValues = "CREATE TABLE " + TABLE_KEY_VALUES + " (" + TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TABLE_KEY + " TEXT," + TABLE_VALUES + " TEXT)";
+
+        String createTableRewards = "CREATE TABLE " + TABLE_REWARDS + " (" +
+                TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TABLE_REWARDS_COST + " INTEGER, " +
+                TABLE_REWARDS_TITLE + " TEXT, " +
+                TABLE_REWARDS_DESCRIPTION + " TEXT, " +
+                TABLE_REWARDS_CREATION_DATE + " DATETIME, " +
+                TABLE_REWARDS_PURCHASE_DATE + " DATETIME, " +
+                TABLE_REWARDS_UNLIMITED + " BOOL, " +
+                TABLE_REWARDS_PURCHASED + " BOOL NOT NULL DEFAULT '0')";
 
         db.execSQL(createTableKeyValues);
         db.execSQL(createTableTasksGoals);
+        db.execSQL(createTableRewards);
     }
 
     @Override
@@ -111,6 +143,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_TASKS_GOALS);
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_KEY_VALUES);
         onCreate(db);
+    }
+
+    public synchronized Integer getDBVersion() throws SQLException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.getVersion();
+    }
+
+    public void deleteTableKeyValyes() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from " + TABLE_KEY_VALUES);
     }
 
     public void initiateKeys() {
@@ -126,7 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_VALUES, "0");
         db.insert(TABLE_KEY_VALUES, null, contentValues);
         contentValues.put(TABLE_KEY, CHAR_MAX_XP);
-        contentValues.put(TABLE_VALUES, "1000");
+        contentValues.put(TABLE_VALUES, "100");
         db.insert(TABLE_KEY_VALUES, null, contentValues);
         contentValues.put(TABLE_KEY, CHAR_LVL);
         contentValues.put(TABLE_VALUES, "1");
@@ -185,18 +227,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_KEY, USER_MAX_OTHER);
         contentValues.put(TABLE_VALUES, "1000");
         db.insert(TABLE_KEY_VALUES, null, contentValues);
+        contentValues.put(TABLE_KEY, USER_PASSCODE_SET);
+        contentValues.put(TABLE_VALUES, "FALSE");
+        db.insert(TABLE_KEY_VALUES, null, contentValues);
         contentValues.put(TABLE_KEY, USER_OTHER_LVL);
         contentValues.put(TABLE_VALUES, "0");
         db.insert(TABLE_KEY_VALUES, null, contentValues);
+        contentValues.put(TABLE_KEY, USER_PROFILE_PICTURE);
+        db.insert(TABLE_KEY_VALUES, null, contentValues);
         db.close();
+        initializeDefaultRewards();
     }
 
-    public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate) {
+    public void initializeDefaultRewards() {
+        Date todayDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        addReward("Treat yourself!",
+                "Watch a TV show, play a video game, read a book, anything fun!",
+                200,
+                formatter.format(todayDate),
+                true);
+
+        addReward("End of day relaxation",
+                "Take a nap, go out for dinner, have a glass of wine, your call!",
+                100,
+                formatter.format(todayDate),
+                true);
+
+        addReward("Yummy!",
+                "Have a cheat day (pizza, chocolate, pop, you choose!)",
+                400,
+                formatter.format(todayDate),
+                true);
+
+        addReward("You deserve it!",
+                "Take a day off (go to the park, the beach, or just get away from home!)",
+                5000,
+                formatter.format(todayDate),
+                true);
+    }
+
+    public String[] getGoalsAndTasksHeaders() {
+        String[] tableTasksGoalsHeaders = {
+                TABLE_ID,
+                TABLE_TASKS_GOALS_SILVER,
+                TABLE_TASKS_GOALS_TITLE,
+                TABLE_TASKS_GOALS_CATEGORY,
+                TABLE_TASKS_GOALS_CREATION_DATE,
+                TABLE_TASKS_GOALS_COMPLETION_DATE,
+                TABLE_TASKS_GOALS_DEADLINE_DATE,
+                TABLE_TASKS_GOALS_DELETED,
+                TABLE_TASKS_GOALS_COMPLETED,
+                TABLE_TASKS_GOALS_HEALTH_EXERCISE,
+                TABLE_TASKS_GOALS_WORK,
+                TABLE_TASKS_GOALS_SCHOOL,
+                TABLE_TASKS_GOALS_FAMILY_FRIENDS,
+                TABLE_TASKS_GOALS_LEARNING,
+                TABLE_TASKS_GOALS_OTHER,
+                TABLE_TASKS_GOALS_DATA
+        };
+        return tableTasksGoalsHeaders;
+    }
+
+    public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
         contentValues.put(TABLE_TASKS_GOALS_DATA, description);
         contentValues.put(TABLE_TASKS_GOALS_CATEGORY, category);
+        contentValues.put(TABLE_TASKS_GOALS_CREATION_DATE, creationDate);
         contentValues.put(TABLE_TASKS_GOALS_DEADLINE_DATE, deadlineDate);
         contentValues.put(TABLE_TASKS_GOALS_SILVER, silver);
         contentValues.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, improvementType.get(TABLE_TASKS_GOALS_HEALTH_EXERCISE));
@@ -211,13 +311,268 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public void resetExpiredGoalsAndTasks() {
+    public void updateTodo(Long id, String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<GoalsAndTasks> expiredGoalsAndTasksArrayList = new ArrayList<GoalsAndTasks>();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
+        contentValues.put(TABLE_TASKS_GOALS_DATA, description);
+        contentValues.put(TABLE_TASKS_GOALS_CATEGORY, category);
+        contentValues.put(TABLE_TASKS_GOALS_CREATION_DATE, creationDate);
+        contentValues.put(TABLE_TASKS_GOALS_DEADLINE_DATE, deadlineDate);
+        contentValues.put(TABLE_TASKS_GOALS_SILVER, silver);
+        contentValues.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, improvementType.get(TABLE_TASKS_GOALS_HEALTH_EXERCISE));
+        contentValues.put(TABLE_TASKS_GOALS_WORK, improvementType.get(TABLE_TASKS_GOALS_WORK));
+        contentValues.put(TABLE_TASKS_GOALS_SCHOOL, improvementType.get(TABLE_TASKS_GOALS_SCHOOL));
+        contentValues.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, improvementType.get(TABLE_TASKS_GOALS_FAMILY_FRIENDS));
+        contentValues.put(TABLE_TASKS_GOALS_LEARNING, improvementType.get(TABLE_TASKS_GOALS_LEARNING));
+        contentValues.put(TABLE_TASKS_GOALS_OTHER, improvementType.get(TABLE_TASKS_GOALS_OTHER));
+        Log.d(TAG, "addData: Adding " + description + " to " + TABLE_TASKS_GOALS + " under category " + category);
+        db.update(TABLE_TASKS_GOALS, contentValues, TABLE_ID + "= " + id, null);
+        db.close();
+    }
 
+    public Boolean passcodeSet() {
+        String passcodeSet = getValue(USER_PASSCODE_SET);
+        if (passcodeSet != null && passcodeSet.equals("true")) {
+            return true;
+        }
+        return false;
+    }
+
+    public void updateReward(Integer id, String title, String description, Integer cost, String creationDate, Boolean unlimited) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_REWARDS_TITLE, title);
+        contentValues.put(TABLE_REWARDS_DESCRIPTION, description);
+        contentValues.put(TABLE_REWARDS_CREATION_DATE, creationDate);
+        contentValues.put(TABLE_REWARDS_COST, cost);
+        contentValues.put(TABLE_REWARDS_UNLIMITED, unlimited);
+        db.update(TABLE_REWARDS, contentValues, TABLE_ID + "= " + id, null);
+        Log.d(TAG, "addData: Adding " + description + " to " + TABLE_REWARDS);
+        db.close();
+    }
+
+    public Long addReward(String title, String description, Integer cost, String creationDate, Boolean unlimited) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_REWARDS_TITLE, title);
+        contentValues.put(TABLE_REWARDS_DESCRIPTION, description);
+        contentValues.put(TABLE_REWARDS_CREATION_DATE, creationDate);
+        contentValues.put(TABLE_REWARDS_COST, cost);
+        contentValues.put(TABLE_REWARDS_UNLIMITED, unlimited);
+        Log.d(TAG, "addData: Adding " + description + " to " + TABLE_REWARDS);
+        Long result = db.insert(TABLE_REWARDS, null, contentValues);
+        db.close();
+        return result;
+    }
+
+    public Rewards getReward(Integer id) {
+        Rewards rewards = null;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_REWARDS + " WHERE " + TABLE_ID + " = '" + id + "' ";
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    do {
+                        rewards = new Rewards(c.getInt(c.getColumnIndex(TABLE_ID)),
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_TITLE)),
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_DESCRIPTION)),
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_COST)),
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0
+                        );
+                    } while (c.moveToNext());
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+        db.close();
+        return rewards;
+    }
+
+    public GoalsAndTasks getTodo(Long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_ID + " = '" + id + "' ";
+        GoalsAndTasks goalsAndTasks = null;
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    Map<String, Boolean> improvementType = new HashMap<>();
+                    improvementType.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_HEALTH_EXERCISE)) > 0);
+                    improvementType.put(TABLE_TASKS_GOALS_WORK, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_WORK)) > 0);
+                    improvementType.put(TABLE_TASKS_GOALS_SCHOOL, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SCHOOL)) > 0);
+                    improvementType.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAMILY_FRIENDS)) > 0);
+                    improvementType.put(TABLE_TASKS_GOALS_LEARNING, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_LEARNING)) > 0);
+                    improvementType.put(TABLE_TASKS_GOALS_OTHER, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_OTHER)) > 0);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
+                    String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
+                    String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
+
+                    Date creationDate = null;
+                    if (creationDateString != null) {
+                        try {
+                            creationDate = formatter.parse(creationDateString);
+                        } catch (ParseException e) {
+                            Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                        }
+                    }
+
+                    Date deadlineDate = null;
+                    if (deadlineDateString != null) {
+                        try {
+                            deadlineDate = formatter.parse(deadlineDateString);
+                        } catch (ParseException e) {
+                            Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                        }
+                    }
+
+                    Date completionDate = null;
+                    if (completionDateString != null) {
+                        try {
+                            completionDate = formatter.parse(completionDateString);
+                        } catch (ParseException e) {
+                            Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                        }
+                    }
+
+                    goalsAndTasks = new GoalsAndTasks(
+                            c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
+                            c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
+                            c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CATEGORY)),
+                            c.getLong(c.getColumnIndex(TABLE_ID)),
+                            c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
+                            improvementType,
+                            deadlineDate,
+                            completionDate,
+                            creationDate,
+                            c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0
+                    );
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+        return goalsAndTasks;
+    }
+
+    public Integer resetExpiredGoalsAndTasks() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Calendar cal = Calendar.getInstance();
+        Date today = new Date();
+        DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ArrayList<GoalsAndTasks> expiredGoalsAndTasksArrayList = new ArrayList<GoalsAndTasks>();
         String query = "SELECT * FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 0 "
-                + "AND " + TABLE_TASKS_GOALS_CATEGORY + "<>'Goal'"
-                + " AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE(NOW() - INTERVAL 1 DAY) ORDER BY " + TABLE_TASKS_GOALS_COMPLETION_DATE;
+                + "AND " + TABLE_TASKS_GOALS_CATEGORY + "<>'Daily' "
+                + "ORDER BY " + TABLE_TASKS_GOALS_CREATION_DATE;
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    do {
+                        Map<String, Boolean> improvementType = new HashMap<>();
+                        improvementType.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_HEALTH_EXERCISE)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_WORK, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_WORK)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_SCHOOL, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SCHOOL)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAMILY_FRIENDS)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_LEARNING, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_LEARNING)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_OTHER, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_OTHER)) > 0);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
+                        String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
+                        String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
+                        Date deadlineDate = null;
+                        if (deadlineDateString != null) {
+                            try {
+                                deadlineDate = formatter.parse(deadlineDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
+                        Date completionDate = null;
+                        if (completionDateString != null) {
+                            try {
+                                completionDate = formatter.parse(completionDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
+                        Date creationDate = null;
+                        if (creationDateString != null) {
+                            try {
+                                creationDate = formatter.parse(creationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
+                        GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CATEGORY)),
+                                c.getLong(c.getColumnIndex(TABLE_ID)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
+                                improvementType,
+                                deadlineDate,
+                                completionDate,
+                                creationDate,
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0
+                        );
+                        expiredGoalsAndTasksArrayList.add(goalsAndTasks);
+                    } while (c.moveToNext());
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+        Integer deletedCount = 0;
+        for (GoalsAndTasks goalsAndTasks : expiredGoalsAndTasksArrayList) {
+            Date todayDate = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTime = sdf.format(todayDate);
+            if (goalsAndTasks.getCategory() == TodoType.DAILY) {
+                if (goalsAndTasks.getCompletionDate() != null) {
+                    if (getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(goalsAndTasks.getCompletionDate())) > 0) {
+                        deletedCount++;
+                    }
+                }
+            }
+            if (goalsAndTasks.getCategory() == TodoType.GOAL) {
+                if (getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(goalsAndTasks.getDeadlineDate())) > 0) {
+                    deleteData(goalsAndTasks.getId(), false, currentTime, true);
+                    deletedCount++;
+                }
+            } else if (getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(goalsAndTasks.getCreationDate())) > 0) {
+                deleteData(goalsAndTasks.getId(), false, currentTime, true);
+                deletedCount++;
+            }
+        }
+        db.close();
+        return deletedCount;
+    }
+
+    private Date getZeroTimeDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        date = calendar.getTime();
+        return date;
+    }
+
+    public ArrayList loadAllGoalsAndTask() {
+        ArrayList<GoalsAndTasks> goalsAndTasksArrayList = new ArrayList<GoalsAndTasks>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_TASKS_GOALS;
         try {
             Cursor c = db.rawQuery(query, null);
             if (c != null) {
@@ -233,6 +588,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
                         Date deadlineDate = null;
+                        String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
+                        String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
+
+                        Date creationDate = null;
+                        if (creationDateString != null) {
+                            try {
+                                creationDate = formatter.parse(creationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
+
                         if (deadlineDateString != null) {
                             try {
                                 deadlineDate = formatter.parse(deadlineDateString);
@@ -240,16 +608,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
                             }
                         }
+
+                        Date completionDate = null;
+                        if (completionDateString != null) {
+                            try {
+                                completionDate = formatter.parse(completionDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
                         GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CATEGORY)),
                                 c.getLong(c.getColumnIndex(TABLE_ID)),
-                                c.getLong(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
                                 improvementType,
-                                deadlineDate
+                                deadlineDate,
+                                completionDate,
+                                creationDate,
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0
                         );
-                        expiredGoalsAndTasksArrayList.add(goalsAndTasks);
+                        goalsAndTasksArrayList.add(goalsAndTasks);
                     } while (c.moveToNext());
                 }
             }
@@ -257,19 +638,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e(getClass().getSimpleName(), "Could not create or Open the database");
             db.close();
         }
-
-        for (GoalsAndTasks goalsAndTasks : expiredGoalsAndTasksArrayList) {
-            Date dt = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String currentTime = sdf.format(dt);
-            if (!goalsAndTasks.getCategory().equals("Goal")) {
-                deleteData(goalsAndTasks.getId(), false, currentTime, true);
-            }
-        }
         db.close();
+        return goalsAndTasksArrayList;
     }
 
-    public ArrayList loadAllGoalsAndTask() {
+    public ArrayList loadAllCompletedGoalsAndTask() {
         ArrayList<GoalsAndTasks> goalsAndTasksArrayList = new ArrayList<GoalsAndTasks>();
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 0 ";
@@ -288,6 +661,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
                         Date deadlineDate = null;
+                        String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
+                        String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
+
+                        Date creationDate = null;
+                        if (creationDateString != null) {
+                            try {
+                                creationDate = formatter.parse(creationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
+
                         if (deadlineDateString != null) {
                             try {
                                 deadlineDate = formatter.parse(deadlineDateString);
@@ -295,14 +681,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
                             }
                         }
+
+                        Date completionDate = null;
+                        if (completionDateString != null) {
+                            try {
+                                completionDate = formatter.parse(completionDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse deadline date string");
+                            }
+                        }
+
                         GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CATEGORY)),
                                 c.getLong(c.getColumnIndex(TABLE_ID)),
-                                c.getLong(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
                                 improvementType,
-                                deadlineDate
+                                deadlineDate,
+                                completionDate,
+                                creationDate,
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0
                         );
                         goalsAndTasksArrayList.add(goalsAndTasks);
                     } while (c.moveToNext());
@@ -314,6 +713,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
         return goalsAndTasksArrayList;
+    }
+
+    public ArrayList loadAllRewards() {
+        ArrayList<Rewards> rewardsArrayList = new ArrayList<Rewards>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_REWARDS + " WHERE " + TABLE_REWARDS_PURCHASED + " = 0 ";
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    do {
+                        Rewards reward = new Rewards(
+                                c.getInt(c.getColumnIndex(TABLE_ID)),
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_TITLE)),
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_DESCRIPTION)),
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_COST)),
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0
+                        );
+                        rewardsArrayList.add(reward);
+                    } while (c.moveToNext());
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+        db.close();
+        return rewardsArrayList;
+    }
+
+    public void purchaseReward(Integer id, String purchaseDate, Integer totalSilver, boolean purchased, boolean unlimited) {
+        if (!unlimited) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put(TABLE_REWARDS_PURCHASED, purchased);
+            cv.put(TABLE_REWARDS_PURCHASE_DATE, purchaseDate);
+            database.update(TABLE_REWARDS, cv, TABLE_ID + "= " + id, null);
+            database.close();
+        }
+        updateValue(SILVER_AMOUNT_TOTAL, Integer.toString(totalSilver));
     }
 
     public void deleteData(Long id, boolean completed, String completionDate, boolean deleted) {
@@ -333,6 +772,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean deleteRewardPermanent(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_REWARDS, TABLE_ID + " = " + id, null);
+        db.close();
+        return true;
+    }
+
     public void addKey(String key) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -344,15 +790,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getValue(String key) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_KEY_VALUES + " WHERE " + TABLE_KEY + " = " + "'" + key + "'";
-        Cursor value = db.rawQuery(query, null);
-        String values;
-        if (value.moveToFirst()) {
-            values = value.getString(2);
-        } else {
-            values = null;
+        try {
+            Cursor value = db.rawQuery(query, null);
+            String values;
+            if (value.moveToFirst()) {
+                values = value.getString(2);
+            } else {
+                values = null;
+            }
+            db.close();
+            return values;
+        } catch (Exception e) {
+            return "";
         }
-        db.close();
-        return values;
     }
 
     public float getImprovementValue(String key, StatisticFilters dataRange, Integer dayOfWeek) {
@@ -644,5 +1094,147 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
         return countTotal;
+    }
+
+    public void updateDailyNotCompleted(Long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_TASKS_GOALS_COMPLETED, 0);
+        db.update(TABLE_TASKS_GOALS, contentValues, TABLE_ID + " = " + "'" + id + "'", null);
+    }
+
+    public void insertProfilePicture(Bitmap profilePicture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        profilePicture.compress(Bitmap.CompressFormat.PNG, 50, stream);
+        byte[] profilePictureByte = stream.toByteArray();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_VALUES, profilePictureByte);
+        db.update(TABLE_KEY_VALUES, contentValues, TABLE_KEY + " = " + "'" + USER_PROFILE_PICTURE + "'", null);
+    }
+
+    public Bitmap getProfilePicture() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_KEY_VALUES + " WHERE " + TABLE_KEY + " = " + "'" + USER_PROFILE_PICTURE + "'";
+        Cursor cur = db.rawQuery(query, null);
+        byte[] imgByte = null;
+        if (cur != null) {
+            if (cur.moveToFirst()) {
+                try {
+                    imgByte = cur.getBlob(2);
+                } catch (Exception e) {
+                    return null;
+                }
+                cur.close();
+                return BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+            }
+        }
+        if (cur != null && !cur.isClosed()) {
+            cur.close();
+        }
+        return null;
+    }
+
+    public void importDatabase(String databasePath) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(databasePath, null, 0);
+        String query = "SELECT * FROM " + TABLE_TASKS_GOALS;
+        try {
+            Cursor c = db.rawQuery(query, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    do {
+                        Map<String, Boolean> improvementType = new HashMap<>();
+                        improvementType.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_HEALTH_EXERCISE)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_WORK, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_WORK)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_SCHOOL, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SCHOOL)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAMILY_FRIENDS)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_LEARNING, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_LEARNING)) > 0);
+                        improvementType.put(TABLE_TASKS_GOALS_OTHER, c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_OTHER)) > 0);
+                        String deadlineDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DEADLINE_DATE));
+                        String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
+                        String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
+                        addDataImport(
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CATEGORY)),
+                                c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_SILVER)),
+                                improvementType,
+                                deadlineDateString,
+                                completionDateString,
+                                creationDateString,
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0,
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_DELETED)) > 0
+                        );
+
+                    } while (c.moveToNext());
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+
+        try {
+            String queryKeyValues = "SELECT * FROM " + TABLE_KEY_VALUES;
+            Cursor cKeyValues = db.rawQuery(queryKeyValues, null);
+            if (cKeyValues != null) {
+                if (cKeyValues.moveToFirst()) {
+                    do {
+                        updateValue(
+                                cKeyValues.getString(cKeyValues.getColumnIndex(TABLE_KEY)),
+                                cKeyValues.getString(cKeyValues.getColumnIndex(TABLE_VALUES)));
+                    } while (cKeyValues.moveToNext());
+                }
+            }
+        } catch (SQLiteException se) {
+            Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+            db.close();
+        }
+        db.close();
+    }
+
+    private void addDataImport(String description,
+                               String category,
+                               String title,
+                               Integer silver,
+                               Map<String, Boolean> improvementType,
+                               String deadlineDate,
+                               String creationDate,
+                               String completionDate,
+                               Boolean deleted,
+                               Boolean completed) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
+        contentValues.put(TABLE_TASKS_GOALS_DATA, description);
+        contentValues.put(TABLE_TASKS_GOALS_CATEGORY, category);
+        contentValues.put(TABLE_TASKS_GOALS_CREATION_DATE, creationDate);
+        contentValues.put(TABLE_TASKS_GOALS_DEADLINE_DATE, deadlineDate);
+        contentValues.put(TABLE_TASKS_GOALS_SILVER, silver);
+        contentValues.put(TABLE_TASKS_GOALS_HEALTH_EXERCISE, improvementType.get(TABLE_TASKS_GOALS_HEALTH_EXERCISE));
+        contentValues.put(TABLE_TASKS_GOALS_WORK, improvementType.get(TABLE_TASKS_GOALS_WORK));
+        contentValues.put(TABLE_TASKS_GOALS_SCHOOL, improvementType.get(TABLE_TASKS_GOALS_SCHOOL));
+        contentValues.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, improvementType.get(TABLE_TASKS_GOALS_FAMILY_FRIENDS));
+        contentValues.put(TABLE_TASKS_GOALS_LEARNING, improvementType.get(TABLE_TASKS_GOALS_LEARNING));
+        contentValues.put(TABLE_TASKS_GOALS_OTHER, improvementType.get(TABLE_TASKS_GOALS_OTHER));
+        contentValues.put(TABLE_TASKS_GOALS_COMPLETED, completed);
+        contentValues.put(TABLE_TASKS_GOALS_DELETED, deleted);
+        contentValues.put(TABLE_TASKS_GOALS_COMPLETION_DATE, completionDate);
+        Log.d(TAG, "addData: Adding " + description + " to " + TABLE_TASKS_GOALS + " under category " + category);
+        Long result = db.insert(TABLE_TASKS_GOALS, null, contentValues);
+        db.close();
+    }
+
+    public boolean existingKey(String key) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String Query = "Select * from " + TABLE_KEY_VALUES + " where " + TABLE_KEY + " = " + "'" + key + "'";
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 }

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="2.5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2.5dp">
+
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#43d358">
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="?android:selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/pen" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#ff707d">
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/trash_can" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2.5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2.5dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f6f6f6"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.8">
+
+                <LinearLayout
+                    android:id="@+id/header_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/reward_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="5dp"
+                        android:text="New Text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/infinity_Ll"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/infinity_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:paddingTop="5dp"
+                            android:src="@drawable/infinity" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/reward_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/header_holder"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:text="New Text"
+                    android:textColor="#09A8E5"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:gravity="center_vertical|right">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp"
+                        android:background="#e4e4e4" />
+
+                    <LinearLayout
+                        android:id="@+id/purchase_reward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/silver_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/silver" />
+
+                        <TextView
+                            android:id="@+id/reward_cost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:text="200" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.daimajia.swipe.SwipeLayout>

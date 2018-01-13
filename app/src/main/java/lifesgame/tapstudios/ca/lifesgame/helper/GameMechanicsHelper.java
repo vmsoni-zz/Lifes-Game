@@ -1,9 +1,14 @@
 package lifesgame.tapstudios.ca.lifesgame.helper;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import lifesgame.tapstudios.ca.lifesgame.ProfilePicker;
 
 /**
  * Created by Vidit Soni on 6/3/2017.
@@ -40,6 +45,7 @@ public class GameMechanicsHelper {
     private int lvlFamilyFriends;
     private int lvlLearning;
     private int lvlOther;
+    private Context context;
 
     public GameMechanicsHelper(TextView charHealth,
                                TextView charXp,
@@ -47,7 +53,8 @@ public class GameMechanicsHelper {
                                TextView silverAmountTextView,
                                DatabaseHelper databaseHelper,
                                RoundCornerProgressBar healthBar,
-                               RoundCornerProgressBar xpBar) {
+                               RoundCornerProgressBar xpBar,
+                               Context context) {
         this.charHealth = charHealth;
         this.charXp = charXp;
         this.charLevel = charLevel;
@@ -79,6 +86,7 @@ public class GameMechanicsHelper {
         lvlFamilyFriends = 0;
         lvlLearning = 0;
         lvlOther = 0;
+        this.context = context;
     }
 
     public void setUpGameTextViews() {
@@ -128,7 +136,7 @@ public class GameMechanicsHelper {
         charLevel.setText(Integer.toString(currentLvl));
     }
 
-    public void addSilver(Long addSilver) {
+    public void addSilver(Integer addSilver) {
         totalSilver += addSilver;
         databaseHelper.updateValue(databaseHelper.SILVER_AMOUNT_TOTAL, Long.toString(totalSilver));
         silverAmountTextView.setText(Long.toString(totalSilver));
@@ -136,9 +144,27 @@ public class GameMechanicsHelper {
 
     public void removeHealth() {
         currentHealth -= 10;
-        databaseHelper.updateValue(databaseHelper.CHAR_HEALTH, Integer.toString(currentHealth));
         charHealth.setText(Integer.toString(currentHealth) + "/" + Integer.toString(maxHealth));
         healthBar.setProgress(currentHealth);
+        if (currentHealth <= 0) {
+            new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Uh Oh...")
+                    .setContentText("You have lost all your health, time to restart")
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            databaseHelper.deleteTableKeyValyes();
+                            databaseHelper.initiateKeys();
+                            Intent intent = new Intent(context, ProfilePicker.class);
+                            context.startActivity(intent);
+                        }
+                    })
+                    .show();
+        } else {
+            databaseHelper.updateValue(databaseHelper.CHAR_HEALTH, Integer.toString(currentHealth));
+        }
     }
 
     public void addHealth() {
@@ -148,12 +174,13 @@ public class GameMechanicsHelper {
         healthBar.setProgress(currentHealth);
     }
 
-    public void addXp() {
-        currentXp += 50;
+    public Boolean addXp(Integer amount) {
+        Boolean levelUp = false;
+        currentXp += amount;
         xpBar.setProgress(currentXp);
-        if (currentXp == maxXp) {
-            maxXp = maxXp * 2;
-            currentXp = 0;
+        if (currentXp >= maxXp) {
+            currentXp -= maxXp;
+            maxXp += 50;
             xpBar.setMax(maxXp);
             xpBar.setProgress(currentXp);
             maxHealth += 100;
@@ -165,9 +192,11 @@ public class GameMechanicsHelper {
             databaseHelper.updateValue(databaseHelper.CHAR_MAX_HEALTH, Integer.toString(maxHealth));
             databaseHelper.updateValue(databaseHelper.CHAR_MAX_XP, Integer.toString(maxXp));
             databaseHelper.updateValue(databaseHelper.CHAR_HEALTH, Integer.toString(currentHealth));
+            levelUp = true;
         }
         databaseHelper.updateValue(databaseHelper.CHAR_XP, Integer.toString(currentXp));
         charXp.setText(Integer.toString(currentXp) + "/" + Integer.toString(maxXp));
+        return levelUp;
     }
 
     public void addLevel() {

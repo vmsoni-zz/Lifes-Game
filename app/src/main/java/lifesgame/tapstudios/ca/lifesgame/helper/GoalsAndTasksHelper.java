@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.Button;
 
 import lifesgame.tapstudios.ca.lifesgame.DialogAddGoalsAndTasks;
-import lifesgame.tapstudios.ca.lifesgame.MainActivity;
 import lifesgame.tapstudios.ca.lifesgame.R;
 
 /**
@@ -41,8 +39,9 @@ public class GoalsAndTasksHelper {
 
     }
 
-    public void displayGoalsAndTasksEditMenu(final int position) {
+    public void displayGoalsAndTasksEditMenu(Long id) {
         Intent intent = new Intent(context, DialogAddGoalsAndTasks.class);
+        intent.putExtra("ID", id);
         context.startActivity(intent);
     }
 }

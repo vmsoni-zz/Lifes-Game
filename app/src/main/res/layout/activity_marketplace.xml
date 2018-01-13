@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:williamchart="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f6f6f6"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/full_package"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/full_package" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="2.5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2.5dp">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f6f6f6"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2">
+
+                            <TextView
+                                android:id="@+id/full_package_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:text="Full Package"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/full_package_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/full_package_title"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:text="Get all the following features:"
+                                android:textColor="@color/marketplace_text_color_blue"
+                                android:textSize="14sp" />
+
+
+                            <TextView
+                                android:id="@+id/full_package_features"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/full_package_description"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:text="@string/full_package_features"
+                                android:textColor="@color/marketplace_text_color_blue"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="15dp"
+                                    android:background="#e4e4e4" />
+
+                                <LinearLayout
+                                    android:id="@+id/purchase_full_package"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp">
+
+                                    <ImageView
+                                        android:id="@+id/silver_img_1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/silver" />
+
+                                    <TextView
+                                        android:id="@+id/full_package_cost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="5dp"
+                                        android:text="4.99" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/csv_export"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/csv_export" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2.5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2.5dp">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f6f6f6"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2">
+
+                            <TextView
+                                android:id="@+id/csv_export_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:text="CSV Export"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/csv_export_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/csv_export_title"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:text="Export all your statistical data to a CSV format!"
+                                android:textColor="@color/marketplace_text_color_blue"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="15dp"
+                                    android:background="#e4e4e4" />
+
+                                <LinearLayout
+                                    android:id="@+id/purchase_csv_export"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp">
+
+                                    <ImageView
+                                        android:id="@+id/silver_img_2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/silver" />
+
+                                    <TextView
+                                        android:id="@+id/csv_export_cost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="5dp"
+                                        android:text="1.99" />/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/export_csv_ll"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/export_csv_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="5dp"
+                                        android:paddingRight="5dp"
+                                        android:text="Export" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/db_import_export"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/db_import_export" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2.5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2.5dp">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f6f6f6"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2">
+
+                            <TextView
+                                android:id="@+id/cloud_backup_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:text="Backup/Restore Data"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cloud_backup_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cloud_backup_title"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:text="Backup and/or restore your data!"
+                                android:textColor="@color/marketplace_text_color_blue"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|right">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="15dp"
+                                    android:background="#e4e4e4" />
+
+                                <LinearLayout
+                                    android:id="@+id/purchase_cloud_backup"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/silver_img_3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/silver" />
+
+                                    <TextView
+                                        android:id="@+id/cloud_backup_cost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="5dp"
+                                        android:text="2.99" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/import_export_db"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:id="@+id/import_database"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@drawable/border"
+                                        android:clickable="true"
+                                        android:gravity="center_vertical|center_horizontal"
+                                        android:padding="8dp">
+
+                                        <TextView
+                                            android:id="@+id/import_database_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:text="Import" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/export_backup"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@drawable/border"
+                                        android:clickable="true"
+                                        android:gravity="center_vertical|center_horizontal"
+                                        android:padding="8dp">
+
+                                        <TextView
+                                            android:id="@+id/export_backup_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:text="Export" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/unlock_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/pin_lock" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2.5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2.5dp">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f6f6f6"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.8">
+
+                            <TextView
+                                android:id="@+id/unlock_pin_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:text="App Lock Pin"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/unlock_pin_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/unlock_pin_title"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:text="Add an pin based lock to secure your data!"
+                                android:textColor="@color/marketplace_text_color_blue"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.2"
+                            android:gravity="center_vertical|right">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="15dp"
+                                    android:background="#e4e4e4" />
+
+                                <LinearLayout
+                                    android:id="@+id/purchase_unlock_pin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp">
+
+                                    <ImageView
+                                        android:id="@+id/silver_img_4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/silver" />
+
+                                    <TextView
+                                        android:id="@+id/unlock_pin_cost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="5dp"
+                                        android:text="0.99" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/enable_disable_app_pin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/enable_pin"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@drawable/border"
+                                        android:clickable="true"
+                                        android:gravity="center_vertical|center_horizontal"
+                                        android:padding="8dp">
+
+                                        <TextView
+                                            android:id="@+id/enable_pin_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:text="Enable" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/disable_pin"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:background="@drawable/border"
+                                        android:clickable="true"
+                                        android:gravity="center_vertical|center_horizontal"
+                                        android:padding="8dp">
+
+                                        <TextView
+                                            android:id="@+id/disable_pin_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:text="Disable" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>

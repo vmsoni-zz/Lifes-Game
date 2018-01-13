@@ -13,6 +13,7 @@ import java.util.List;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
+import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 
 /**
  * Created by Vidit Soni on 5/24/2017.
@@ -67,10 +68,17 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(dt);
-        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
-        goalsAndTasks.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, goalsAndTasks.size());
+        try {
+            if (goalsAndTasks.get(position) != null) {
+                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
+                goalsAndTasks.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, goalsAndTasks.size());
+            }
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public void deleteItemPermanent(int position) {
@@ -79,4 +87,16 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, goalsAndTasks.size());
     }
+
+    public void updateDailyCompleted(int position, Boolean completed, Boolean deleted) {
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = sdf.format(dt);
+        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
+    }
+
+    public void updateDailyNotCompleted(int position) {
+        databaseHelper.updateDailyNotCompleted(goalsAndTasks.get(position).getId());
+    }
+
 }
