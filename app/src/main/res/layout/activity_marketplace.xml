@@ -51,7 +51,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2">
+                            android:layout_weight="1.8">
 
                             <TextView
                                 android:id="@+id/full_package_title"
@@ -76,7 +76,7 @@
                                 android:gravity="center_vertical"
                                 android:paddingBottom="10dp"
                                 android:paddingLeft="20dp"
-                                android:text="Get all the following features:"
+                                android:text="Get the following features:"
                                 android:textColor="@color/marketplace_text_color_blue"
                                 android:textSize="14sp" />
 
@@ -98,7 +98,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="1.2"
                             android:gravity="center_vertical|right">
 
                             <LinearLayout
@@ -120,12 +120,6 @@
                                     android:clickable="true"
                                     android:gravity="center_vertical|center_horizontal"
                                     android:padding="8dp">
-
-                                    <ImageView
-                                        android:id="@+id/silver_img_1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/silver" />
 
                                     <TextView
                                         android:id="@+id/full_package_cost"
@@ -181,7 +175,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2">
+                            android:layout_weight="1.8">
 
                             <TextView
                                 android:id="@+id/csv_export_title"
@@ -215,7 +209,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="1.2"
                             android:gravity="center_vertical|right">
 
                             <LinearLayout
@@ -238,17 +232,10 @@
                                     android:gravity="center_vertical|center_horizontal"
                                     android:padding="8dp">
 
-                                    <ImageView
-                                        android:id="@+id/silver_img_2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/silver" />
-
                                     <TextView
                                         android:id="@+id/csv_export_cost"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:paddingLeft="5dp"
                                         android:text="1.99" />/>
                                 </LinearLayout>
 
@@ -318,7 +305,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2">
+                            android:layout_weight="1.8">
 
                             <TextView
                                 android:id="@+id/cloud_backup_title"
@@ -351,7 +338,7 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="1.2"
                             android:gravity="center_vertical|right">
 
                             <LinearLayout
@@ -372,20 +359,12 @@
                                     android:background="@drawable/border"
                                     android:clickable="true"
                                     android:gravity="center_vertical|center_horizontal"
-                                    android:padding="8dp"
-                                    android:visibility="gone">
-
-                                    <ImageView
-                                        android:id="@+id/silver_img_3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/silver" />
+                                    android:padding="8dp">
 
                                     <TextView
-                                        android:id="@+id/cloud_backup_cost"
+                                        android:id="@+id/db_backup_cost"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:paddingLeft="5dp"
                                         android:text="2.99" />
                                 </LinearLayout>
 
@@ -393,7 +372,8 @@
                                     android:id="@+id/import_export_db"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
 
                                     <LinearLayout
                                         android:id="@+id/import_database"
@@ -519,7 +499,8 @@
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:id="@+id/linearLayout3">
 
                                 <View
                                     android:layout_width="1dp"
@@ -537,17 +518,10 @@
                                     android:gravity="center_vertical|center_horizontal"
                                     android:padding="8dp">
 
-                                    <ImageView
-                                        android:id="@+id/silver_img_4"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/silver" />
-
                                     <TextView
                                         android:id="@+id/unlock_pin_cost"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:paddingLeft="5dp"
                                         android:text="0.99" />
                                 </LinearLayout>
 
@@ -577,26 +551,29 @@
                                             android:text="Enable" />
                                     </LinearLayout>
 
-                                    <LinearLayout
-                                        android:id="@+id/disable_pin"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginRight="10dp"
-                                        android:layout_marginTop="10dp"
-                                        android:background="@drawable/border"
-                                        android:clickable="true"
-                                        android:gravity="center_vertical|center_horizontal"
-                                        android:padding="8dp">
-
-                                        <TextView
-                                            android:id="@+id/disable_pin_tv"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="5dp"
-                                            android:paddingRight="5dp"
-                                            android:text="Disable" />
-                                    </LinearLayout>
                                 </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/disable_pin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignLeft="@+id/linearLayout3"
+                                android:layout_alignStart="@+id/linearLayout3"
+                                android:layout_alignTop="@+id/linearLayout3"
+                                android:background="@drawable/border"
+                                android:clickable="true"
+                                android:visibility="gone"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:id="@+id/disable_pin_tv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:text="Disable" />
                             </LinearLayout>
                         </RelativeLayout>
                     </LinearLayout>

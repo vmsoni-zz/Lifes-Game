@@ -143,7 +143,7 @@ public class SilverFragment extends Fragment {
             dataSet.get(0)
                     .setColor(Color.WHITE)
                     .setThickness(6)
-                    .setSmooth(true);
+                    .setSmooth(false);
         } else {
             dataSet.get(0)
                     .setColor(Color.WHITE)

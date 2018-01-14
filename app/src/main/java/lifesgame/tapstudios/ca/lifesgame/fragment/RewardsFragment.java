@@ -55,6 +55,7 @@ public class RewardsFragment extends Fragment {
             rewardsAdapter.notifyDataSetChanged();
         }
         setupAddRewardButtonListener();
+        hideFABOnScroll();
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
         tracker = application.getDefaultTracker();
@@ -88,5 +89,20 @@ public class RewardsFragment extends Fragment {
         Activity activity = (Activity) getContext();
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_up, R.anim.no_anim);
+    }
+
+    public void hideFABOnScroll() {
+        rewardsListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    addRewardToListBtn.hide();
+                } else {
+                    addRewardToListBtn.show();
+                }
+
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 }

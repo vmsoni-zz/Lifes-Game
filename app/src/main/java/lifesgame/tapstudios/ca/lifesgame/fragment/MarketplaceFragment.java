@@ -21,9 +21,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.android.vending.billing.IInAppBillingService;
 import com.github.orangegangsters.lollipin.lib.managers.AppLock;
 import com.google.android.gms.analytics.HitBuilders;
@@ -70,6 +76,12 @@ public class MarketplaceFragment extends Fragment {
     private ServiceConnection mServiceConn;
     private Tracker tracker;
 
+    private TextView fullPackageTv;
+    private TextView dbImportExportTv;
+    private TextView csvExportTv;
+    private TextView appPinTv;
+
+
     private static final int REQUEST_CODE_ENABLE = 11;
     private static final int REQUEST_CODE_DISABLE = 12;
     public static final int PURCHASE_CODE = 1001;
@@ -95,6 +107,12 @@ public class MarketplaceFragment extends Fragment {
         disableAppPin = (LinearLayout) marketplaceView.findViewById(R.id.disable_pin);
         enableDisableAppPinLl = (LinearLayout) marketplaceView.findViewById(R.id.enable_disable_app_pin);
         exportCSVLl = (LinearLayout) marketplaceView.findViewById(R.id.export_csv_ll);
+
+        fullPackageTv = (TextView) marketplaceView.findViewById(R.id.full_package_cost);
+        dbImportExportTv = (TextView) marketplaceView.findViewById(R.id.db_backup_cost);
+        csvExportTv = (TextView) marketplaceView.findViewById(R.id.csv_export_cost);
+        appPinTv = (TextView) marketplaceView.findViewById(R.id.unlock_pin_cost);
+
         setupListeners();
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -123,7 +141,7 @@ public class MarketplaceFragment extends Fragment {
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
         context.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-
+        setupPrices();
         return marketplaceView;
     }
 
@@ -140,9 +158,6 @@ public class MarketplaceFragment extends Fragment {
 
         if (userPurchases == null || userPurchases.size() == 0) {
             setupAllPurchaseListeners();
-            setupImportExport();
-            setupAppLock();
-            setupCSVExport();
         } else {
             for (Purchase purchase : userPurchases) {
                 switch (purchase.getPackageName()) {
@@ -233,28 +248,44 @@ public class MarketplaceFragment extends Fragment {
         purchaseFullPackage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    purchaseItem("fullPackage");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         purchaseCSVExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    purchaseItem("csvExport");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         purchaseDataBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    purchaseItem("dbImportExport");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         purchaseUnlockPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    purchaseItem("appPin");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -384,16 +415,11 @@ public class MarketplaceFragment extends Fragment {
     }
 
     private void purchaseItem(String sku) throws RemoteException {
-        Bundle buyIntentBundle = mService.getBuyIntent(3, context.getPackageName(),
-                "", "inapp", "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
-        PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
-        try {
-            startIntentSenderForResult(pendingIntent.getIntentSender(),
-                    PURCHASE_CODE, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
-                    Integer.valueOf(0), null);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSku(sku)
+                .setType(BillingClient.SkuType.INAPP)
+                .build();
+        purchaseHelper.purchase(getActivity(), flowParams);
     }
 
     private String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
@@ -413,5 +439,47 @@ public class MarketplaceFragment extends Fragment {
                 cursor.close();
             }
         }
+    }
+
+    private void setupPrices() {
+        List<String> skuList = new ArrayList();
+        skuList.add("fullPackage");
+        skuList.add("csvExport");
+        skuList.add("dbImportExport");
+        skuList.add("appPin");
+
+        List<SkuDetails> skuDetailsList = purchaseHelper.getPrices(skuList);
+        if(skuDetailsList == null || skuDetailsList.size() == 0) {
+            setPriceNotAvailable();
+            return;
+        }
+        try {
+            for (SkuDetails details : skuDetailsList) {
+                String sku = details.getSku();
+                switch (sku) {
+                    case "fullPackage":
+                        fullPackageTv.setText(details.getPrice());
+                        break;
+                    case "csvExport":
+                        csvExportTv.setText(details.getPrice());
+                        break;
+                    case "dbImportExport":
+                        dbImportExportTv.setText(details.getPrice());
+                        break;
+                    case "appPin":
+                        appPinTv.setText(details.getPrice());
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void setPriceNotAvailable() {
+        fullPackageTv.setText("Not Available");
+        csvExportTv.setText("Not Available");
+        dbImportExportTv.setText("Not Available");
+        appPinTv.setText("Not Available");
     }
 }

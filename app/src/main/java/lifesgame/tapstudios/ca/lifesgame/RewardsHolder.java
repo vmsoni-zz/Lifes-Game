@@ -65,9 +65,9 @@ public class RewardsHolder extends RecyclerView.ViewHolder {
                     if (!reward.getUnlimitedConsumption()) {
                         rewardsAdapter.removeItem(position);
                     }
-                    Toast.makeText(context, "Purchase Reward: " + reward.getTitle(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Redeemed Reward: " + reward.getTitle(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "Not Enough Silver!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Not Enough Silver!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

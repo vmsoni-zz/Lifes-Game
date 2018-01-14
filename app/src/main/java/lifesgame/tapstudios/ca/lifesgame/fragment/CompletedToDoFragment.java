@@ -160,7 +160,7 @@ public class CompletedToDoFragment extends Fragment {
             dataSet.get(1)
                     .setColor(Color.WHITE)
                     .setThickness(6)
-                    .setSmooth(true);
+                    .setSmooth(false);
         } else {
             dataSet.get(1)
                     .setColor(Color.WHITE)

@@ -243,15 +243,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Date todayDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        addReward("Treat yourself!",
-                "Watch a TV show, play a video game, read a book, anything fun!",
-                200,
-                formatter.format(todayDate),
-                true);
-
         addReward("End of day relaxation",
                 "Take a nap, go out for dinner, have a glass of wine, your call!",
                 100,
+                formatter.format(todayDate),
+                true);
+
+        addReward("Treat yourself!",
+                "Watch a TV show, play a video game, read a book, anything fun!",
+                200,
                 formatter.format(todayDate),
                 true);
 
@@ -974,8 +974,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (dataRange == StatisticFilters.DAILY) {
             for (String date : graphData.keySet()) {
                 if (Integer.valueOf(namesOfDays[i]) % 6 == 0 || Integer.valueOf(namesOfDays[i]) == 1) {
-                    dataSetTotalSilver.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getSilverAmount());
-                    dataSetCompletedTaskGoals.addPoint(namesOfDays[i], graphData.get(namesOfDays[i]).getCompletedAmount());
+                    if (Integer.valueOf(namesOfDays[i]) > 12) {
+                        String key;
+                        if (Integer.valueOf(namesOfDays[i]) == 24) {
+                            key = Integer.valueOf(namesOfDays[i]) - 12 + "am";
+                        } else {
+                            key = Integer.valueOf(namesOfDays[i]) - 12 + "pm";
+                        }
+                        dataSetTotalSilver.addPoint(key, graphData.get(namesOfDays[i]).getSilverAmount());
+                        dataSetCompletedTaskGoals.addPoint(key, graphData.get(namesOfDays[i]).getCompletedAmount());
+                    } else {
+                        String key;
+                        if (Integer.valueOf(namesOfDays[i]) == 12) {
+                            key = namesOfDays[i] + "pm";
+                        } else {
+                            key = namesOfDays[i] + "am";
+                        }
+                        dataSetTotalSilver.addPoint(key, graphData.get(namesOfDays[i]).getSilverAmount());
+                        dataSetCompletedTaskGoals.addPoint(key, graphData.get(namesOfDays[i]).getCompletedAmount());
+                    }
                 } else {
                     dataSetTotalSilver.addPoint("", graphData.get(namesOfDays[i]).getSilverAmount());
                     dataSetCompletedTaskGoals.addPoint("", graphData.get(namesOfDays[i]).getCompletedAmount());
@@ -1230,7 +1247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String Query = "Select * from " + TABLE_KEY_VALUES + " where " + TABLE_KEY + " = " + "'" + key + "'";
         Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() <= 0){
+        if (cursor.getCount() <= 0) {
             cursor.close();
             return false;
         }

@@ -1,7 +1,9 @@
 package lifesgame.tapstudios.ca.lifesgame.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +26,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import lifesgame.tapstudios.ca.lifesgame.GoalsAndTasksAdapter;
 import lifesgame.tapstudios.ca.lifesgame.ProfilePicker;
 import lifesgame.tapstudios.ca.lifesgame.R;
+import lifesgame.tapstudios.ca.lifesgame.activity.IntroActivity;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
@@ -135,7 +138,7 @@ public class HomeFragment extends Fragment {
         if (profilePicture != null) {
             displayPPSeperateThread(profilePicture);
         } else {
-            getImageFromUser();
+            startTutorial();
         }
     }
 
@@ -151,6 +154,11 @@ public class HomeFragment extends Fragment {
 
     private void getImageFromUser() {
         Intent intent = new Intent(getContext(), ProfilePicker.class);
+        startActivity(intent);
+    }
+
+    private void startTutorial() {
+        Intent intent = new Intent(getContext(), IntroActivity.class); // Call the AppIntro java class
         startActivity(intent);
     }
 
