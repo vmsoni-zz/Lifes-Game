@@ -233,7 +233,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 }
 
                 if (!userTaskGoalTitle.getText().toString().isEmpty()) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(DialogAddGoalsAndTasks.this, MainActivity.class);
                     String deadlineDate = null;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date();

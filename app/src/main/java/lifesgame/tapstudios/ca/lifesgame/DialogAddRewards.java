@@ -1,11 +1,13 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -27,6 +29,11 @@ public class DialogAddRewards extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private CheckBox singleTime;
     private CheckBox unlimited;
+    private CheckBox blueColor;
+    private CheckBox redColor;
+    private CheckBox greenColor;
+    private CheckBox orangeColor;
+    private String checkedColor;
     private Integer id = -1;
     private Tracker tracker;
 
@@ -38,6 +45,7 @@ public class DialogAddRewards extends AppCompatActivity {
         rewardDescription = findViewById(R.id.user_reward_description);
         rewardTitleLayout = findViewById(R.id.user_reward_title_layout);
         databaseHelper = new DatabaseHelper(this);
+        checkedColor = "blue";
         addItem();
         deleteItem();
         silverSeekBar();
@@ -57,16 +65,16 @@ public class DialogAddRewards extends AppCompatActivity {
 
     private void silverSeekBar() {
         SeekBar silverSeekBar = (SeekBar) findViewById(R.id.silver_seek_bar);
-        silverSeekBar.setMax(500);
+        silverSeekBar.setMax(9999);
         silverSeekBar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     int progressValue;
-                    final TextView silverTextView = (TextView) findViewById(R.id.silver_amount_text_view);
+                    final EditText silverEditText = (EditText) findViewById(R.id.silver_amount_edit_text);
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                         progressValue = i;
-                        silverTextView.setText(String.valueOf(progressValue));
+                        silverEditText.setText(String.valueOf(progressValue));
                     }
 
                     @Override
@@ -76,7 +84,7 @@ public class DialogAddRewards extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        silverTextView.setText(String.valueOf(progressValue));
+                        silverEditText.setText(String.valueOf(progressValue));
                     }
                 }
         );
@@ -85,6 +93,10 @@ public class DialogAddRewards extends AppCompatActivity {
     private void setupCheckBoxes() {
         singleTime = (CheckBox) findViewById(R.id.singleTime);
         unlimited = (CheckBox) findViewById(R.id.unlimited);
+        blueColor = (CheckBox) findViewById(R.id.color_blue);
+        greenColor = (CheckBox) findViewById(R.id.color_green);
+        redColor = (CheckBox) findViewById(R.id.color_red);
+        orangeColor = (CheckBox) findViewById(R.id.color_orange);
 
         singleTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +113,50 @@ public class DialogAddRewards extends AppCompatActivity {
                 unlimited.setChecked(true);
             }
         });
+
+        blueColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blueColor.setChecked(true);
+                redColor.setChecked(false);
+                greenColor.setChecked(false);
+                orangeColor.setChecked(false);
+                checkedColor = "blue";
+            }
+        });
+
+        redColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blueColor.setChecked(false);
+                redColor.setChecked(true);
+                greenColor.setChecked(false);
+                orangeColor.setChecked(false);
+                checkedColor = "red";
+            }
+        });
+
+        greenColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blueColor.setChecked(false);
+                redColor.setChecked(false);
+                greenColor.setChecked(true);
+                orangeColor.setChecked(false);
+                checkedColor = "green";
+            }
+        });
+
+        orangeColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blueColor.setChecked(false);
+                redColor.setChecked(false);
+                greenColor.setChecked(false);
+                orangeColor.setChecked(true);
+                checkedColor = "orange";
+            }
+        });
     }
 
     private void addItem() {
@@ -113,7 +169,7 @@ public class DialogAddRewards extends AppCompatActivity {
         userAcceptTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final TextView userRewardsCost = (TextView) findViewById(R.id.silver_amount_text_view);
+                final EditText userRewardsCost = (EditText) findViewById(R.id.silver_amount_edit_text);
 
                 if (rewardTitle.getText().toString().isEmpty()) {
                     rewardTitleLayout.setError("Title must not be blank!");
@@ -133,7 +189,8 @@ public class DialogAddRewards extends AppCompatActivity {
                                 rewardDescription.getText().toString(),
                                 Integer.valueOf(userRewardsCost.getText().toString()),
                                 formatter.format(date),
-                                unlimitedConsumption);
+                                unlimitedConsumption,
+                                checkedColor);
 
                         tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Reward-Update")
@@ -145,7 +202,8 @@ public class DialogAddRewards extends AppCompatActivity {
                                 rewardDescription.getText().toString(),
                                 Integer.valueOf(userRewardsCost.getText().toString()),
                                 formatter.format(date),
-                                unlimitedConsumption);
+                                unlimitedConsumption,
+                                checkedColor);
 
                         tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Reward-Addition")
@@ -191,6 +249,25 @@ public class DialogAddRewards extends AppCompatActivity {
             unlimited.setChecked(false);
         }
 
+        blueColor.setChecked(false);
+        greenColor.setChecked(false);
+        orangeColor.setChecked(false);
+        redColor.setChecked(false);
+
+        switch (rewards.getStyleColor()) {
+            case "blue":
+                blueColor.setChecked(true);
+                break;
+            case "green":
+                greenColor.setChecked(true);
+                break;
+            case "red":
+                redColor.setChecked(true);
+                break;
+            case "orange":
+                orangeColor.setChecked(true);
+                break;
+        }
         ((SeekBar) findViewById(R.id.silver_seek_bar)).setProgress(rewards.getCost());
     }
 }

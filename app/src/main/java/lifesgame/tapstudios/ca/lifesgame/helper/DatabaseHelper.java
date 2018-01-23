@@ -68,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_REWARDS_CREATION_DATE = "creation_date";
     private static final String TABLE_REWARDS_PURCHASE_DATE = "purchase_date";
     private static final String TABLE_REWARDS_UNLIMITED = "unlimited_consumption";
+    private static final String TABLE_REWARDS_STYLE_COLOR = "style_color";
 
     public static final String CHAR_HEALTH = "character_health";
     public static final String CHAR_MAX_HEALTH = "character_max_health";
@@ -131,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 TABLE_REWARDS_CREATION_DATE + " DATETIME, " +
                 TABLE_REWARDS_PURCHASE_DATE + " DATETIME, " +
                 TABLE_REWARDS_UNLIMITED + " BOOL, " +
+                TABLE_REWARDS_STYLE_COLOR + " TEXT, " +
                 TABLE_REWARDS_PURCHASED + " BOOL NOT NULL DEFAULT '0')";
 
         db.execSQL(createTableKeyValues);
@@ -247,25 +249,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Take a nap, go out for dinner, have a glass of wine, your call!",
                 100,
                 formatter.format(todayDate),
-                true);
+                true,
+                "blue");
 
         addReward("Treat yourself!",
                 "Watch a TV show, play a video game, read a book, anything fun!",
                 200,
                 formatter.format(todayDate),
-                true);
+                true,
+                "red");
 
         addReward("Yummy!",
                 "Have a cheat day (pizza, chocolate, pop, you choose!)",
                 400,
                 formatter.format(todayDate),
-                true);
+                true,
+                "green");
 
         addReward("You deserve it!",
                 "Take a day off (go to the park, the beach, or just get away from home!)",
                 5000,
                 formatter.format(todayDate),
-                true);
+                true,
+                "orange");
     }
 
     public String[] getGoalsAndTasksHeaders() {
@@ -339,7 +345,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public void updateReward(Integer id, String title, String description, Integer cost, String creationDate, Boolean unlimited) {
+    public void updateReward(Integer id, String title, String description, Integer cost, String creationDate, Boolean unlimited, String colorStyle) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_REWARDS_TITLE, title);
@@ -347,12 +353,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_REWARDS_CREATION_DATE, creationDate);
         contentValues.put(TABLE_REWARDS_COST, cost);
         contentValues.put(TABLE_REWARDS_UNLIMITED, unlimited);
+        contentValues.put(TABLE_REWARDS_STYLE_COLOR, colorStyle);
         db.update(TABLE_REWARDS, contentValues, TABLE_ID + "= " + id, null);
         Log.d(TAG, "addData: Adding " + description + " to " + TABLE_REWARDS);
         db.close();
     }
 
-    public Long addReward(String title, String description, Integer cost, String creationDate, Boolean unlimited) {
+    public Long addReward(String title, String description, Integer cost, String creationDate, Boolean unlimited, String colorStyle) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_REWARDS_TITLE, title);
@@ -360,7 +367,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_REWARDS_CREATION_DATE, creationDate);
         contentValues.put(TABLE_REWARDS_COST, cost);
         contentValues.put(TABLE_REWARDS_UNLIMITED, unlimited);
-        Log.d(TAG, "addData: Adding " + description + " to " + TABLE_REWARDS);
+        contentValues.put(TABLE_REWARDS_STYLE_COLOR, colorStyle);
+        Log.d(TAG, "addData: Adding " + title + " to " + TABLE_REWARDS);
         Long result = db.insert(TABLE_REWARDS, null, contentValues);
         db.close();
         return result;
@@ -379,7 +387,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 c.getString(c.getColumnIndex(TABLE_REWARDS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_REWARDS_DESCRIPTION)),
                                 c.getInt(c.getColumnIndex(TABLE_REWARDS_COST)),
-                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0,
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_STYLE_COLOR))
                         );
                     } while (c.moveToNext());
                 }
@@ -729,7 +738,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 c.getString(c.getColumnIndex(TABLE_REWARDS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_REWARDS_DESCRIPTION)),
                                 c.getInt(c.getColumnIndex(TABLE_REWARDS_COST)),
-                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0
+                                c.getInt(c.getColumnIndex(TABLE_REWARDS_UNLIMITED)) > 0,
+                                c.getString(c.getColumnIndex(TABLE_REWARDS_STYLE_COLOR))
                         );
                         rewardsArrayList.add(reward);
                     } while (c.moveToNext());
@@ -868,7 +878,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public BarSet getImprovementTypesXP(StatisticFilters dataRange, Integer dayOfWeek) {
         Map<String, Float> improvementTypesLevel = new HashMap<>();
-        improvementTypesLevel.put("health", getImprovementValue(USER_HEALTH_EXERCISE, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Health", getImprovementValue(USER_HEALTH_EXERCISE, dataRange, dayOfWeek));
         improvementTypesLevel.put("Work", getImprovementValue(USER_WORK, dataRange, dayOfWeek));
         improvementTypesLevel.put("School", getImprovementValue(USER_SCHOOL, dataRange, dayOfWeek));
         improvementTypesLevel.put("Family", getImprovementValue(USER_FAMILY_FRIENDS, dataRange, dayOfWeek));
@@ -895,7 +905,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 namesOfDays = new String[]{
-                        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+                        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"
                 };
                 query = "SELECT " + TABLE_TASKS_GOALS_COMPLETION_DATE + ", " + TABLE_TASKS_GOALS_SILVER + " FROM " + TABLE_TASKS_GOALS +
                         " WHERE DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') " +
@@ -973,21 +983,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int i = 0;
         if (dataRange == StatisticFilters.DAILY) {
             for (String date : graphData.keySet()) {
-                if (Integer.valueOf(namesOfDays[i]) % 6 == 0 || Integer.valueOf(namesOfDays[i]) == 1) {
+                if (Integer.valueOf(namesOfDays[i]) % 6 == 0 || Integer.valueOf(namesOfDays[i]) == 23) {
                     if (Integer.valueOf(namesOfDays[i]) > 12) {
-                        String key;
-                        if (Integer.valueOf(namesOfDays[i]) == 24) {
-                            key = Integer.valueOf(namesOfDays[i]) - 12 + "am";
-                        } else {
-                            key = Integer.valueOf(namesOfDays[i]) - 12 + "pm";
-                        }
+                        String key = Integer.valueOf(namesOfDays[i]) - 12 + "pm";
                         dataSetTotalSilver.addPoint(key, graphData.get(namesOfDays[i]).getSilverAmount());
                         dataSetCompletedTaskGoals.addPoint(key, graphData.get(namesOfDays[i]).getCompletedAmount());
                     } else {
                         String key;
                         if (Integer.valueOf(namesOfDays[i]) == 12) {
                             key = namesOfDays[i] + "pm";
-                        } else {
+                        }
+                        else if(Integer.valueOf(namesOfDays[i]) == 0) {
+                            key = "12am";
+                        }
+                        else {
                             key = namesOfDays[i] + "am";
                         }
                         dataSetTotalSilver.addPoint(key, graphData.get(namesOfDays[i]).getSilverAmount());

@@ -36,6 +36,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:src="@drawable/reward_types"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 

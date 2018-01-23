@@ -11,4 +11,13 @@
     <color name="navMenu">#20647b</color>
     <color name="fbutton_color_asbestos">#7f8c8d</color>
     <color name="marketplace_text_color_blue">#09A8E5</color>
+    <color name="color_green_reward_title">#1B5E20</color>
+    <color name="color_red_reward_title">#B71C1C</color>
+    <color name="color_blue_reward_title">#0D47A1</color>
+    <color name="color_orange_reward_title">#E65100</color>
+    <color name="transparent_background">#64000000</color>
+    <color name="color_green_reward_description">#4CAF50</color>
+    <color name="color_red_reward_description">#F44336</color>
+    <color name="color_blue_reward_description">#2196F3</color>
+    <color name="color_orange_reward_description">#FF9800</color>
 </resources>

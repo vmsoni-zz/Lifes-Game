@@ -478,8 +478,12 @@ public class MarketplaceFragment extends Fragment {
 
     private void setPriceNotAvailable() {
         fullPackageTv.setText("Not Available");
+        purchaseFullPackage.setClickable(false);
         csvExportTv.setText("Not Available");
+        purchaseCSVExport.setClickable(false);
         dbImportExportTv.setText("Not Available");
+        purchaseDataBackup.setClickable(false);
         appPinTv.setText("Not Available");
+        purchaseUnlockPin.setClickable(false);
     }
 }

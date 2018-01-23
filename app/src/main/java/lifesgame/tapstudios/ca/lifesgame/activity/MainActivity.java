@@ -17,6 +17,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Map;
 
@@ -59,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         tracker.setScreenName("MainActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (googleSignInAccount != null) {
-            displayName = googleSignInAccount.getDisplayName();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            displayName = user.getDisplayName();
         }
 
         databaseHelper = new DatabaseHelper(this);

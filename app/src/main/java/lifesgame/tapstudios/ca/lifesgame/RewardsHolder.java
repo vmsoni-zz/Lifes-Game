@@ -20,7 +20,6 @@ import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 public class RewardsHolder extends RecyclerView.ViewHolder {
     private final ImageButton editBtn;
     private final ImageButton deleteBtn;
-    private Rewards rewards;
     private Context context;
     private RewardsAdapter rewardsAdapter;
     private PurchaseHelper purchaseHelper;
@@ -54,6 +53,7 @@ public class RewardsHolder extends RecyclerView.ViewHolder {
         if (rewards.getUnlimitedConsumption()) {
             infinityLl.setVisibility(View.VISIBLE);
         }
+        setupRewardsColors(rewards);
         this.initializeOnClickListeners(rewards, position);
     }
 
@@ -87,5 +87,26 @@ public class RewardsHolder extends RecyclerView.ViewHolder {
                 rewardsAdapter.deleteRewardPermanent(position);
             }
         });
+    }
+
+    private void setupRewardsColors(Rewards rewards) {
+        switch (rewards.getStyleColor()) {
+            case "blue":
+                title.setTextColor(context.getResources().getColor(R.color.color_blue_reward_title));
+                description.setTextColor(context.getResources().getColor(R.color.color_blue_reward_description));
+                break;
+            case "green":
+                title.setTextColor(context.getResources().getColor(R.color.color_green_reward_title));
+                description.setTextColor(context.getResources().getColor(R.color.color_green_reward_description));
+                break;
+            case "red":
+                title.setTextColor(context.getResources().getColor(R.color.color_red_reward_title));
+                description.setTextColor(context.getResources().getColor(R.color.color_red_reward_description));
+                break;
+            case "orange":
+                title.setTextColor(context.getResources().getColor(R.color.color_orange_reward_title));
+                description.setTextColor(context.getResources().getColor(R.color.color_orange_reward_description));
+                break;
+        }
     }
 }

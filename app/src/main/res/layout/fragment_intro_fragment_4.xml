@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorAccent"
     android:paddingBottom="@dimen/appIntroBottomBarHeight">
 
 
@@ -37,6 +37,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:src="@drawable/game_mechanics"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 

@@ -25,6 +25,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -48,11 +50,9 @@ public class ProfilePicker extends AppCompatActivity {
     private ImageView chosenProfilePic;
     private Bitmap profilePicture;
     private Tracker tracker;
-    private GoogleSignInAccount googleSignInAccount;
     Uri profilePictureUri;
     private ProgressDialog dialog;
     private LinearLayout signOutLl;
-    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +68,10 @@ public class ProfilePicker extends AppCompatActivity {
         username = (TextView) findViewById(R.id.username);
         signOutLl = (LinearLayout) findViewById(R.id.signout_ll);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         dialog = new ProgressDialog(this);
-        if (googleSignInAccount != null) {
-            username.setText(googleSignInAccount.getDisplayName());
+        if (user != null) {
+            username.setText(user.getDisplayName());
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
@@ -151,6 +145,7 @@ public class ProfilePicker extends AppCompatActivity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
                         signOut();
                     }
                 })
@@ -165,14 +160,9 @@ public class ProfilePicker extends AppCompatActivity {
     }
 
     private void signOut() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
-                    }
-                });
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     private void chooseCustomProfilePicture() {

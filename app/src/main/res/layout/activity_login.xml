@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
+        android:fontFamily="@raw/baloo"
         android:shadowColor="#CFCFCF"
         android:text="Lifes Game"
-        android:fontFamily="@raw/baloo"
         android:textColor="@color/colorWhite"
         android:textSize="36sp"
         android:textStyle="normal|bold" />
@@ -26,39 +26,106 @@
         android:layout_below="@id/LG_tv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:shadowColor="#CFCFCF"
         android:fontFamily="@raw/baloo"
+        android:shadowColor="#CFCFCF"
         android:text="Make Everyday a Game"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+        android:id="@+id/sign_in_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_signup"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingTop="30dp" />
+
+    <Button
+        android:id="@+id/btn_login_email_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.9"
+        android:background="@color/transparent_background"
+        android:radius="15dp"
+        android:text="Login"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_login_email_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:alpha="0.9"
+        android:background="@color/transparent_background"
+        android:radius="15dp"
+        android:text="Register"
+        android:textColor="@color/colorWhite" />
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/skip_sign_ll"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/border"
-        android:clickable="true"
-        android:padding="8dp">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/skip_sign_tv"
+        <LinearLayout
+            android:id="@+id/forgot_password_Ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Skip Sign in"
-            android:textColor="@color/colorWhite" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/forgot_password_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Forgot Password"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/colorWhite" />
+
+        <LinearLayout
+            android:id="@+id/skip_sign_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/skip_sign_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Skip Registration"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
+
