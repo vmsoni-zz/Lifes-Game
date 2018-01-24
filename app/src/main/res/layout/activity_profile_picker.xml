@@ -77,7 +77,9 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
 
                 <ImageButton
                     android:id="@+id/choose_custom_profile_picture"
@@ -149,6 +151,7 @@
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
             android:textSize="14sp"
+            android:visibility="gone"
             android:text="Did you Know?"/>
         <TextView
             android:layout_marginTop="20dp"
@@ -160,6 +163,7 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:gravity="center"
+            android:visibility="gone"
             android:text="If you invite a friend, both you and your friend get the premium version of this app for free!" />
 
         <LinearLayout
@@ -172,6 +176,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/border"
             android:clickable="true"
+            android:visibility="gone"
             android:padding="8dp">
 
             <TextView

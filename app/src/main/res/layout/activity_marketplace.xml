@@ -35,7 +35,6 @@
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:paddingBottom="2.5dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
@@ -77,9 +76,9 @@
                                 android:paddingBottom="10dp"
                                 android:paddingLeft="20dp"
                                 android:text="Get the following features:"
+                                android:textStyle="bold"
                                 android:textColor="@color/marketplace_text_color_blue"
                                 android:textSize="14sp" />
-
 
                             <TextView
                                 android:id="@+id/full_package_features"
@@ -125,8 +124,27 @@
                                         android:id="@+id/full_package_cost"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:text="1.99" />/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/purchased_full_package_ll"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/border"
+                                    android:clickable="true"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:padding="8dp"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/purchased_full_package_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
                                         android:paddingLeft="5dp"
-                                        android:text="4.99" />
+                                        android:paddingRight="5dp"
+                                        android:text="Purchased" />
                                 </LinearLayout>
                             </LinearLayout>
                         </RelativeLayout>

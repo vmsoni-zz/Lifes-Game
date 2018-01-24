@@ -57,6 +57,7 @@ public class MarketplaceFragment extends Fragment {
     public DatabaseHelper databaseHelper;
     private View marketplaceView;
     private LinearLayout purchaseFullPackage;
+    private LinearLayout purchasedFullPackage;
     private LinearLayout purchaseCSVExport;
     private LinearLayout purchaseDataBackup;
     private LinearLayout exportDatabase;
@@ -107,6 +108,7 @@ public class MarketplaceFragment extends Fragment {
         disableAppPin = (LinearLayout) marketplaceView.findViewById(R.id.disable_pin);
         enableDisableAppPinLl = (LinearLayout) marketplaceView.findViewById(R.id.enable_disable_app_pin);
         exportCSVLl = (LinearLayout) marketplaceView.findViewById(R.id.export_csv_ll);
+        purchasedFullPackage = (LinearLayout) marketplaceView.findViewById(R.id.purchased_full_package_ll);
 
         fullPackageTv = (TextView) marketplaceView.findViewById(R.id.full_package_cost);
         dbImportExportTv = (TextView) marketplaceView.findViewById(R.id.db_backup_cost);
@@ -162,6 +164,7 @@ public class MarketplaceFragment extends Fragment {
             for (Purchase purchase : userPurchases) {
                 switch (purchase.getPackageName()) {
                     case "FullPackage":
+                        setupFullPackagePurchased();
                         setupImportExport();
                         setupCSVExport();
                         setupAppLock();
@@ -178,6 +181,11 @@ public class MarketplaceFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void setupFullPackagePurchased() {
+        purchaseFullPackage.setVisibility(View.GONE);
+        purchasedFullPackage.setVisibility(View.VISIBLE);
     }
 
     private void setupImportExport() {
