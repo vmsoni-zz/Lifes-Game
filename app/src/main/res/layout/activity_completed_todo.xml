@@ -4,7 +4,8 @@
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f6f6f6">
+    android:background="#f6f6f6"
+    app:ignore="NamespaceTypo">
 
     <ScrollView
         android:layout_width="match_parent"

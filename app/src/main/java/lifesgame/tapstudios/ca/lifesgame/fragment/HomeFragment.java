@@ -56,13 +56,11 @@ public class HomeFragment extends Fragment {
     private static int PICK_IMAGE_REQUEST = 1;
     String displayName;
 
-    public HomeFragment(Integer expiredGoalsAndTasksCount, String displayName) {
-        this.expiredGoalsAndTasksCount = expiredGoalsAndTasksCount;
-        this.displayName = displayName;
-    }
+    public HomeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        expiredGoalsAndTasksCount = getArguments().getInt("EXPIRED_TODO_COUNT");
         homeFragment = inflater.inflate(R.layout.home_layout, container, false);
         setupFragmentElements();
         goalsAndTasksHelper = new GoalsAndTasksHelper(addItemToListBtn, getActivity());
@@ -110,7 +108,7 @@ public class HomeFragment extends Fragment {
         charLevel = (TextView) homeFragment.findViewById(R.id.charLevel);
         charXp = (TextView) homeFragment.findViewById(R.id.charXp);
         username = (TextView) homeFragment.findViewById(R.id.username);
-        username.setText(displayName);
+        //username.setText(displayName);
         silverAmountTextView = (TextView) homeFragment.findViewById(R.id.silver_amount_text_view);
         xpBar = (RoundCornerProgressBar) homeFragment.findViewById(R.id.xpBar);
         healthBar = (RoundCornerProgressBar) homeFragment.findViewById(R.id.healthBar);

@@ -31,6 +31,8 @@ public class StatisticsFragment extends Fragment {
     private StatisticFilters statisticsRange;
     private Tracker tracker;
 
+    public StatisticsFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

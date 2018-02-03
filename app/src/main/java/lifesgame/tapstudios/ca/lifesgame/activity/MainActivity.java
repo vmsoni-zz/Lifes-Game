@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Integer expiredGoalsAndTasksCount;
     private GoogleSignInAccount googleSignInAccount;
     private String displayName;
+    private Bundle homeFragmentBundle;
     private static final int REQUEST_CODE_ENABLE = 11;
 
     @Override
@@ -67,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         databaseHelper = new DatabaseHelper(this);
+        expiredGoalsAndTasksCount = databaseHelper.resetExpiredGoalsAndTasks();
+        homeFragmentBundle = new Bundle();
+        homeFragmentBundle.putInt("EXPIRED_TODO_COUNT", expiredGoalsAndTasksCount);
         if (getIntent() != null) {
-            expiredGoalsAndTasksCount = getIntent().getIntExtra("EXPIRED_TODO_COUNT", 0);
-            getIntent().removeExtra("EXPIRED_TODO_COUNT");
-
             if(getIntent().getBooleanExtra("PASSCODE_SET", false)) {
                 Intent intent = new Intent(this, CustomPinActivity.class);
                 intent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
@@ -93,9 +94,11 @@ public class MainActivity extends AppCompatActivity {
     private void setupSwipeFragments() {
         viewPager = (NonSwipeableViewPager) findViewById(R.id.main_fragment);
         mAdapterViewPager = new PagerAdapter(fragmentManager);
-        mAdapterViewPager.addFragment(new HomeFragment(expiredGoalsAndTasksCount, displayName), "Home");
+        HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setArguments(homeFragmentBundle);
+        mAdapterViewPager.addFragment(homeFragment, "Home");
         mAdapterViewPager.addFragment(new StatisticsFragment(), "Statistics");
-        mAdapterViewPager.addFragment(new StoreFragment(MainActivity.this), "Statistics");
+        mAdapterViewPager.addFragment(new StoreFragment(), "Statistics");
         viewPager.setAdapter(mAdapterViewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {

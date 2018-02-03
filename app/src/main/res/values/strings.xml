@@ -20,7 +20,7 @@
     <string name="invitation_title">Lifes Game Invite</string>
     <string name="invitation_message">Try out this fun new app for tracking habits, goals, and more!</string>
     <string name="invitation_cta">Download it now!</string>
-    <string name="invitation_custom_image">android.resource://lifesgame.tapstudios.ca.lifesgame/drawable/check_mark</string>
+    <string name="invitation_custom_image">android.resource://lifesgame.tapstudios.ca.lifesgame/drawable/icon_lifes_game</string>
     <string name="full_package_features">- CSV Export\n- Database Backup\n- Unlock Pin\n- All future features</string>
     <string name="title_activity_settings">Settings</string>
 

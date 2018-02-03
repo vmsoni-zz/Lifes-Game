@@ -208,11 +208,9 @@ public class ProfilePicker extends AppCompatActivity {
 
         if (requestCode == REQUEST_INVITE) {
             if (resultCode == RESULT_OK) {
-                // Get the invitation IDs of all sent messages
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
             } else {
-                // Sending failed or it was canceled, show failure message to the user
-                // ...
+
             }
         }
 
@@ -250,7 +248,7 @@ public class ProfilePicker extends AppCompatActivity {
             if (this.dialog.isShowing()) {
                 this.dialog.dismiss();
             }
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
     }

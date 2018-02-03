@@ -24,10 +24,8 @@ public class StoreFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private int totalDeleted;
     private StatisticFilters statisticsRange;
-    private Context context;
 
-    public StoreFragment(Context context) {
-        this.context = context;
+    public StoreFragment() {
     }
 
     @Override
@@ -60,7 +58,7 @@ public class StoreFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new PagerAdapter(getChildFragmentManager());
         adapter.addFragment(new RewardsFragment(), "Rewards");
-        adapter.addFragment(new MarketplaceFragment(context), "Marketplace");
+        adapter.addFragment(new MarketplaceFragment(), "Marketplace");
         viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

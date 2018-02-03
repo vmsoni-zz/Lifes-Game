@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.BillingManager;
+import lifesgame.tapstudios.ca.lifesgame.MainViewController;
 import lifesgame.tapstudios.ca.lifesgame.activity.CustomPinActivity;
 import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
 import lifesgame.tapstudios.ca.lifesgame.R;
@@ -54,7 +56,9 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseImportHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.PurchaseHelper;
 
 public class MarketplaceFragment extends Fragment {
-    public DatabaseHelper databaseHelper;
+    private MainViewController mainViewController;
+    private BillingManager billingManager;
+    private DatabaseHelper databaseHelper;
     private View marketplaceView;
     private LinearLayout purchaseFullPackage;
     private LinearLayout purchasedFullPackage;
@@ -82,20 +86,21 @@ public class MarketplaceFragment extends Fragment {
     private TextView csvExportTv;
     private TextView appPinTv;
 
-
     private static final int REQUEST_CODE_ENABLE = 11;
     private static final int REQUEST_CODE_DISABLE = 12;
     public static final int PURCHASE_CODE = 1001;
 
-
-    public MarketplaceFragment(Context context) {
-        this.context = context;
+    public MarketplaceFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.context = getActivity();
         databaseHelper = new DatabaseHelper(getContext());
-        purchaseHelper = new PurchaseHelper(context);
+        purchaseHelper = new PurchaseHelper(getActivity());
+        mainViewController = new MainViewController(this);
+        billingManager = new BillingManager(getActivity(), mainViewController.getUpdateListener(), this);
+
         marketplaceView = inflater.inflate(R.layout.activity_marketplace, container, false);
         purchaseFullPackage = (LinearLayout) marketplaceView.findViewById(R.id.purchase_full_package);
         purchaseCSVExport = (LinearLayout) marketplaceView.findViewById(R.id.purchase_csv_export);
@@ -115,8 +120,6 @@ public class MarketplaceFragment extends Fragment {
         csvExportTv = (TextView) marketplaceView.findViewById(R.id.csv_export_cost);
         appPinTv = (TextView) marketplaceView.findViewById(R.id.unlock_pin_cost);
 
-        setupListeners();
-
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
         tracker = application.getDefaultTracker();
         tracker.send(new HitBuilders.EventBuilder()
@@ -126,59 +129,62 @@ public class MarketplaceFragment extends Fragment {
 
         tracker.setScreenName("Marketplace");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
-
-        mServiceConn = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                mService = null;
-            }
-
-            @Override
-            public void onServiceConnected(ComponentName name,
-                                           IBinder service) {
-                mService = IInAppBillingService.Stub.asInterface(service);
-            }
-        };
-
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        context.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-        setupPrices();
         return marketplaceView;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mService != null) {
-            context.unbindService(mServiceConn);
-        }
+    public void onBillingManagerSetupFinished() {
+        List<String> skuList = new ArrayList();
+        skuList.add("full_package");
+        skuList.add("csv_export");
+        skuList.add("db_import_export");
+        skuList.add("app_pin");
+        addSkuRows(null, skuList, BillingClient.SkuType.INAPP, null);
+        billingManager.queryPurchases();
     }
 
-    private void setupListeners() {
-        List<Purchase> userPurchases = purchaseHelper.retrieveUserPurchases();
+    private List<SkuDetails> addSkuRows(final List<String> inList, List<String> skusList,
+                                        final @BillingClient.SkuType String billingType, final Runnable executeWhenFinished) {
 
-        if (userPurchases == null || userPurchases.size() == 0) {
-            setupAllPurchaseListeners();
-        } else {
-            for (Purchase purchase : userPurchases) {
-                switch (purchase.getPackageName()) {
-                    case "FullPackage":
-                        setupFullPackagePurchased();
-                        setupImportExport();
-                        setupCSVExport();
-                        setupAppLock();
-                        break;
-                    case "ImportExport":
-                        setupImportExport();
-                        break;
-                    case "CSVExport":
-                        setupCSVExport();
-                        break;
-                    case "AppPin":
-                        setupAppLock();
-                        break;
-                }
+        final List<SkuDetails> finalSkuDetailsList = new ArrayList<>();
+        billingManager.querySkuDetailsAsync(billingType, skusList,
+                new SkuDetailsResponseListener() {
+                    @Override
+                    public void onSkuDetailsResponse(@BillingClient.BillingResponse int responseCode,
+                                                     List<SkuDetails> skuDetailsList) {
+
+                        if (responseCode == BillingClient.BillingResponse.OK) {
+                            finalSkuDetailsList.addAll(skuDetailsList);
+                            setupPrices(finalSkuDetailsList);
+                            // Handle any error responses.
+                        } else if (skuDetailsList != null
+                                && skuDetailsList.size() > 0) {
+
+                            // Traverse through the list of SKUs inside SkuDetailsList.
+                        }
+                    }
+                });
+        return finalSkuDetailsList;
+    }
+
+    public void setupListeners(List<Purchase> userPurchases) {
+        setupAllPurchaseListeners();
+        for (Purchase purchase : userPurchases) {
+            switch (purchase.getSku()) {
+                case "full_package":
+                    setupFullPackagePurchased();
+                    setupImportExport();
+                    setupCSVExport();
+                    setupAppLock();
+                    break;
+                case "db_import_export":
+                    setupImportExport();
+                    break;
+                case "csv_export":
+                    setupCSVExport();
+                    break;
+                case "app_pin":
+                    setupAppLock();
+                    break;
             }
         }
     }
@@ -257,7 +263,7 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    purchaseItem("fullPackage");
+                    purchaseItem("full_package");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -268,7 +274,7 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    purchaseItem("csvExport");
+                    purchaseItem("csv_export");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -279,7 +285,7 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    purchaseItem("dbImportExport");
+                    purchaseItem("db_import_export");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -290,7 +296,7 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    purchaseItem("appPin");
+                    purchaseItem("app_pin");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -427,7 +433,7 @@ public class MarketplaceFragment extends Fragment {
                 .setSku(sku)
                 .setType(BillingClient.SkuType.INAPP)
                 .build();
-        purchaseHelper.purchase(getActivity(), flowParams);
+        billingManager.initiatePurchaseFlow(flowParams);
     }
 
     private String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
@@ -449,15 +455,9 @@ public class MarketplaceFragment extends Fragment {
         }
     }
 
-    private void setupPrices() {
-        List<String> skuList = new ArrayList();
-        skuList.add("fullPackage");
-        skuList.add("csvExport");
-        skuList.add("dbImportExport");
-        skuList.add("appPin");
+    private void setupPrices(List<SkuDetails> skuDetailsList) {
 
-        List<SkuDetails> skuDetailsList = purchaseHelper.getPrices(skuList);
-        if(skuDetailsList == null || skuDetailsList.size() == 0) {
+        if (skuDetailsList == null || skuDetailsList.size() == 0) {
             setPriceNotAvailable();
             return;
         }
@@ -465,16 +465,16 @@ public class MarketplaceFragment extends Fragment {
             for (SkuDetails details : skuDetailsList) {
                 String sku = details.getSku();
                 switch (sku) {
-                    case "fullPackage":
+                    case "full_package":
                         fullPackageTv.setText(details.getPrice());
                         break;
-                    case "csvExport":
+                    case "csv_export":
                         csvExportTv.setText(details.getPrice());
                         break;
-                    case "dbImportExport":
+                    case "db_import_export":
                         dbImportExportTv.setText(details.getPrice());
                         break;
-                    case "appPin":
+                    case "app_pin":
                         appPinTv.setText(details.getPrice());
                         break;
                 }

@@ -30,51 +30,12 @@ import static com.gun0912.tedpermission.TedPermission.TAG;
  * Created by viditsoni on 2017-12-28.
  */
 
-public class PurchaseHelper implements PurchasesUpdatedListener {
+public class PurchaseHelper {
     private Context context;
     private DatabaseHelper databaseHelper;
-    private BillingClient mBillingClient;
-    private Boolean connectionFound;
     public PurchaseHelper(Context context) {
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
-        connectionFound = false;
-        mBillingClient = BillingClient.newBuilder((Activity) context).setListener(this).build();
-        startServiceConnectionIfNeeded(null);
-    }
-
-    private void startServiceConnectionIfNeeded(final Runnable executeOnSuccess) {
-        if (mBillingClient.isReady()) {
-            if (executeOnSuccess != null) {
-                executeOnSuccess.run();
-            }
-        } else {
-            mBillingClient.startConnection(new BillingClientStateListener() {
-                @Override
-                public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponse) {
-                    if (billingResponse == BillingClient.BillingResponse.OK) {
-                        Log.i(TAG, "onBillingSetupFinished() response: " + billingResponse);
-                        if (executeOnSuccess != null) {
-                            executeOnSuccess.run();
-                            connectionFound = true;
-                        }
-                    } else {
-                        Log.w(TAG, "onBillingSetupFinished() error code: " + billingResponse);
-                        connectionFound = false;
-                    }
-                }
-
-                @Override
-                public void onBillingServiceDisconnected() {
-                    Log.w(TAG, "onBillingServiceDisconnected()");
-                    connectionFound = false;
-                }
-            });
-        }
-    }
-
-    public void purchase(Activity activity, BillingFlowParams flowParams) {
-        mBillingClient.launchBillingFlow(activity, flowParams);
     }
 
     public Boolean purchaseReward(Rewards reward) {
@@ -93,49 +54,4 @@ public class PurchaseHelper implements PurchasesUpdatedListener {
         return false;
     }
 
-    public List<Purchase> retrieveUserPurchases() {
-        if (!connectionFound) {
-            return null;
-        }
-        final List<Purchase> userPurchases = new ArrayList<>();
-        mBillingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
-                new PurchaseHistoryResponseListener() {
-                    @Override
-                    public void onPurchaseHistoryResponse(@BillingClient.BillingResponse int responseCode,
-                                                          List<Purchase> purchasesList) {
-                        if (responseCode == BillingClient.BillingResponse.OK
-                                && purchasesList != null) {
-                            userPurchases.addAll(purchasesList);
-                        }
-                    }
-                });
-        return userPurchases;
-    }
-
-    public List<SkuDetails> getPrices(List<String> skuList) {
-        final List<SkuDetails> skuDetailsListValues = null;
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
-        mBillingClient.querySkuDetailsAsync(params.build(),
-                new SkuDetailsResponseListener() {
-                    @Override
-                    public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
-                        if (skuDetailsList != null) {
-                            skuDetailsListValues.addAll(skuDetailsList);
-                        }
-                    }
-                });
-        return skuDetailsListValues;
-    }
-
-    @Override
-    public void onPurchasesUpdated(@BillingClient.BillingResponse int responseCode,
-                                   List<Purchase> purchases) {
-        if (responseCode == BillingClient.BillingResponse.OK
-                && purchases != null) {
-            Toast.makeText(this.context, "Purchase successful", Toast.LENGTH_SHORT).show();
-        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
-            Toast.makeText(this.context, "Purchase unsuccessful", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

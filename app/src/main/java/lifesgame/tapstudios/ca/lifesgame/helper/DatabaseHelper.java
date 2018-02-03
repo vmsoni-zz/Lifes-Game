@@ -882,7 +882,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         improvementTypesLevel.put("Work", getImprovementValue(USER_WORK, dataRange, dayOfWeek));
         improvementTypesLevel.put("School", getImprovementValue(USER_SCHOOL, dataRange, dayOfWeek));
         improvementTypesLevel.put("Family", getImprovementValue(USER_FAMILY_FRIENDS, dataRange, dayOfWeek));
-        improvementTypesLevel.put("Learning", getImprovementValue(USER_LEARNING, dataRange, dayOfWeek));
+        improvementTypesLevel.put("Learn", getImprovementValue(USER_LEARNING, dataRange, dayOfWeek));
         improvementTypesLevel.put("Other", getImprovementValue(USER_OTHER, dataRange, dayOfWeek));
         BarSet barSetImprovementTypesLevel = new BarSet();
         for (String type : improvementTypesLevel.keySet()) {

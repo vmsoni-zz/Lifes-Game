@@ -37,6 +37,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:src="@drawable/statistics_tutorial"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
