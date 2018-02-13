@@ -80,7 +80,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
-                        android:background="@drawable/ripple_effect"
+                        android:background="#f6f6f6"
                         android:scaleType="fitXY"
                         android:src="@drawable/check_mark" />
 
@@ -318,7 +318,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
-                        android:background="@drawable/ripple_effect"
+                        android:background="#f6f6f6"
                         android:scaleType="fitXY"
                         android:src="@drawable/x_mark" />
                 </LinearLayout>

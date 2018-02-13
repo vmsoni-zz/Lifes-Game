@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         expiredGoalsAndTasksCount = databaseHelper.resetExpiredGoalsAndTasks();
         homeFragmentBundle = new Bundle();
         homeFragmentBundle.putInt("EXPIRED_TODO_COUNT", expiredGoalsAndTasksCount);
+
         if (getIntent() != null) {
             if(getIntent().getBooleanExtra("PASSCODE_SET", false)) {
                 Intent intent = new Intent(this, CustomPinActivity.class);
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             }
             getIntent().removeExtra("PASSCODE_SET");
         }
-
         fragmentManager = getFragmentManager();
         setupSwipeFragments();
         setupBottomNavBar();

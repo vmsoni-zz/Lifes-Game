@@ -64,9 +64,9 @@ public class SilverFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         silverView = inflater.inflate(R.layout.activity_silver, container, false);
-        mTip = new Tooltip(silverView.getContext(), R.layout.linechart_tooltip, R.id.value);
+        mTip = new Tooltip(getActivity(), R.layout.linechart_tooltip, R.id.value);
         silverChart = (LineChartView) silverView.findViewById(R.id.silverChart);
         dailyButton = (ImageButton) silverView.findViewById(R.id.daily_silver);
         weeklyButton = (ImageButton) silverView.findViewById(R.id.weekly_silver);

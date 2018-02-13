@@ -1,6 +1,8 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
 import lifesgame.tapstudios.ca.lifesgame.fragment.MarketplaceFragment;
 import lifesgame.tapstudios.ca.lifesgame.model.Purchases;
 
@@ -101,8 +104,11 @@ public class BillingManager implements PurchasesUpdatedListener {
     @Override
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
         if (responseCode == BillingClient.BillingResponse.OK) {
+            if (purchases == null || purchases.size() <= 0) {
+                marketplaceFragment.setupListeners(new ArrayList<Purchase>());
+            }
             for (Purchase purchase : purchases) {
-                if(!handlePurchase(purchase)) {
+                if (!handlePurchase(purchase)) {
                     marketplaceFragment.setupListeners(new ArrayList<Purchase>());
                 }
             }
@@ -115,7 +121,6 @@ public class BillingManager implements PurchasesUpdatedListener {
             marketplaceFragment.setupListeners(new ArrayList<Purchase>());
         }
     }
-
 
     public void queryPurchases() {
         Runnable queryToExecute = new Runnable() {

@@ -26,7 +26,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorPrimary"
-            android:src="@drawable/add"
+            williamchart:srcCompat="@drawable/add"
             android:tint="@android:color/white"
             app:borderWidth="0dp" />
     </android.support.design.widget.CoordinatorLayout>

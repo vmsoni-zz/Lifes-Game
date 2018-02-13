@@ -75,9 +75,9 @@ public class CompletedToDoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         completedToDoView = inflater.inflate(R.layout.activity_completed_todo, container, false);
-        mTip = new Tooltip(completedToDoView.getContext(), R.layout.linechart_tooltip, R.id.value);
+        mTip = new Tooltip(getActivity(), R.layout.linechart_tooltip, R.id.value);
         completedToDoGraph = (LineChartView) completedToDoView.findViewById(R.id.mainChart);
         completedToDoPercentageGraph = (ColorfulRingProgressView) completedToDoView.findViewById(R.id.compToDoGraph);
         tvCompToDo = (TextView) completedToDoView.findViewById(R.id.tvCompToDo);
@@ -150,8 +150,10 @@ public class CompletedToDoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
-            updateGraphs();
+        if (databaseHelper != null) {
+            if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+                updateGraphs();
+            }
         }
     }
 

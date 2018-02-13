@@ -60,22 +60,22 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        expiredGoalsAndTasksCount = getArguments().getInt("EXPIRED_TODO_COUNT");
         homeFragment = inflater.inflate(R.layout.home_layout, container, false);
+        expiredGoalsAndTasksCount = getArguments().getInt("EXPIRED_TODO_COUNT");
         setupFragmentElements();
         goalsAndTasksHelper = new GoalsAndTasksHelper(addItemToListBtn, getActivity());
         arrayList = new ArrayList<GoalsAndTasks>();
-        databaseHelper = new DatabaseHelper(getContext());
-        gameMechanicsHelper = new GameMechanicsHelper(charHealth, charXp, charLevel, silverAmountTextView, databaseHelper, healthBar, xpBar, getContext());
-        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getContext(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
+        gameMechanicsHelper = new GameMechanicsHelper(charHealth, charXp, charLevel, silverAmountTextView, databaseHelper, healthBar, xpBar, getActivity());
+        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper, inflater);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(linearLayoutManager);
         listView.setHasFixedSize(true);
         listView.setAdapter(goalsAndTasksAdapter);
         gameMechanicsHelper.setUpGameTextViews();
         if (expiredGoalsAndTasksCount > 0) {
-            new SweetAlertDialog(homeFragment.getContext(), SweetAlertDialog.WARNING_TYPE)
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Mistakes Happen In Life")
                     .setContentText("You failed to complete " + String.valueOf(expiredGoalsAndTasksCount) + " TODOs")
                     .setConfirmText("Ok")
@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment {
                             }
                             expiredGoalsAndTasksCount = 0;
                             sDialog.dismissWithAnimation();
+                            getArguments().remove("EXPIRED_TODO_COUNT");
                         }
                     })
                     .show();
@@ -151,12 +152,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void getImageFromUser() {
-        Intent intent = new Intent(getContext(), ProfilePicker.class);
+        Intent intent = new Intent(getActivity(), ProfilePicker.class);
         startActivity(intent);
     }
 
     private void startTutorial() {
-        Intent intent = new Intent(getContext(), IntroActivity.class); // Call the AppIntro java class
+        Intent intent = new Intent(getActivity(), IntroActivity.class); // Call the AppIntro java class
         startActivity(intent);
     }
 

@@ -103,8 +103,9 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
             Date todayDate = new Date();
 
             if (getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(goalsAndTasks.getCompletionDate())) > 0) {
-                goalsAndTasksAdapter.updateDailyNotCompleted(position);
+                goalsAndTasksAdapter.removeDaily(position, goalsAndTasks.getCompleted(), true);
                 goalsAndTasks.setCompleted(false);
+                goalsAndTasks.setId(goalsAndTasksAdapter.addDailyForNewDay(position));
             }
             if (goalsAndTasks.getCompleted()) {
                 disableDailyButtonValues();
@@ -145,11 +146,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (goalsAndTasks.getCategory() == TodoType.DAILY) {
-                    goalsAndTasksAdapter.removeItem(position, true, true);
-                } else {
-                    goalsAndTasksAdapter.deleteItemPermanent(position);
-                }
+                goalsAndTasksAdapter.deleteItemPermanent(position);
             }
         });
 
@@ -173,7 +170,8 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                 if (goalsAndTasks.getCategory() == TodoType.DAILY) {
                     goalsAndTasksAdapter.updateDailyCompleted(position, true, false);
                     disableDailyButtonValues();
-                } else {
+                }
+                else {
                     goalsAndTasksAdapter.removeItem(position, true, true);
                 }
                 displayCustomToastXPAndSilver(levelUp, xpAmount);

@@ -49,6 +49,9 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private static final String TABLE_TASKS_GOALS_FAMILY_FRIENDS = "family_friends";
     private static final String TABLE_TASKS_GOALS_LEARNING = "learning";
     private static final String TABLE_TASKS_GOALS_OTHER = "other";
+    private static final String taskDescription = "* Tasks expire at 11:59pm on their creation date *";
+    private static final String goalDescription = "* Goals expire at 11:59pm on their deadline date *";
+    private static final String dailyDescription = "* Dailies reset 11:59pm everyday *";
 
     private SelectedDate mSelectedDate;
     private EditText endDateEt;
@@ -58,6 +61,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private TextInputLayout endDateLayout;
     private TextInputEditText userTaskGoalDescription;
     private DatabaseHelper databaseHelper;
+    private TextView todoTypeDescription;
     Spinner improvementCategory;
     Long id;
     private Tracker tracker;
@@ -68,6 +72,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_goals_and_tasks);
         improvementCategory = (Spinner) findViewById(R.id.spinner1);
+        todoTypeDescription = (TextView) findViewById(R.id.todoTypeDescriptionTV);
         endDateEt = (EditText) findViewById(R.id.endDateTv);
         endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
         userTaskGoalDescription = (TextInputEditText) findViewById(R.id.textDescription);
@@ -141,10 +146,23 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         improvementCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 1) {
-                    endDateLl.setVisibility(View.VISIBLE);
-                } else {
-                    endDateLl.setVisibility(View.GONE);
+                switch (i) {
+                    case 0:
+                        todoTypeDescription.setText(taskDescription);
+                        endDateLl.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        todoTypeDescription.setText(goalDescription);
+                        endDateLl.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        todoTypeDescription.setText(dailyDescription);
+                        endDateLl.setVisibility(View.GONE);
+                        break;
+                    default:
+                        todoTypeDescription.setText("");
+                        endDateLl.setVisibility(View.GONE);
+                        break;
                 }
             }
 
@@ -267,7 +285,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                         databaseHelper.addData(userTaskGoalDescription.getText().toString(),
                                 improvementCategory.getSelectedItem().toString(),
                                 userTaskGoalTitle.getText().toString(),
-                                Long.valueOf(userTaskGoalSilver.getText().toString()),
+                                Integer.valueOf(userTaskGoalSilver.getText().toString()),
                                 improvementType,
                                 deadlineDate,
                                 formatter.format(date));

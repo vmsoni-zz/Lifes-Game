@@ -296,7 +296,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return tableTasksGoalsHeaders;
     }
 
-    public Long addData(String description, String category, String title, Long silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate) {
+    public Long addData(String description, String category, String title, Integer silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
@@ -823,30 +823,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 DateFormat todayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS + " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
-                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
+                        " WHERE " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "AND " + key + "= 1 " +
                         "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = DATE('" + todayDateFormat.format(cal.getTime()) + "') ";
                 break;
             case WEEKLY:
                 query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
-                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
-                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        " WHERE " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "AND " + key + "= 1 " +
                         "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
                 break;
             case MONTHLY:
                 String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
                 query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
-                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
-                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        " WHERE " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "AND " + key + "= 1 " +
                         "AND strftime('%Y', " + TABLE_TASKS_GOALS_COMPLETION_DATE + ") = '" + year + "' ";
                 break;
             default:
                 query = "SELECT COUNT (*) FROM " + TABLE_TASKS_GOALS +
-                        " WHERE " + TABLE_TASKS_GOALS_DELETED + " = 1 " +
-                        "AND " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
+                        " WHERE " + TABLE_TASKS_GOALS_COMPLETED + " = 1 " +
                         "AND " + key + "= 1 " +
                         "AND DATE(" + TABLE_TASKS_GOALS_COMPLETION_DATE + ") >= DATE('now', 'weekday 0', '-7 days') ";
                 break;

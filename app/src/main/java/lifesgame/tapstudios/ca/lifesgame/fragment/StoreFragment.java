@@ -37,7 +37,7 @@ public class StoreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         statisticsRange = StatisticFilters.WEEKLY;
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         view = inflater.inflate(R.layout.statistics_tabs, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);

@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application xmlns:tools="http://schemas.android.com/tools"
-        android:debuggable="true"
         android:name=".AnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon_lifes_game"
@@ -23,14 +22,14 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.IntroActivity"
@@ -74,6 +73,18 @@
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:permission="">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
-
 </manifest>

@@ -96,7 +96,7 @@ public class MarketplaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.context = getActivity();
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         purchaseHelper = new PurchaseHelper(getActivity());
         mainViewController = new MainViewController(this);
         billingManager = new BillingManager(getActivity(), mainViewController.getUpdateListener(), this);

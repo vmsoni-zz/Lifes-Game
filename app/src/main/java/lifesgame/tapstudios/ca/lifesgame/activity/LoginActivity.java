@@ -52,7 +52,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        databaseHelper = new DatabaseHelper(this);
+
+/*        setContentView(R.layout.activity_login);
         databaseHelper = new DatabaseHelper(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,10 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                 .build());
 
         tracker.setScreenName("LoginScreen");
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());*/
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("PASSCODE_SET", databaseHelper.passcodeSet());
+        startActivity(intent);
     }
 
-    @Override
+/*    @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -93,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("PASSCODE_SET", databaseHelper.passcodeSet());
             startActivity(intent);
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

@@ -32,19 +32,20 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
                                 GameMechanicsHelper gameMechanicsHelper,
                                 DatabaseHelper databaseHelper,
                                 List<GoalsAndTasks> objects,
-                                GoalsAndTasksHelper goalsAndTasksHelper) {
+                                GoalsAndTasksHelper goalsAndTasksHelper,
+                                LayoutInflater inflater) {
         this.context = context;
         this.resource = resource;
         this.gameMechanicsHelper = gameMechanicsHelper;
         this.databaseHelper = databaseHelper;
         this.goalsAndTasksHelper = goalsAndTasksHelper;
         goalsAndTasks = objects;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = inflater;
     }
 
     @Override
     public GoalsAndTasksHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+        View view = inflater.inflate(resource, parent, false);
         return new GoalsAndTasksHolder(context, view, goalsAndTasksHelper, this, gameMechanicsHelper);
     }
 
@@ -95,8 +96,28 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
     }
 
-    public void updateDailyNotCompleted(int position) {
-        databaseHelper.updateDailyNotCompleted(goalsAndTasks.get(position).getId());
+    public Long addDailyForNewDay(int position) {
+        return databaseHelper.addData(
+                goalsAndTasks.get(position).getDescription(),
+                goalsAndTasks.get(position).getCategory().getTodoTypeString(),
+                goalsAndTasks.get(position).getTitle(),
+                goalsAndTasks.get(position).getSilver(),
+                goalsAndTasks.get(position).getImprovementTypeMap(),
+                goalsAndTasks.get(position).getDeadlineDateString(),
+                goalsAndTasks.get(position).getCompletionDateString()
+        );
     }
 
+    public void removeDaily(int position, Boolean completed, Boolean deleted) {
+        try {
+            if (goalsAndTasks.get(position) != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String completionDate = sdf.format(goalsAndTasks.get(position).getCompletionDate());
+                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, completionDate, deleted);
+            }
+        }
+        catch (Exception e) {
+
+        }
+    }
 }

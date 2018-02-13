@@ -66,9 +66,9 @@ public class ImprovementTypeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         improvementView = inflater.inflate(R.layout.activity_improvement, container, false);
-        mTip = new Tooltip(improvementView.getContext(), R.layout.linechart_tooltip, R.id.value);
+        mTip = new Tooltip(getActivity(), R.layout.linechart_tooltip, R.id.value);
         improvementTypeXpChart = (BarChartView) improvementView.findViewById(R.id.improvementTypesChart);
         dailyButton = (ImageButton) improvementView.findViewById(R.id.daily_improvement);
         weeklyButton = (ImageButton) improvementView.findViewById(R.id.weekly_improvement);

@@ -38,14 +38,14 @@ public class RewardsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getActivity());
         rewardsView = inflater.inflate(R.layout.activity_rewards, container, false);
         rewardsList = new ArrayList<Rewards>();
-        rewardsAdapter = new RewardsAdapter(getContext(), R.layout.rewards_row, databaseHelper, rewardsList);
+        rewardsAdapter = new RewardsAdapter(getActivity(), R.layout.rewards_row, databaseHelper, rewardsList);
         addRewardToListBtn = rewardsView.findViewById(R.id.add_reward_item);
         rewardsListView = (RecyclerView) rewardsView.findViewById(R.id.rewards);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rewardsListView.setLayoutManager(linearLayoutManager);
         rewardsListView.setHasFixedSize(true);
@@ -85,8 +85,8 @@ public class RewardsFragment extends Fragment {
     }
 
     public void displayDialogRewards() {
-        Intent intent = new Intent(getContext(), DialogAddRewards.class);
-        Activity activity = (Activity) getContext();
+        Intent intent = new Intent(getActivity(), DialogAddRewards.class);
+        Activity activity = getActivity();
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_up, R.anim.no_anim);
     }
