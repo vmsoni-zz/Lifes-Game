@@ -64,6 +64,7 @@ public class MarketplaceFragment extends Fragment {
     private LinearLayout purchasedFullPackage;
     private LinearLayout purchaseCSVExport;
     private LinearLayout purchaseDataBackup;
+    private LinearLayout purchaseSupportDev;
     private LinearLayout exportDatabase;
     private LinearLayout importDatabase;
     private LinearLayout purchaseUnlockPin;
@@ -75,16 +76,14 @@ public class MarketplaceFragment extends Fragment {
     private Context context;
     private DatabaseExportHelper databaseExportHelper;
     private DatabaseImportHelper databaseImportHelper;
-    private PurchaseHelper purchaseHelper;
     private CSVExportHelper csvExportHelper;
-    private IInAppBillingService mService;
-    private ServiceConnection mServiceConn;
     private Tracker tracker;
 
     private TextView fullPackageTv;
     private TextView dbImportExportTv;
     private TextView csvExportTv;
     private TextView appPinTv;
+    private TextView supportDevTv;
 
     private static final int REQUEST_CODE_ENABLE = 11;
     private static final int REQUEST_CODE_DISABLE = 12;
@@ -97,7 +96,6 @@ public class MarketplaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.context = getActivity();
         databaseHelper = new DatabaseHelper(getActivity());
-        purchaseHelper = new PurchaseHelper(getActivity());
         mainViewController = new MainViewController(this);
         billingManager = new BillingManager(getActivity(), mainViewController.getUpdateListener(), this);
 
@@ -105,6 +103,7 @@ public class MarketplaceFragment extends Fragment {
         purchaseFullPackage = (LinearLayout) marketplaceView.findViewById(R.id.purchase_full_package);
         purchaseCSVExport = (LinearLayout) marketplaceView.findViewById(R.id.purchase_csv_export);
         purchaseDataBackup = (LinearLayout) marketplaceView.findViewById(R.id.purchase_cloud_backup);
+        purchaseSupportDev = (LinearLayout) marketplaceView.findViewById(R.id.purchaset_support_dev);
         exportDatabase = (LinearLayout) marketplaceView.findViewById(R.id.export_backup);
         importDatabase = (LinearLayout) marketplaceView.findViewById(R.id.import_database);
         purchaseUnlockPin = (LinearLayout) marketplaceView.findViewById(R.id.purchase_unlock_pin);
@@ -119,6 +118,7 @@ public class MarketplaceFragment extends Fragment {
         dbImportExportTv = (TextView) marketplaceView.findViewById(R.id.db_backup_cost);
         csvExportTv = (TextView) marketplaceView.findViewById(R.id.csv_export_cost);
         appPinTv = (TextView) marketplaceView.findViewById(R.id.unlock_pin_cost);
+        supportDevTv = (TextView) marketplaceView.findViewById(R.id.support_dev_cost);
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
         tracker = application.getDefaultTracker();
@@ -138,6 +138,7 @@ public class MarketplaceFragment extends Fragment {
         skuList.add("csv_export");
         skuList.add("db_import_export");
         skuList.add("app_pin");
+        skuList.add("support_dev");
         addSkuRows(null, skuList, BillingClient.SkuType.INAPP, null);
         billingManager.queryPurchases();
     }
@@ -167,7 +168,6 @@ public class MarketplaceFragment extends Fragment {
     }
 
     public void setupListeners(List<Purchase> userPurchases) {
-        setupAllPurchaseListeners();
         for (Purchase purchase : userPurchases) {
             switch (purchase.getSku()) {
                 case "full_package":
@@ -297,6 +297,17 @@ public class MarketplaceFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     purchaseItem("app_pin");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        purchaseSupportDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    purchaseItem("support_dev");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -456,11 +467,11 @@ public class MarketplaceFragment extends Fragment {
     }
 
     private void setupPrices(List<SkuDetails> skuDetailsList) {
-
         if (skuDetailsList == null || skuDetailsList.size() == 0) {
             setPriceNotAvailable();
             return;
         }
+        setupAllPurchaseListeners();
         try {
             for (SkuDetails details : skuDetailsList) {
                 String sku = details.getSku();
@@ -476,6 +487,9 @@ public class MarketplaceFragment extends Fragment {
                         break;
                     case "app_pin":
                         appPinTv.setText(details.getPrice());
+                        break;
+                    case "support_dev":
+                        supportDevTv.setText(details.getPrice());
                         break;
                 }
             }
@@ -493,5 +507,7 @@ public class MarketplaceFragment extends Fragment {
         purchaseDataBackup.setClickable(false);
         appPinTv.setText("Not Available");
         purchaseUnlockPin.setClickable(false);
+        supportDevTv.setText("Not Available");
+        purchaseSupportDev.setClickable(false);
     }
 }

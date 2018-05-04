@@ -118,18 +118,7 @@ public class CompletedToDoFragment extends Fragment {
             mTip.setPivotY(Tools.fromDpToPx(25));
         }
         //Graph Data
-        dataSet = databaseHelper.getCompletedGoalTasks(statisticsRange, dayOfWeek);
-        totalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-
-        Paint gridPaint = new Paint();
-        gridPaint.setColor(Color.parseColor("#ffffff"));
-        gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
-        gridPaint.setAntiAlias(true);
-        gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-
-        setupCompletedToDoPercentageGraph(databaseHelper.getCompletedToDoPercentage(statisticsRange, dayOfWeek));
-        setupCompletedToDoGraph(dataSet, gridPaint);
+        updateGraphs();
         setupDateRangeFilters();
         setupDayOfWeekButtonFilters();
 

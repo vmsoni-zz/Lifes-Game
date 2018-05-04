@@ -79,6 +79,7 @@ public class DatabaseImportHelper extends AsyncTask<String ,String, Boolean> {
                 databaseHelper.importDatabase(importedDatabasePath);
                 return true;
             } catch (Exception e) {
+                Toast.makeText(context, "Database version is outdated", Toast.LENGTH_SHORT).show();
                 Log.e("Exception", e.getMessage());
             }
         }

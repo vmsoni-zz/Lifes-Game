@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,19 +30,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_margin="15dp"
-                    android:scaleType="fitXY"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
                     android:layout_gravity="center_horizontal"
-                    android:textStyle="bold"
+                    android:layout_marginBottom="15dp"
+                    android:textColor="@color/colorWhite"
                     android:textSize="16sp"
-                    android:textColor="@color/colorWhite" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -118,11 +119,8 @@
                         android:id="@+id/xp_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
                         android:paddingRight="15dp"
-                        android:paddingTop="15dp"
+                        android:paddingTop="10dp"
                         android:src="@drawable/experience" />
 
                     <RelativeLayout
@@ -133,15 +131,17 @@
                             android:id="@+id/charXpLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingTop="15dp"
+                            android:paddingTop="5dp"
                             android:text="XP:"
                             android:textColor="@color/colorWhite"
                             android:textSize="15dp" />
 
                         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                             android:id="@+id/xpBar"
-                            android:layout_width="160dp"
+                            android:layout_width="match_parent"
                             android:layout_height="10dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_below="@+id/charXpLabel"
                             android:paddingRight="5dp"
                             app:rcBackgroundColor="#86D6F4"
@@ -154,8 +154,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignRight="@+id/xpBar"
+                            android:maxLines="1"
                             android:paddingRight="5dp"
-                            android:paddingTop="15dp"
+                            android:paddingTop="5dp"
                             android:text="New Text"
                             android:textColor="@color/colorWhite"
                             android:textSize="15dp" />
@@ -252,8 +253,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/silverLayout"
-                    android:visibility="gone"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/gold_img"
@@ -287,6 +288,59 @@
                             android:textColor="@color/colorWhite" />
                     </RelativeLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="9dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Filter"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/todo_type_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:text="All"
+                                android:textColor="@color/colorWhite" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <ImageButton
+                        android:id="@+id/todo_filter_button"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/filter_states"
+                        android:scaleType="fitXY"></ImageButton>
+                </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
 
@@ -294,7 +348,18 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ececec"
             android:layout_weight="0.4">
+
+            <TextView
+                android:id="@+id/no_todos_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:textColor="@color/cyanLight"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:text="@string/no_todos_added"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/goals_tasks"
@@ -302,7 +367,8 @@
                 android:layout_height="match_parent"
                 android:background="#ececec"
                 android:clipToPadding="false"
-                android:paddingBottom="100dp"></android.support.v7.widget.RecyclerView>
+                android:paddingBottom="100dp">
+            </android.support.v7.widget.RecyclerView>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_item"
@@ -311,9 +377,9 @@
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/add"
                 android:tint="@android:color/white"
-                app:borderWidth="0dp" />
+                app:borderWidth="0dp"
+                app:srcCompat="@drawable/add" />
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>

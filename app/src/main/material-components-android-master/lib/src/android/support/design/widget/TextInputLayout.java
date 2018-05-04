@@ -886,17 +886,17 @@ public class TextInputLayout extends LinearLayout {
     }
 
     if (mErrorShown && mErrorView != null) {
-      // Set a color filter of the error color
+      // Set a color filter_selected of the error color
       editTextBackground.setColorFilter(
           AppCompatDrawableManager.getPorterDuffColorFilter(
               mErrorView.getCurrentTextColor(), PorterDuff.Mode.SRC_IN));
     } else if (mCounterOverflowed && mCounterView != null) {
-      // Set a color filter of the counter color
+      // Set a color filter_selected of the counter color
       editTextBackground.setColorFilter(
           AppCompatDrawableManager.getPorterDuffColorFilter(
               mCounterView.getCurrentTextColor(), PorterDuff.Mode.SRC_IN));
     } else {
-      // Else reset the color filter and refresh the drawable state so that the
+      // Else reset the color filter_selected and refresh the drawable state so that the
       // normal tint is used
       DrawableCompat.clearColorFilter(editTextBackground);
       mEditText.refreshDrawableState();
@@ -917,7 +917,7 @@ public class TextInputLayout extends LinearLayout {
     if (!mHasReconstructedEditTextBackground) {
       // This is gross. There is an issue in the platform which affects container Drawables
       // where the first drawable retrieved from resources will propagate any changes
-      // (like color filter) to all instances from the cache. We'll try to workaround it...
+      // (like color filter_selected) to all instances from the cache. We'll try to workaround it...
 
       final Drawable newBg = bg.getConstantState().newDrawable();
 

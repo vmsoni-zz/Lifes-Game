@@ -11,6 +11,11 @@
         android:id="@+id/statistics"
         />
     <item
+        android:title="Pomodoro"
+        android:icon="@drawable/pomodoro"
+        android:id="@+id/pomodoro"
+        />
+    <item
         android:title="Store"
         android:icon="@drawable/store"
         android:id="@+id/store"

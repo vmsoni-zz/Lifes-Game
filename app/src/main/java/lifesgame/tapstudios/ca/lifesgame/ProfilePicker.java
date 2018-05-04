@@ -1,21 +1,34 @@
 package lifesgame.tapstudios.ca.lifesgame;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInviteInvitation;
@@ -32,6 +45,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import lifesgame.tapstudios.ca.lifesgame.activity.LoginActivity;
@@ -53,6 +68,12 @@ public class ProfilePicker extends AppCompatActivity {
     Uri profilePictureUri;
     private ProgressDialog dialog;
     private LinearLayout signOutLl;
+    private int selectedCustomImage;
+    private static final Integer[] customImageResources = { R.drawable.chicken,
+            R.drawable.cheetah, R.drawable.elephant,
+            R.drawable.lion_female, R.drawable.lion_male,
+            R.drawable.monkey, R.drawable.monkey_1,
+            R.drawable.panda, R.drawable.penguin, R.drawable.puma, R.drawable.tiger, R.drawable.zeebra };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +113,7 @@ public class ProfilePicker extends AppCompatActivity {
         chooseCustomProfilePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseCustomProfilePicture();
+                displayImageSelectionPopup();
             }
         });
 
@@ -132,7 +153,7 @@ public class ProfilePicker extends AppCompatActivity {
             CropImage.activity(profilePictureUri)
                     .start(this);
         } else {
-            Toast.makeText(this, "Select an image...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select a custom image...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -262,4 +283,85 @@ public class ProfilePicker extends AppCompatActivity {
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
+
+    private void displayImageSelectionPopup() {
+        String title = "Type of Profile Picture";
+        String[] filterChoices = {"Choose your own", "Pick from default"};
+        Context context = this;
+
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColor(getResources().getColor(R.color.colorPrimaryDark))
+                .items(filterChoices)
+                .itemsCallbackSingleChoice(
+                        0,
+                        (dialog, view, which, text) -> {
+                            pickImageType(which);
+                            return true;
+                        })
+                .backgroundColor(Color.WHITE)
+                .positiveText("Choose")
+                .negativeText("Cancel")
+                .choiceWidgetColor(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary)))
+                .contentColor(getResources().getColor(R.color.colorPrimaryDark))
+                .show();
+    }
+
+    private void pickImageType(int filter) {
+        switch (filter) {
+            case 0:
+                chooseCustomProfilePicture();
+                break;
+            case 1:
+                chooseDefaultProfilePicture();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void chooseDefaultProfilePicture() {
+        GridView gridView = new GridView(this);
+        List<Integer> mList = new ArrayList<Integer>();
+        for (int i = 1; i < 36; i++) {
+            mList.add(i);
+        }
+
+        gridView.setAdapter(new CustomGridAdapter(this, customImageResources));
+        gridView.setNumColumns(2);
+
+        MaterialDialog chooseCustomImageDialog = new MaterialDialog.Builder(this)
+                .title("Custom Profile Picture:")
+                .titleColor(getResources().getColor(R.color.colorPrimaryDark))
+                .customView(gridView, false)
+                .itemsCallbackSingleChoice(
+                        0,
+                        (dialog, view, which, text) -> {
+                            pickImageType(which);
+                            return true;
+                        })
+                .negativeText("Cancel")
+                .backgroundColor(Color.WHITE)
+                .choiceWidgetColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)))
+                .contentColor(getResources().getColor(R.color.colorPrimaryDark))
+                .show();
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                chooseCustomImageDialog.dismiss();
+                selectedCustomImage = position;
+                profilePicture = BitmapFactory.decodeResource( getResources(), customImageResources[selectedCustomImage]);
+                chosenProfilePic.setImageBitmap(profilePicture);
+            }
+        });
+    }
+
+    // @Override
+    // public boolean onCreateOptionsMenu(Menu menu) {
+    // // Inflate the menu; this adds items to the action bar if it is present.
+    // getMenuInflater().inflate(R.menu.grid, menu);
+    // return true;
+    // }
+    // Here is your custom Adapter
 }

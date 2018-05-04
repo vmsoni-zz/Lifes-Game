@@ -43,7 +43,6 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 public class ImprovementTypeFragment extends Fragment {
     public BarChartView improvementTypeXpChart;
     public DatabaseHelper databaseHelper;
-    private Tooltip mTip;
     private View improvementView;
     private ImageButton dailyButton;
     private ImageButton weeklyButton;
@@ -68,7 +67,6 @@ public class ImprovementTypeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         databaseHelper = new DatabaseHelper(getActivity());
         improvementView = inflater.inflate(R.layout.activity_improvement, container, false);
-        mTip = new Tooltip(getActivity(), R.layout.linechart_tooltip, R.id.value);
         improvementTypeXpChart = (BarChartView) improvementView.findViewById(R.id.improvementTypesChart);
         dailyButton = (ImageButton) improvementView.findViewById(R.id.daily_improvement);
         weeklyButton = (ImageButton) improvementView.findViewById(R.id.weekly_improvement);
@@ -115,9 +113,10 @@ public class ImprovementTypeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-
-        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
-            updateGraphs();
+        if (databaseHelper != null) {
+            if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+                updateGraphs();
+            }
         }
     }
 

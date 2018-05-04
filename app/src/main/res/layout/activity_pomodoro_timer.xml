@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fbutton="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6"
+    tools:context="lifesgame.tapstudios.ca.lifesgame.PomodoroTimerFragment">
+
+    <TextView
+        android:id="@+id/pomodoroTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Minutes"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/horizontal_number_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pomodoroTitleTv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        app:np_dividerColor="@color/colorAccent"
+        app:np_fadingEdgeEnabled="true"
+        app:np_height="64dp"
+        app:np_max="25"
+        app:np_min="1"
+        app:np_order="ascending"
+        app:np_orientation="horizontal"
+        app:np_selectedTextColor="@color/colorAccent"
+        app:np_selectedTextSize="35sp"
+        app:np_textColor="@color/colorPrimary"
+        app:np_textSize="28sp"
+        app:np_typeface="sans-serif-light"
+        app:np_width="180dp"
+        app:np_wrapSelectorWheel="false" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true">
+
+        <com.timqi.sectorprogressview.ColorfulRingProgressView
+            android:id="@+id/pomodoroTimerProgress"
+            android:layout_width="700px"
+            android:layout_height="700px"
+            app:bgColor="#e1e1e1"
+            app:fgColorEnd="#00a4ff"
+            app:fgColorStart="#02fef1"
+            app:percent="0"
+            app:startAngle="0"
+            app:strokeWidth="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/minuteTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="50sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="m"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/secondTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:text="00"
+                android:textSize="50sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="s"
+                android:textSize="25sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ButtonHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/textDescriptionLayout"
+        android:padding="20dp">
+
+        <info.hoang8f.widget.FButton
+            android:id="@+id/btn_start_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="Start"
+            android:textColor="@android:color/white"
+            fbutton:buttonColor="@color/fbutton_color_emerald" />
+
+        <info.hoang8f.widget.FButton
+            android:id="@+id/btn_stop_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="Reset"
+            android:textColor="@android:color/white"
+            fbutton:buttonColor="@color/fbutton_color_alizarin" />
+    </LinearLayout>
+</RelativeLayout>

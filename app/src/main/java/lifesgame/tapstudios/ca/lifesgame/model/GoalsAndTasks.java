@@ -18,11 +18,14 @@ public class GoalsAndTasks {
     private Date deadlineDate;
     private Date completionDate;
     private Date creationDate;
+    private Date startDate;
     private Boolean completed;
     private Boolean deleted;
     private Map<String, Boolean> improvementType;
+    private int completedCount;
+    private int failedCount;
 
-    public GoalsAndTasks(String title, String description, String category, Long id, Integer silver, Map<String, Boolean> improvementType, Date deadlineDate, Date completionDate, Date creationDate, Boolean completed) {
+    public GoalsAndTasks(String title, String description, String category, Long id, Integer silver, Map<String, Boolean> improvementType, Date deadlineDate, Date completionDate, Date creationDate, Date startDate, Boolean completed, int completedCount, int failedCount) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -33,6 +36,9 @@ public class GoalsAndTasks {
         this.completionDate = completionDate;
         this.completed = completed;
         this.creationDate = creationDate;
+        this.completedCount = completedCount;
+        this.failedCount = failedCount;
+        this.startDate = startDate;
     }
 
     public void setId(Long id) {
@@ -53,6 +59,26 @@ public class GoalsAndTasks {
 
     public void setCompleted(Boolean completed) {
         this.completed = completed;
+    }
+
+    public void setCompletedCount(int completedCount) {
+        this.completedCount = completedCount;
+    }
+
+    public void setFailedCount(int failedCount) {
+        this.failedCount = failedCount;
+    }
+
+    public void setCompletionDate(Date date) {
+        this.completionDate = date;
+    }
+
+    public int getCompletedCount() {
+        return completedCount;
+    }
+
+    public int getFailedCount() {
+        return failedCount;
     }
 
     public String getTitle() {
@@ -86,6 +112,27 @@ public class GoalsAndTasks {
         return deadlineDate;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public String getStartDateString() {
+        if (startDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        return sdf.format(startDate);
+    }
+
+    public String getStartDateStringDatabase() {
+        if (startDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(startDate);
+    }
+
+
     public String getDeadlineDateString() {
         if (deadlineDate == null) {
             return null;
@@ -94,8 +141,16 @@ public class GoalsAndTasks {
         return sdf.format(deadlineDate);
     }
 
+    public String getDeadlineDateStringDatabase() {
+        if (deadlineDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(deadlineDate);
+    }
+
     public Date getCompletionDate() {
-        return completionDate == null ? new Date() : completionDate;
+        return completionDate == null ? null : completionDate;
     }
 
     public String getCompletionDateString() {
@@ -103,6 +158,15 @@ public class GoalsAndTasks {
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+
+        return sdf.format(completionDate);
+    }
+
+    public String getCompletionDateStringDatabase() {
+        if (completionDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return sdf.format(completionDate);
     }
@@ -116,7 +180,14 @@ public class GoalsAndTasks {
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        return sdf.format(creationDate);
+    }
 
+    public String getCreationDateStringDatabase() {
+        if (creationDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(creationDate);
     }
 

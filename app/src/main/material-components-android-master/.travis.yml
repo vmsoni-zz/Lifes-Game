@@ -20,11 +20,11 @@ android:
     - 'android-sdk-license-.+'
 
 before_script:
-  - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
-  - echo y | android update sdk --no-ui --all --filter extra-android-support
-  - echo y | android update sdk --no-ui --all --filter "android-$ANDROID_EMULATOR_API_LEVEL"
-  - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
-  - echo y | android update sdk --no-ui --all --filter "sys-img-armeabi-v7a-android-$ANDROID_EMULATOR_API_LEVEL"
+  - echo y | android update sdk --no-ui --all --filter_selected extra-android-m2repository
+  - echo y | android update sdk --no-ui --all --filter_selected extra-android-support
+  - echo y | android update sdk --no-ui --all --filter_selected "android-$ANDROID_EMULATOR_API_LEVEL"
+  - echo y | android update sdk --no-ui --all --filter_selected build-tools-25.0.2
+  - echo y | android update sdk --no-ui --all --filter_selected "sys-img-armeabi-v7a-android-$ANDROID_EMULATOR_API_LEVEL"
   - echo no | android create avd --force -n test -t "android-$ANDROID_EMULATOR_API_LEVEL" --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
 

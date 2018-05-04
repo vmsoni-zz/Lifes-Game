@@ -65,16 +65,31 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         return goalsAndTasks.size();
     }
 
-    public void removeItem(int position, Boolean completed, Boolean deleted) {
+    public GoalsAndTasks removeItemFromList(int position) {
+        GoalsAndTasks goalsAndTask = goalsAndTasks.get(position);
+        goalsAndTasks.remove(position);
+        return goalsAndTask;
+    }
+
+    public void addItemToList(int position, GoalsAndTasks goalsAndTask) {
+        goalsAndTasks.add(position, goalsAndTask);
+    }
+
+    public void removeItem(GoalsAndTasks goalsAndTask, Boolean completed, Boolean deleted) {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(dt);
+        int completedCount = 0;
+        int failedCount = 0;
+        if (completed) {
+            completedCount++;
+        }
+        else {
+            failedCount++;
+        }
         try {
-            if (goalsAndTasks.get(position) != null) {
-                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
-                goalsAndTasks.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, goalsAndTasks.size());
+            if (goalsAndTask != null) {
+                databaseHelper.deleteData(goalsAndTask.getId(), completed, currentTime, deleted, completedCount, failedCount);
             }
         }
         catch (Exception e) {
@@ -85,27 +100,52 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
     public void deleteItemPermanent(int position) {
         databaseHelper.deleteDataPermanent(goalsAndTasks.get(position).getId());
         goalsAndTasks.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, goalsAndTasks.size());
     }
 
     public void updateDailyCompleted(int position, Boolean completed, Boolean deleted) {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(dt);
-        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted);
+        goalsAndTasks.get(position).setCompletionDate(dt);
+        if (completed) {
+            goalsAndTasks.get(position).setCompletedCount((goalsAndTasks.get(position).getCompletedCount()) + 1);
+        }
+        else {
+            goalsAndTasks.get(position).setFailedCount((goalsAndTasks.get(position).getFailedCount()) + 1);
+        }
+        databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted, goalsAndTasks.get(position).getCompletedCount(), goalsAndTasks.get(position).getFailedCount());
     }
 
     public Long addDailyForNewDay(int position) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return databaseHelper.addData(
                 goalsAndTasks.get(position).getDescription(),
                 goalsAndTasks.get(position).getCategory().getTodoTypeString(),
                 goalsAndTasks.get(position).getTitle(),
                 goalsAndTasks.get(position).getSilver(),
                 goalsAndTasks.get(position).getImprovementTypeMap(),
-                goalsAndTasks.get(position).getDeadlineDateString(),
-                goalsAndTasks.get(position).getCompletionDateString()
+                goalsAndTasks.get(position).getDeadlineDateStringDatabase(),
+                sdf.format(date),
+                goalsAndTasks.get(position).getStartDateStringDatabase(),
+                goalsAndTasks.get(position).getCompletedCount(),
+                goalsAndTasks.get(position).getFailedCount()
         );
+    }
+
+    public void updateDailySkippedDaily(int position, Boolean completed, Boolean deleted) {
+        try {
+            if (goalsAndTasks.get(position) != null) {
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String completionDate = sdf.format(date);
+                goalsAndTasks.get(position).setCompletionDate(date);
+                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, completionDate, deleted, goalsAndTasks.get(position).getCompletedCount(), goalsAndTasks.get(position).getFailedCount());
+            }
+        }
+        catch (Exception e) {
+        }
     }
 
     public void removeDaily(int position, Boolean completed, Boolean deleted) {
@@ -113,11 +153,10 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
             if (goalsAndTasks.get(position) != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String completionDate = sdf.format(goalsAndTasks.get(position).getCompletionDate());
-                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, completionDate, deleted);
+                databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, completionDate, deleted, goalsAndTasks.get(position).getCompletedCount(), goalsAndTasks.get(position).getFailedCount());
             }
         }
         catch (Exception e) {
-
         }
     }
 }

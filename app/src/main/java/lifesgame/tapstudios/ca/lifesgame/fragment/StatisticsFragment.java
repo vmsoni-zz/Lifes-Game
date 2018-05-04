@@ -71,10 +71,12 @@ public class StatisticsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
-        if(updatedTotalDeleted != totalDeleted) {
-            adapter.getItem(0).onResume();
-            totalDeleted = updatedTotalDeleted;
+        if(databaseHelper != null) {
+            int updatedTotalDeleted = databaseHelper.getTotalDeletedCount(statisticsRange);
+            if(updatedTotalDeleted != totalDeleted) {
+                adapter.getItem(0).onResume();
+                totalDeleted = updatedTotalDeleted;
+            }
         }
     }
 

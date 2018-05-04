@@ -23,8 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Map;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.BottomNavigationViewHelper;
 import lifesgame.tapstudios.ca.lifesgame.NonSwipeableViewPager;
 import lifesgame.tapstudios.ca.lifesgame.PagerAdapter;
+import lifesgame.tapstudios.ca.lifesgame.PomodoroTimerFragment;
 import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.fragment.HomeFragment;
 import lifesgame.tapstudios.ca.lifesgame.fragment.StatisticsFragment;
@@ -88,17 +90,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // do nothing.
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void setupSwipeFragments() {
         viewPager = (NonSwipeableViewPager) findViewById(R.id.main_fragment);
+        viewPager.setOffscreenPageLimit(4);
         mAdapterViewPager = new PagerAdapter(fragmentManager);
         HomeFragment homeFragment = new HomeFragment();
         homeFragment.setArguments(homeFragmentBundle);
         mAdapterViewPager.addFragment(homeFragment, "Home");
         mAdapterViewPager.addFragment(new StatisticsFragment(), "Statistics");
-        mAdapterViewPager.addFragment(new StoreFragment(), "Statistics");
+        mAdapterViewPager.addFragment(new PomodoroTimerFragment(), "Pomodoro");
+        mAdapterViewPager.addFragment(new StoreFragment(), "Store");
         viewPager.setAdapter(mAdapterViewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {
@@ -120,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupBottomNavBar() {
         mBottomNavigation = (BottomNavigationView) findViewById(R.id.NavBot);
+        BottomNavigationViewHelper.disableShiftMode(mBottomNavigation);
         mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -131,8 +139,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.statistics:
                         viewPager.setCurrentItem(1, true);
                         break;
-                    case R.id.store:
+                    case R.id.pomodoro:
                         viewPager.setCurrentItem(2, true);
+                        break;
+                    case R.id.store:
+                        viewPager.setCurrentItem(3, true);
                         break;
                 }
                 return true;
@@ -144,8 +155,11 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent() != null) {
             Integer fragmentNumber = getIntent().getIntExtra("FRAGMENT_NUMBER", -1);
             if (fragmentNumber != -1) {
-                if(fragmentNumber == 2) {
+                if(fragmentNumber == 3) {
                     mBottomNavigation.setSelectedItemId(R.id.store);
+                }
+                else if(fragmentNumber == 2) {
+                    mBottomNavigation.setSelectedItemId(R.id.pomodoro);
                 }
                 else if(fragmentNumber == 1) {
                     mBottomNavigation.setSelectedItemId(R.id.statistics);

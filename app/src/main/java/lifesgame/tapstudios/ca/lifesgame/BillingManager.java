@@ -9,15 +9,19 @@ import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.vending.billing.IInAppBillingService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
 import lifesgame.tapstudios.ca.lifesgame.fragment.MarketplaceFragment;
@@ -30,10 +34,10 @@ import lifesgame.tapstudios.ca.lifesgame.model.Purchases;
 public class BillingManager implements PurchasesUpdatedListener {
     private BillingClient mBillingClient;
     private Boolean mIsServiceConnected;
-    private Integer mBillingClientResponseCode;
     private BillingUpdatesListener mBillingUpdatesListener;
     private Activity mActivity;
     private MarketplaceFragment marketplaceFragment;
+    private Set mTokensToBeConsumed;
     private static final String BASE_64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo0GUGUaHjz+8UKBf3g5vvsahVqVFxgFBRdYbUpwViH1jvu2pDvyeChZlml57atJF7x8W+026RMbqrVlLMgnWOyVQgu+kICOW/iZCYY/K0LlA7z5bknHYAHSDGePEl8TD0BKwx4H38bH76pFbw3+qINWt3+mfGxDfFHTzzsJPJSpGt41eukQDukCOx8yBTIe7C76dGL5BJeHCPHWJdswYNpcdSiIoGqPbstP5PtypVnkC/wYOhlo36FUhy6BP64lLdv30nH+cQKTI/YML00E+Kojy7JI+Vi55mNhELPP4eVxOj2rOIgHAqjWK11gRjce7oY6MfmjVu3ZUNBLYpE/PGQIDAQAB";
 
     public BillingManager(Activity activity, final BillingUpdatesListener updatesListener, final MarketplaceFragment marketplaceFragment) {
@@ -68,7 +72,6 @@ public class BillingManager implements PurchasesUpdatedListener {
                         executeOnSuccess.run();
                     }
                 }
-                mBillingClientResponseCode = billingResponseCode;
             }
 
             @Override
@@ -106,10 +109,15 @@ public class BillingManager implements PurchasesUpdatedListener {
         if (responseCode == BillingClient.BillingResponse.OK) {
             if (purchases == null || purchases.size() <= 0) {
                 marketplaceFragment.setupListeners(new ArrayList<Purchase>());
+                return;
             }
             for (Purchase purchase : purchases) {
                 if (!handlePurchase(purchase)) {
                     marketplaceFragment.setupListeners(new ArrayList<Purchase>());
+                }
+                if (purchase.getSku().equals("support_dev")) {
+                    Toast.makeText(this.mActivity, "Thank you for your support!", Toast.LENGTH_SHORT).show();
+                    consumeAsync(purchase.getPurchaseToken());
                 }
             }
             marketplaceFragment.setupListeners(purchases);
@@ -120,6 +128,35 @@ public class BillingManager implements PurchasesUpdatedListener {
             Toast.makeText(this.mActivity, "An Error Occurred", Toast.LENGTH_SHORT).show();
             marketplaceFragment.setupListeners(new ArrayList<Purchase>());
         }
+    }
+
+    public void consumeAsync(final String purchaseToken) {
+        if (mTokensToBeConsumed == null) {
+            mTokensToBeConsumed = new HashSet<>();
+        } else if (mTokensToBeConsumed.contains(purchaseToken)) {
+            // Skip this token as it's already scheduled for consumption.
+            return;
+        }
+        mTokensToBeConsumed.add(purchaseToken);
+
+        final ConsumeResponseListener onConsumeListener = new ConsumeResponseListener() {
+            @Override
+            public void onConsumeResponse(@BillingClient.BillingResponse int responseCode, String purchaseToken) {
+                // Try to reconnect once if the billing service was disconnected.
+                mBillingUpdatesListener.onConsumeFinished(purchaseToken, responseCode);
+            }
+        };
+
+        // Create a runnable from the request to use it inside the connection retry policy.
+        Runnable consumeRequest = new Runnable() {
+            @Override
+            public void run() {
+                // Consume the purchase asynchronously.
+                mBillingClient.consumeAsync(purchaseToken, onConsumeListener);
+            }
+        };
+
+        executeServiceRequest(consumeRequest);
     }
 
     public void queryPurchases() {

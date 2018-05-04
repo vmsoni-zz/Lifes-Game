@@ -177,37 +177,148 @@
                     android:textSize="14sp" />
 
                 <LinearLayout
-                    android:id="@+id/goal_task_remaining_time_ll"
-                    android:layout_width="197dp"
+                    android:id="@+id/dynamic_ll"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/goal_task_description"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/goal_task_remaining_time_label"
+                    <LinearLayout
+                        android:id="@+id/goal_task_start_date_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:text="Deadline: "
-                        android:textColor="@color/fbutton_color_wisteria"
-                        android:textSize="16sp" />
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/goal_task_remaining_time"
+                        <TextView
+                            android:id="@+id/goal_task_start_date_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Start Date: "
+                            android:textColor="@color/lightGreenDark"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/goal_task_start_date_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="@color/colorPrimaryRed"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/goal_task_remaining_time_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/colorPrimaryRed"
-                        android:textSize="14sp" />
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/goal_task_remaining_time_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Deadline: "
+                            android:textColor="@color/fbutton_color_wisteria"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/goal_task_remaining_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="@color/colorPrimaryRed"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/daily_count_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/goal_task_description"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/daily_completed_count_title_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:text="Completed Count: "
+                                android:textColor="@color/greyDark"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/daily_completed_count_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="@color/greenPrimary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="5dp">
+
+                            <TextView
+                                android:id="@+id/daily_failed_count_title_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:text="Failed Count: "
+                                android:textColor="@color/greyDark"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/daily_failed_count_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="@color/deepOrangePrimary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/daily_skip_day_Ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/border_small_padding"
+                        android:visibility="gone"
+                        android:gravity="center_horizontal|center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorAccent"
+                            android:text="Skip Day"/>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/goal_task_remaining_time_ll"
+                    android:layout_below="@id/dynamic_ll"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center"

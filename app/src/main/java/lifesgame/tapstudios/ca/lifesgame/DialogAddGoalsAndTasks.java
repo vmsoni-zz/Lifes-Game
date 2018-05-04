@@ -8,9 +8,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,16 +51,23 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private static final String TABLE_TASKS_GOALS_FAMILY_FRIENDS = "family_friends";
     private static final String TABLE_TASKS_GOALS_LEARNING = "learning";
     private static final String TABLE_TASKS_GOALS_OTHER = "other";
-    private static final String taskDescription = "* Tasks expire at 11:59pm on their creation date *";
+    private static final String taskDescription = "* Tasks expire at 11:59pm on their start date *";
     private static final String goalDescription = "* Goals expire at 11:59pm on their deadline date *";
     private static final String dailyDescription = "* Dailies reset 11:59pm everyday *";
 
-    private SelectedDate mSelectedDate;
+    private SelectedDate mSelectedEndDate;
+    private SelectedDate mSelectedStartDate;
+    private SeekBar silverSeekBar;
+
     private EditText endDateEt;
+    private EditText startDateEt;
+    private EditText silverEditText;
     private LinearLayout endDateLl;
+    private LinearLayout startDateLl;
     private TextInputEditText userTaskGoalTitle;
     private TextInputLayout userTaskGoalTitleLayout;
     private TextInputLayout endDateLayout;
+    private TextInputLayout startDateLayout;
     private TextInputEditText userTaskGoalDescription;
     private DatabaseHelper databaseHelper;
     private TextView todoTypeDescription;
@@ -74,15 +83,22 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         improvementCategory = (Spinner) findViewById(R.id.spinner1);
         todoTypeDescription = (TextView) findViewById(R.id.todoTypeDescriptionTV);
         endDateEt = (EditText) findViewById(R.id.endDateTv);
+        startDateEt = (EditText) findViewById(R.id.startDateTv);
+        silverEditText = (EditText) findViewById(R.id.silver_amount_edit_text);
         endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
+        startDateLl = (LinearLayout) findViewById(R.id.startDateHolder);
         userTaskGoalDescription = (TextInputEditText) findViewById(R.id.textDescription);
         userTaskGoalTitle = (TextInputEditText) findViewById(R.id.textTitle);
         userTaskGoalTitleLayout = (TextInputLayout) findViewById(R.id.textTitleLayout);
         endDateLayout = (TextInputLayout) findViewById(R.id.endDateLayout);
+        startDateLayout = (TextInputLayout) findViewById(R.id.startDateLayout);
+        silverSeekBar = (SeekBar) findViewById(R.id.silver_seek_bar);
         databaseHelper = new DatabaseHelper(this);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
+        startDateEt.setInputType(InputType.TYPE_NULL);
         endDateLl.setVisibility(View.GONE);
+        startDateLl.setVisibility(View.GONE);
 
         final String[] improvementCategories = new String[]{"Task", "Goal", "Daily"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, improvementCategories);
@@ -101,12 +117,15 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
         id = getIntent().getLongExtra("ID", -1L);
 
+        mSelectedStartDate = new SelectedDate(Calendar.getInstance());
+        updateStartDateInfoView();
+        silverEditTextListener();
         if (id != -1L) {
             editTODO();
         }
     }
 
-    DatePicker.Callback mFragmentCallback = new DatePicker.Callback() {
+    DatePicker.Callback mStartdateFragmentCallback = new DatePicker.Callback() {
         @Override
         public void onCancelled() {
         }
@@ -116,18 +135,54 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                                             int hourOfDay, int minute,
                                             SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
                                             String recurrenceRule) {
-            mSelectedDate = selectedDate;
-            updateInfoView();
+            mSelectedStartDate = selectedDate;
+            updateStartDateInfoView();
+        }
+    };
+
+
+    DatePicker.Callback mEndateFragmentCallback = new DatePicker.Callback() {
+        @Override
+        public void onCancelled() {
+        }
+
+        @Override
+        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+                                            int hourOfDay, int minute,
+                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+                                            String recurrenceRule) {
+            mSelectedEndDate = selectedDate;
+            updateEndDateInfoView();
         }
     };
 
     private void goalSelection() {
+        startDateEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePicker pickerFrag = new DatePicker();
+                pickerFrag.setCallback(mStartdateFragmentCallback);
+                SublimeOptions options = new SublimeOptions();
+                options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
+                options.setDisplayOptions(SublimeOptions.ACTIVATE_DATE_PICKER);
+                options.setCanPickDateRange(false);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("SUBLIME_OPTIONS", options);
+                pickerFrag.setArguments(bundle);
+
+                pickerFrag.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                pickerFrag.show(getSupportFragmentManager(), "SUBLIME_PICKER");
+
+            }
+        });
+
         //Onclick Listener for the end date text view
         endDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePicker pickerFrag = new DatePicker();
-                pickerFrag.setCallback(mFragmentCallback);
+                pickerFrag.setCallback(mEndateFragmentCallback);
                 SublimeOptions options = new SublimeOptions();
                 options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
                 options.setDisplayOptions(SublimeOptions.ACTIVATE_DATE_PICKER);
@@ -149,18 +204,22 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 switch (i) {
                     case 0:
                         todoTypeDescription.setText(taskDescription);
+                        startDateLl.setVisibility(View.VISIBLE);
                         endDateLl.setVisibility(View.GONE);
                         break;
                     case 1:
                         todoTypeDescription.setText(goalDescription);
+                        startDateLl.setVisibility(View.GONE);
                         endDateLl.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         todoTypeDescription.setText(dailyDescription);
+                        startDateLl.setVisibility(View.GONE);
                         endDateLl.setVisibility(View.GONE);
                         break;
                     default:
                         todoTypeDescription.setText("");
+                        startDateLl.setVisibility(View.GONE);
                         endDateLl.setVisibility(View.GONE);
                         break;
                 }
@@ -173,11 +232,20 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         });
     }
 
-    private void updateInfoView() {
-        if (mSelectedDate != null) {
-            if (mSelectedDate.getType() == SelectedDate.Type.SINGLE) {
+    private void updateEndDateInfoView() {
+        if (mSelectedEndDate != null) {
+            if (mSelectedEndDate.getType() == SelectedDate.Type.SINGLE) {
                 endDateEt.setText(applyBoldStyle("Deadline: ")
-                        .append(DateFormat.getDateInstance().format(mSelectedDate.getEndDate().getTime())));
+                        .append(DateFormat.getDateInstance().format(mSelectedEndDate.getEndDate().getTime())));
+            }
+        }
+    }
+
+    private void updateStartDateInfoView() {
+        if (mSelectedStartDate != null) {
+            if (mSelectedStartDate.getType() == SelectedDate.Type.SINGLE) {
+                startDateEt.setText(applyBoldStyle("Start: ")
+                        .append(DateFormat.getDateInstance().format(mSelectedStartDate.getEndDate().getTime())));
             }
         }
     }
@@ -185,6 +253,30 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private void updateDateTV(Calendar cal) {
         endDateEt.setText(applyBoldStyle("END: ")
                 .append(DateFormat.getDateInstance().format(cal.getTime())));
+    }
+
+    private void silverEditTextListener() {
+        silverEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(count > 0 && Integer.valueOf(s.toString()) > 100) {
+                    silverEditText.setText("100");
+                    silverEditText.setSelection(silverEditText.getText().length());
+                    silverSeekBar.setProgress(100);
+                }
+                else if (count > 0) {
+                    silverSeekBar.setProgress(Integer.valueOf(s.toString()));
+                    silverEditText.setSelection(silverEditText.getText().length());
+                }
+            }
+        });
     }
 
     private SpannableStringBuilder applyBoldStyle(String text) {
@@ -195,11 +287,10 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     }
 
     private void silverSeekBar() {
-        SeekBar silverSeekBar = (SeekBar) findViewById(R.id.silver_seek_bar);
         silverSeekBar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     int progressValue;
-                    final TextView silverTextView = (TextView) findViewById(R.id.silver_amount_text_view);
+                    final EditText silverTextView = (EditText) findViewById(R.id.silver_amount_edit_text);
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -230,7 +321,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         userAcceptTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final TextView userTaskGoalSilver = (TextView) findViewById(R.id.silver_amount_text_view);
+                int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
                 final CheckBox userHealthExercise = (CheckBox) findViewById(R.id.healthExercise);
                 final CheckBox userWork = (CheckBox) findViewById(R.id.work);
                 final CheckBox userSchool = (CheckBox) findViewById(R.id.school);
@@ -253,28 +344,41 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 if (!userTaskGoalTitle.getText().toString().isEmpty()) {
                     Intent intent = new Intent(DialogAddGoalsAndTasks.this, MainActivity.class);
                     String deadlineDate = null;
+                    String startDate = null;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date();
                     if (improvementCategory.getSelectedItem().toString().equals("Goal")) {
-                        if (mSelectedDate == null) {
-                            endDateLayout.setError("Select an Deadline Date");
+                        if (mSelectedEndDate == null) {
+                            endDateLayout.setError("Select a Deadline Date");
                             return;
-                        } else if ((mSelectedDate.getEndDate().compareTo(Calendar.getInstance())) < 0) {
+                        } else if ((mSelectedEndDate.getEndDate().compareTo(Calendar.getInstance())) < 0) {
                             endDateLayout.setError("Deadline cannot be before or equal to current date");
                             return;
                         }
-                        Calendar calendarDeadline = mSelectedDate.getEndDate();
+                        Calendar calendarDeadline = mSelectedEndDate.getEndDate();
                         deadlineDate = formatter.format(calendarDeadline.getTime());
+                    }
+                    if (improvementCategory.getSelectedItem().toString().equals("Task")) {
+                        if (mSelectedStartDate == null) {
+                            endDateLayout.setError("Select a Start Date");
+                            return;
+                        } else if (getZeroTimeDate(mSelectedStartDate.getEndDate().getTime()).compareTo(getZeroTimeDate(Calendar.getInstance().getTime())) < 0) {
+                            endDateLayout.setError("Start date cannot be before current date");
+                            return;
+                        }
+                        Calendar calendarStartDate = mSelectedStartDate.getEndDate();
+                        startDate = formatter.format(calendarStartDate.getTime());
                     }
                     if (id != -1L) {
                         databaseHelper.updateTodo(id,
                                 userTaskGoalDescription.getText().toString(),
                                 improvementCategory.getSelectedItem().toString(),
                                 userTaskGoalTitle.getText().toString(),
-                                Long.valueOf(userTaskGoalSilver.getText().toString()),
+                                silverAmount,
                                 improvementType,
                                 deadlineDate,
-                                formatter.format(date));
+                                formatter.format(date),
+                                startDate);
 
                         tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("ToDo-Update")
@@ -285,10 +389,13 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                         databaseHelper.addData(userTaskGoalDescription.getText().toString(),
                                 improvementCategory.getSelectedItem().toString(),
                                 userTaskGoalTitle.getText().toString(),
-                                Integer.valueOf(userTaskGoalSilver.getText().toString()),
+                                Integer.valueOf(silverAmount),
                                 improvementType,
                                 deadlineDate,
-                                formatter.format(date));
+                                formatter.format(date),
+                                startDate,
+                                0,
+                                0);
                         tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("ToDo-Addition")
                                 .setAction(userTaskGoalTitle.getText().toString())
@@ -358,7 +465,25 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
         improvementCategory.setSelection(goalsAndTasks.getCategory().getOrderValue());
 
+        if (goalsAndTasks.getStartDate() != null) {
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(goalsAndTasks.getStartDate());
+            mSelectedStartDate = new SelectedDate(startDate);
+            updateStartDateInfoView();
+        }
+
         ((SeekBar) findViewById(R.id.silver_seek_bar)).setProgress(goalsAndTasks.getSilver());
+    }
+
+    private Date getZeroTimeDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        date = calendar.getTime();
+        return date;
     }
 }
 

@@ -87,6 +87,7 @@ public class CSVExportHelper extends AsyncTask<String, String, Uri> {
                                     goalsAndTasksList.get(i).getSilver().toString(),
                                     goalsAndTasksList.get(i).getTitle(),
                                     goalsAndTasksList.get(i).getCategory().getTodoTypeString(),
+                                    goalsAndTasksList.get(i).getStartDateString(),
                                     goalsAndTasksList.get(i).getCreationDateString(),
                                     goalsAndTasksList.get(i).getCompletionDateString(),
                                     goalsAndTasksList.get(i).getDeadlineDateString(),
@@ -98,7 +99,9 @@ public class CSVExportHelper extends AsyncTask<String, String, Uri> {
                                     goalsAndTasksList.get(i).getImprovementTypeMap().get(TABLE_TASKS_GOALS_LEARNING).toString(),
                                     goalsAndTasksList.get(i).getImprovementTypeMap().get(TABLE_TASKS_GOALS_LEARNING).toString(),
                                     goalsAndTasksList.get(i).getImprovementTypeMap().get(TABLE_TASKS_GOALS_OTHER).toString(),
-                                    goalsAndTasksList.get(i).getDescription()
+                                    goalsAndTasksList.get(i).getDescription(),
+                                    String.valueOf(goalsAndTasksList.get(i).getCompletedCount()),
+                                    String.valueOf(goalsAndTasksList.get(i).getFailedCount())
                             };
                             csvWrite.writeNext(arrStr);
                         }

@@ -56,8 +56,10 @@ public class SilverFragment extends Fragment {
     private ImageButton saturdayButton;
     private CardView cvDayOfWeekPicker;
     private StatisticFilters statisticsRange;
+    private TextView silverTv;
     private Integer dayOfWeek;
     private Tracker tracker;
+    private String toDoCompletionPrefixSentence = "Total Silver Gained ";
 
     public SilverFragment() {
     }
@@ -71,6 +73,7 @@ public class SilverFragment extends Fragment {
         dailyButton = (ImageButton) silverView.findViewById(R.id.daily_silver);
         weeklyButton = (ImageButton) silverView.findViewById(R.id.weekly_silver);
         monthlyButton = (ImageButton) silverView.findViewById(R.id.monthly_silver);
+        silverTv = (TextView) silverView.findViewById(R.id.silverTV);
         cvDayOfWeekPicker = (CardView) silverView.findViewById(R.id.card_view_daily_filter);
         cvDayOfWeekPicker.setVisibility(View.GONE);
         statisticsRange = StatisticFilters.WEEKLY;
@@ -133,8 +136,10 @@ public class SilverFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //Graph Data
-        if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
-            updateGraphs();
+        if(databaseHelper != null) {
+            if (databaseHelper.getTotalDeletedCount(statisticsRange) != totalDeleted) {
+                updateGraphs();
+            }
         }
     }
 
@@ -258,6 +263,7 @@ public class SilverFragment extends Fragment {
                 dayOfWeek = curdate.get(Calendar.DAY_OF_WEEK);
                 statisticsRange = StatisticFilters.DAILY;
                 resetAllButtonState();
+                silverTv.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 dailyButton.setImageResource(R.drawable.selected_daily);
                 updateGraphs();
                 cvDayOfWeekPicker.setVisibility(View.VISIBLE);
@@ -270,6 +276,7 @@ public class SilverFragment extends Fragment {
             public void onClick(View v) {
                 statisticsRange = StatisticFilters.WEEKLY;
                 resetAllButtonState();
+                silverTv.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 weeklyButton.setImageResource(R.drawable.selected_weekly);
                 updateGraphs();
                 cvDayOfWeekPicker.setVisibility(View.GONE);
@@ -281,6 +288,7 @@ public class SilverFragment extends Fragment {
             public void onClick(View v) {
                 statisticsRange = StatisticFilters.MONTHLY;
                 resetAllButtonState();
+                silverTv.setText(toDoCompletionPrefixSentence + statisticsRange.getDateRange());
                 monthlyButton.setImageResource(R.drawable.selected_monthly);
                 updateGraphs();
                 cvDayOfWeekPicker.setVisibility(View.GONE);
