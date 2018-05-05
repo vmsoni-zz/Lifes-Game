@@ -3,11 +3,9 @@ Life's Game: Make Everyday a Game
 
 Life's Game: Make Everyday a game is an android app that lets users take control of their life in a fun and gamified fashion!
 
+![feature-graphic](https://user-images.githubusercontent.com/19355736/39657627-c61f057c-4fd7-11e8-83b5-a370e384cecf.png)
 
-### APK Download
-
-[**Direct Download**: (Version 1.5)](LifesGame.apk)
-
+### Download:
 <a href="https://play.google.com/store/apps/details?id=lifesgame.tapstudios.ca.lifesgame">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
@@ -25,6 +23,10 @@ full control over their data. Google Analytics is used as a tool to help monitor
 For notifications and app invites, Google Firebase is used.
 
 ## Screen Shots
+![1](https://user-images.githubusercontent.com/19355736/39657669-2800ad36-4fd8-11e8-8bc8-32c6acbccc67.png =415x670)
+![2](https://user-images.githubusercontent.com/19355736/39657757-dd29cb70-4fd8-11e8-8c4c-bd94909795a3.png =415x670)
+![3](https://user-images.githubusercontent.com/19355736/39657764-ec604506-4fd8-11e8-96d1-9f052d7dd444.png =415x670)
+![4](https://user-images.githubusercontent.com/19355736/39657766-fcbe5d8e-4fd8-11e8-8b38-a8533b093036.png =415x670)
 
 ## License
 
