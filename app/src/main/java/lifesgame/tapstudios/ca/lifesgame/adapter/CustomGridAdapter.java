@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import lifesgame.tapstudios.ca.lifesgame.R;
 
 /**
  * Created by viditsoni on 2018-03-10.

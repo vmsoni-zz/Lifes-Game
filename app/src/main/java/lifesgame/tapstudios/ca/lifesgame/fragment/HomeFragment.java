@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import lifesgame.tapstudios.ca.lifesgame.GoalsAndTasksAdapter;
-import lifesgame.tapstudios.ca.lifesgame.ProfilePicker;
+import lifesgame.tapstudios.ca.lifesgame.adapter.GoalsAndTasksAdapter;
+import lifesgame.tapstudios.ca.lifesgame.activity.ProfilePicker;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
 import lifesgame.tapstudios.ca.lifesgame.activity.IntroActivity;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;

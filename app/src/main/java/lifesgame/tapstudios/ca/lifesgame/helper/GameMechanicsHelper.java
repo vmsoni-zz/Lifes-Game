@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import lifesgame.tapstudios.ca.lifesgame.ProfilePicker;
+import lifesgame.tapstudios.ca.lifesgame.activity.ProfilePicker;
 
 /**
  * Created by Vidit Soni on 6/3/2017.

@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,22 +17,27 @@ import com.google.android.gms.analytics.Tracker;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
+import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 
 public class DialogAddRewards extends AppCompatActivity {
-    private TextView rewardTitle;
-    private TextView rewardDescription;
-    private TextInputLayout rewardTitleLayout;
+    @BindView(R.id.user_reward_title) TextView rewardTitle;
+    @BindView(R.id.user_reward_description) TextView rewardDescription;
+    @BindView(R.id.user_reward_title_layout) TextInputLayout rewardTitleLayout;
+    @BindView(R.id.singleTime) CheckBox singleTime;
+    @BindView(R.id.unlimited) CheckBox unlimited;
+    @BindView(R.id.color_blue) CheckBox blueColor;
+    @BindView(R.id.color_red) CheckBox redColor;
+    @BindView(R.id.color_green) CheckBox greenColor;
+    @BindView(R.id.color_orange) CheckBox orangeColor;
+
     private DatabaseHelper databaseHelper;
-    private CheckBox singleTime;
-    private CheckBox unlimited;
-    private CheckBox blueColor;
-    private CheckBox redColor;
-    private CheckBox greenColor;
-    private CheckBox orangeColor;
     private String checkedColor;
     private Integer id = -1;
     private Tracker tracker;
@@ -41,9 +46,8 @@ public class DialogAddRewards extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_rewards);
-        rewardTitle = findViewById(R.id.user_reward_title);
-        rewardDescription = findViewById(R.id.user_reward_description);
-        rewardTitleLayout = findViewById(R.id.user_reward_title_layout);
+        ButterKnife.bind(this);
+
         databaseHelper = new DatabaseHelper(this);
         checkedColor = "blue";
         addItem();
@@ -91,13 +95,6 @@ public class DialogAddRewards extends AppCompatActivity {
     }
 
     private void setupCheckBoxes() {
-        singleTime = (CheckBox) findViewById(R.id.singleTime);
-        unlimited = (CheckBox) findViewById(R.id.unlimited);
-        blueColor = (CheckBox) findViewById(R.id.color_blue);
-        greenColor = (CheckBox) findViewById(R.id.color_green);
-        redColor = (CheckBox) findViewById(R.id.color_red);
-        orangeColor = (CheckBox) findViewById(R.id.color_orange);
-
         singleTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

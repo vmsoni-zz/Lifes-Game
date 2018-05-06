@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;

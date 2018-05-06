@@ -12,10 +12,8 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -34,7 +32,7 @@ import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 /**

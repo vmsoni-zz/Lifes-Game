@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
-import lifesgame.tapstudios.ca.lifesgame.DialogAddGoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.activity.DialogAddGoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.R;
 
 /**

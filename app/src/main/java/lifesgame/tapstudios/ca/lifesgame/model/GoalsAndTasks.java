@@ -4,10 +4,12 @@ import java.util.Map;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import lifesgame.tapstudios.ca.lifesgame.TodoType;
-
 /**
  * Created by Vidit Soni on 8/5/2017.
+ */
+
+/**
+ * A model of Todos that are created by the user.
  */
 public class GoalsAndTasks {
     private String title;
@@ -19,13 +21,15 @@ public class GoalsAndTasks {
     private Date completionDate;
     private Date creationDate;
     private Date startDate;
+    private Date notificationDate;
+    private Integer notificationId;
     private Boolean completed;
     private Boolean deleted;
     private Map<String, Boolean> improvementType;
     private int completedCount;
     private int failedCount;
 
-    public GoalsAndTasks(String title, String description, String category, Long id, Integer silver, Map<String, Boolean> improvementType, Date deadlineDate, Date completionDate, Date creationDate, Date startDate, Boolean completed, int completedCount, int failedCount) {
+    public GoalsAndTasks(String title, String description, String category, Long id, Integer silver, Map<String, Boolean> improvementType, Date deadlineDate, Date completionDate, Date creationDate, Date startDate, Date notificationDate, Boolean completed, int completedCount, int failedCount, Integer notificationId) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -39,6 +43,9 @@ public class GoalsAndTasks {
         this.completedCount = completedCount;
         this.failedCount = failedCount;
         this.startDate = startDate;
+        this.notificationDate = notificationDate;
+        this.notificationId = notificationId;
+
     }
 
     public void setId(Long id) {
@@ -189,6 +196,29 @@ public class GoalsAndTasks {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(creationDate);
+    }
+
+    public Date getNotificationDate() {
+        return notificationDate;
+    }
+
+    public void setNotificationDate(Date notificationDate) {
+        this.notificationDate = notificationDate;
+    }
+
+    public String getNotificationDateString() {
+        if (notificationDate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(notificationDate);
+    }
+
+    public Integer getNotificationId() {
+        if (notificationId == null) {
+            return null;
+        }
+        return notificationId;
     }
 
     public Long getId() {

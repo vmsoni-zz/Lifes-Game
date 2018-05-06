@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.adapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

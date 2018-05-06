@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lifesgame.tapstudios.ca.lifesgame.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.model.GraphData;
 import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 
 /**
  * Created by Vidit Soni on 5/24/2017.
@@ -49,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_TASKS_GOALS_COMPLETION_DATE = "completion_date";
     private static final String TABLE_TASKS_GOALS_DEADLINE_DATE = "deadline_date";
     private static final String TABLE_TASKS_GOALS_START_DATE = "start_date";
+    private static final String TABLE_TASKS_GOALS_NOTIFICATION_DATE = "notification_date";
     private static final String TABLE_TASKS_GOALS_DELETED = "deleted";
     private static final String TABLE_TASKS_GOALS_COMPLETED = "completed";
     private static final String TABLE_TASKS_GOALS_HEALTH_EXERCISE = "health_exercise";
@@ -59,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_TASKS_GOALS_OTHER = "other";
     private static final String TABLE_TASKS_GOALS_COMPLETED_COUNT = "completed_count";
     private static final String TABLE_TASKS_GOALS_FAILED_COUNT = "failed_count";
+    private static final String TABLE_TASKS_GOALS_NOTIFICATION_ID = "notification_id";
     private static final String TABLE_KEY_VALUES = "key_values";
     private static final String TABLE_KEY = "key";
     private static final String TABLE_VALUES = "value";
@@ -100,10 +102,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String USER_PROFILE_PICTURE = "profile_picture";
     public static final String USER_PASSCODE_SET = "passcode_set";
 
-    private int DbCurrentVersion = 2;
+    private static int DbCurrentVersion = 3;
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 3);
     }
 
     @Override
@@ -142,21 +144,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createTableKeyValues);
         db.execSQL(createTableTasksGoals);
         db.execSQL(createTableRewards);
-        onUpgrade(db, DbCurrentVersion - 1, DbCurrentVersion);
+        onUpgrade(db, 1, DbCurrentVersion);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch(oldVersion) {
-            case 0:
-                onCreate(db);
-            case 1:
-                String addCompletedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS +  " ADD COLUMN " + TABLE_TASKS_GOALS_COMPLETED_COUNT + " INTEGER DEFAULT 0;";
-                String addFailedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS +  " ADD COLUMN " + TABLE_TASKS_GOALS_FAILED_COUNT + " INTEGER DEFAULT 0;";
-                String addStartDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS +  " ADD COLUMN " + TABLE_TASKS_GOALS_START_DATE + " DATETIME;";
-                db.execSQL(addCompletedCountColumn);
-                db.execSQL(addFailedCountColumn);
-                db.execSQL(addStartDateColumn);
+        for (int i = oldVersion; i < newVersion; i++) {
+            switch (i) {
+                case 1:
+                    String addCompletedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_COMPLETED_COUNT + " INTEGER DEFAULT 0;";
+                    String addFailedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_FAILED_COUNT + " INTEGER DEFAULT 0;";
+                    String addStartDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_START_DATE + " DATETIME;";
+                    db.execSQL(addCompletedCountColumn);
+                    db.execSQL(addFailedCountColumn);
+                    db.execSQL(addStartDateColumn);
+                case 2:
+                    String addNotificationIdColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_ID + " INTEGER;";
+                    String addNotificationDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_DATE + " DATETIME;";
+                    db.execSQL(addNotificationIdColumn);
+                    db.execSQL(addNotificationDateColumn);
+            }
         }
     }
 
@@ -312,7 +319,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return tableTasksGoalsHeaders;
     }
 
-    public Long addData(String description, String category, String title, Integer silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate, String startDate, int completionCount, int failedCount) {
+    public Long addData(String description, String category, String title, Integer silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate, String startDate, String notificationDate, int completionCount, int failedCount, int notificationId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
@@ -330,6 +337,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_TASKS_GOALS_OTHER, improvementType.get(TABLE_TASKS_GOALS_OTHER));
         contentValues.put(TABLE_TASKS_GOALS_COMPLETED_COUNT, completionCount);
         contentValues.put(TABLE_TASKS_GOALS_FAILED_COUNT, failedCount);
+        contentValues.put(TABLE_TASKS_GOALS_NOTIFICATION_ID, notificationId);
+        contentValues.put(TABLE_TASKS_GOALS_NOTIFICATION_DATE, notificationDate);
 
         Log.d(TAG, "addData: Adding " + description + " to " + TABLE_TASKS_GOALS + " under category " + category);
         Long result = db.insert(TABLE_TASKS_GOALS, null, contentValues);
@@ -337,7 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public void updateTodo(Long id, String description, String category, String title, Integer silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate, String startDate) {
+    public void updateTodo(Long id, String description, String category, String title, Integer silver, Map<String, Boolean> improvementType, String deadlineDate, String creationDate, String startDate, String notificationDate, int notificationId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TABLE_TASKS_GOALS_TITLE, title);
@@ -353,6 +362,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TABLE_TASKS_GOALS_FAMILY_FRIENDS, improvementType.get(TABLE_TASKS_GOALS_FAMILY_FRIENDS));
         contentValues.put(TABLE_TASKS_GOALS_LEARNING, improvementType.get(TABLE_TASKS_GOALS_LEARNING));
         contentValues.put(TABLE_TASKS_GOALS_OTHER, improvementType.get(TABLE_TASKS_GOALS_OTHER));
+        contentValues.put(TABLE_TASKS_GOALS_NOTIFICATION_ID, notificationId);
+        contentValues.put(TABLE_TASKS_GOALS_NOTIFICATION_DATE, notificationDate);
         Log.d(TAG, "addData: Adding " + description + " to " + TABLE_TASKS_GOALS + " under category " + category);
         db.update(TABLE_TASKS_GOALS, contentValues, TABLE_ID + "= " + id, null);
         db.close();
@@ -442,6 +453,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
                     String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
                     String startDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_START_DATE));
+                    String notificationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_DATE));
 
                     Date creationDate = null;
                     if (creationDateString != null) {
@@ -478,6 +490,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         }
                     }
 
+                    Date notificationDate = null;
+                    if (notificationDateString != null) {
+                        try {
+                            notificationDate = formatter.parse(notificationDateString);
+                        } catch (ParseException e) {
+                            Log.e(getClass().getSimpleName(), "Could not parse notification date string");
+                        }
+                    }
                     goalsAndTasks = new GoalsAndTasks(
                             c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                             c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
@@ -489,9 +509,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             completionDate,
                             creationDate,
                             startDate,
+                            notificationDate,
                             c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0,
                             c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED_COUNT)),
-                            c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT))
+                            c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT)),
+                            c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_ID))
                     );
                 }
             }
@@ -527,6 +549,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
                         String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
                         String startDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_START_DATE));
+                        String notificationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_DATE));
 
                         Date deadlineDate = null;
                         if (deadlineDateString != null) {
@@ -564,6 +587,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             }
                         }
 
+                        Date notificationDate = null;
+                        if (notificationDateString != null) {
+                            try {
+                                notificationDate = formatter.parse(notificationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse notification date string");
+                            }
+                        }
+
                         GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
@@ -575,9 +607,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 completionDate,
                                 creationDate,
                                 startDate,
+                                notificationDate,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED_COUNT)),
-                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT))
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_ID))
                         );
                         expiredGoalsAndTasksArrayList.add(goalsAndTasks);
                     } while (c.moveToNext());
@@ -660,6 +694,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
                         String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
                         String startDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_START_DATE));
+                        String notificationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_DATE));
 
                         Date creationDate = null;
                         if (creationDateString != null) {
@@ -696,6 +731,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             }
                         }
 
+                        Date notificationDate = null;
+                        if (notificationDateString != null) {
+                            try {
+                                notificationDate = formatter.parse(notificationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse notification date string");
+                            }
+                        }
+
                         GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
@@ -707,9 +751,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 completionDate,
                                 creationDate,
                                 startDate,
+                                notificationDate,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED_COUNT)),
-                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT))
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_ID))
                         );
                         goalsAndTasksArrayList.add(goalsAndTasks);
                     } while (c.moveToNext());
@@ -745,6 +791,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         String completionDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETION_DATE));
                         String creationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_CREATION_DATE));
                         String startDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_START_DATE));
+                        String notificationDateString = c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_DATE));
 
                         Date creationDate = null;
                         if (creationDateString != null) {
@@ -782,6 +829,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             }
                         }
 
+                        Date notificationDate = null;
+                        if (notificationDateString != null) {
+                            try {
+                                notificationDate = formatter.parse(notificationDateString);
+                            } catch (ParseException e) {
+                                Log.e(getClass().getSimpleName(), "Could not parse notification date string");
+                            }
+                        }
+
+
                         GoalsAndTasks goalsAndTasks = new GoalsAndTasks(
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_TITLE)),
                                 c.getString(c.getColumnIndex(TABLE_TASKS_GOALS_DATA)),
@@ -793,9 +850,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 completionDate,
                                 creationDate,
                                 startDate,
+                                notificationDate,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED)) > 0,
                                 c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_COMPLETED_COUNT)),
-                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT))
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_FAILED_COUNT)),
+                                c.getInt(c.getColumnIndex(TABLE_TASKS_GOALS_NOTIFICATION_ID))
                         );
                         goalsAndTasksArrayList.add(goalsAndTasks);
                     } while (c.moveToNext());

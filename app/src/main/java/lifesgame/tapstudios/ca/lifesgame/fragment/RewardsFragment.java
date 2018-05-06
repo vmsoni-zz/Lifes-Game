@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
-import lifesgame.tapstudios.ca.lifesgame.DialogAddRewards;
+import lifesgame.tapstudios.ca.lifesgame.activity.DialogAddRewards;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.RewardsAdapter;
+import lifesgame.tapstudios.ca.lifesgame.adapter.RewardsAdapter;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 

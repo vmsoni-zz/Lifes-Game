@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.fragment;
 
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -29,7 +29,11 @@ import com.timqi.sectorprogressview.ColorfulRingProgressView;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
+import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.fragment.CompletedToDoFragment;
 import lifesgame.tapstudios.ca.lifesgame.fragment.ImprovementTypeFragment;
 import lifesgame.tapstudios.ca.lifesgame.fragment.SilverFragment;
@@ -43,16 +47,17 @@ import static lifesgame.tapstudios.ca.lifesgame.model.PomodoroTimerStates.STARTE
 import static lifesgame.tapstudios.ca.lifesgame.model.PomodoroTimerStates.STOPPED;
 
 public class PomodoroTimerFragment extends Fragment {
+    @BindView(R.id.horizontal_number_picker) NumberPicker numberPicker;
+    @BindView(R.id.btn_start_timer) FButton btnStartTimer;
+    @BindView(R.id.btn_stop_timer) FButton btnStopTimer;
+    @BindView(R.id.pomodoroTimerProgress) ColorfulRingProgressView pomodoroTimerProgess;
+    @BindView(R.id.minuteTv) TextView minuteTv;
+    @BindView(R.id.secondTv) TextView secondTv;
+
     private PrefUtils prefUtils;
     private View pomodoroView;
     private Tracker tracker;
-    private NumberPicker numberPicker;
-    private FButton btnStartTimer;
-    private FButton btnStopTimer;
     private int timerValue;
-    private ColorfulRingProgressView pomodoroTimerProgess;
-    private TextView minuteTv;
-    private TextView secondTv;
     private CountDownTimer countDownTimer;
     private float progressViewMax;
     private float remainingProgressViewMax;
@@ -70,12 +75,7 @@ public class PomodoroTimerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         pomodoroView = inflater.inflate(R.layout.activity_pomodoro_timer, container, false);
-        numberPicker = (NumberPicker) pomodoroView.findViewById(R.id.horizontal_number_picker);
-        btnStartTimer = (FButton) pomodoroView.findViewById(R.id.btn_start_timer);
-        btnStopTimer = (FButton) pomodoroView.findViewById(R.id.btn_stop_timer);
-        pomodoroTimerProgess = (ColorfulRingProgressView) pomodoroView.findViewById(R.id.pomodoroTimerProgress);
-        minuteTv = (TextView) pomodoroView.findViewById(R.id.minuteTv);
-        secondTv = (TextView) pomodoroView.findViewById(R.id.secondTv);
+        ButterKnife.bind(this, pomodoroView);
         pomodoroTimerState = STOPPED;
         btnStartTimer.setText("Start");
         progressViewMax = 0;

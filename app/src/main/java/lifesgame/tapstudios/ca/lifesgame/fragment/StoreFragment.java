@@ -1,7 +1,6 @@
 package lifesgame.tapstudios.ca.lifesgame.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import lifesgame.tapstudios.ca.lifesgame.PagerAdapter;
+import lifesgame.tapstudios.ca.lifesgame.adapter.PagerAdapter;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
-import lifesgame.tapstudios.ca.lifesgame.fragment.MarketplaceFragment;
-import lifesgame.tapstudios.ca.lifesgame.fragment.RewardsFragment;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 public class StoreFragment extends Fragment {

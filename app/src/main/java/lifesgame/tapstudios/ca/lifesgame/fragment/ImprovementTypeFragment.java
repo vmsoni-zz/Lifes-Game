@@ -1,12 +1,9 @@
 package lifesgame.tapstudios.ca.lifesgame.fragment;
 
-import android.animation.PropertyValuesHolder;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -14,14 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
 import com.db.chart.renderer.XRenderer;
 import com.db.chart.renderer.YRenderer;
-import com.db.chart.tooltip.Tooltip;
 import com.db.chart.util.Tools;
 import com.db.chart.view.BarChartView;
 import com.google.android.gms.analytics.HitBuilders;
@@ -32,7 +26,7 @@ import java.util.Calendar;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 

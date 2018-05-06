@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,15 +34,23 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
-import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
+import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.DatePicker;
+import lifesgame.tapstudios.ca.lifesgame.JobService;
+import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.model.NotificationDate;
+import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.utility.DateUtils;
 
 public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private static final String TABLE_TASKS_GOALS_HEALTH_EXERCISE = "health_exercise";
@@ -57,46 +65,49 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
     private SelectedDate mSelectedEndDate;
     private SelectedDate mSelectedStartDate;
-    private SeekBar silverSeekBar;
+    private SelectedDate mSelectedNotificationDateTime;
+    private NotificationDate notificationDate;
 
-    private EditText endDateEt;
-    private EditText startDateEt;
-    private EditText silverEditText;
-    private LinearLayout endDateLl;
-    private LinearLayout startDateLl;
-    private TextInputEditText userTaskGoalTitle;
-    private TextInputLayout userTaskGoalTitleLayout;
-    private TextInputLayout endDateLayout;
-    private TextInputLayout startDateLayout;
-    private TextInputEditText userTaskGoalDescription;
+    @BindView(R.id.silver_seek_bar) SeekBar silverSeekBar;
+    @BindView(R.id.endDateTv) EditText endDateEt;
+    @BindView(R.id.startDateTv) EditText startDateEt;
+    @BindView(R.id.notificationDateTimeTv) EditText notificationDateTimeEt;
+    @BindView(R.id.silver_amount_edit_text) EditText silverEditText;
+    @BindView(R.id.endDateHolder) LinearLayout endDateLl;
+    @BindView(R.id.startDateHolder) LinearLayout startDateLl;
+    @BindView(R.id.notificationDateTimeHolder) LinearLayout notificationDateTimeLl;
+    @BindView(R.id.textTitle) TextInputEditText userTaskGoalTitle;
+    @BindView(R.id.textTitleLayout) TextInputLayout userTaskGoalTitleLayout;
+    @BindView(R.id.endDateLayout) TextInputLayout endDateLayout;
+    @BindView(R.id.startDateLayout) TextInputLayout startDateLayout;
+    @BindView(R.id.notificationDateTimeLayout) TextInputLayout notificationDateTimeLayout;
+    @BindView(R.id.textDescription) TextInputEditText userTaskGoalDescription;
+    @BindView(R.id.todoTypeDescriptionTV) TextView todoTypeDescription;
+    @BindView(R.id.spinner1) Spinner improvementCategory;
+    @BindView(R.id.btn_user_accept_goal_task) FButton userAcceptTaskGoalBtn;
+    @BindView(R.id.healthExercise) CheckBox userHealthExercise;
+    @BindView(R.id.work) CheckBox userWork;
+    @BindView(R.id.school) CheckBox userSchool;
+    @BindView(R.id.familyFriends) CheckBox userFamilyFriends;
+    @BindView(R.id.learning) CheckBox userLearning;
+    @BindView(R.id.other) CheckBox userOther;
+
     private DatabaseHelper databaseHelper;
-    private TextView todoTypeDescription;
-    Spinner improvementCategory;
-    Long id;
+    private JobService jobService;
+    private Long id;
     private Tracker tracker;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_goals_and_tasks);
-        improvementCategory = (Spinner) findViewById(R.id.spinner1);
-        todoTypeDescription = (TextView) findViewById(R.id.todoTypeDescriptionTV);
-        endDateEt = (EditText) findViewById(R.id.endDateTv);
-        startDateEt = (EditText) findViewById(R.id.startDateTv);
-        silverEditText = (EditText) findViewById(R.id.silver_amount_edit_text);
-        endDateLl = (LinearLayout) findViewById(R.id.endDateHolder);
-        startDateLl = (LinearLayout) findViewById(R.id.startDateHolder);
-        userTaskGoalDescription = (TextInputEditText) findViewById(R.id.textDescription);
-        userTaskGoalTitle = (TextInputEditText) findViewById(R.id.textTitle);
-        userTaskGoalTitleLayout = (TextInputLayout) findViewById(R.id.textTitleLayout);
-        endDateLayout = (TextInputLayout) findViewById(R.id.endDateLayout);
-        startDateLayout = (TextInputLayout) findViewById(R.id.startDateLayout);
-        silverSeekBar = (SeekBar) findViewById(R.id.silver_seek_bar);
         databaseHelper = new DatabaseHelper(this);
+        jobService = new JobService(this);
+        ButterKnife.bind(this);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
         startDateEt.setInputType(InputType.TYPE_NULL);
+        notificationDateTimeEt.setInputType(InputType.TYPE_NULL);
         endDateLl.setVisibility(View.GONE);
         startDateLl.setVisibility(View.GONE);
 
@@ -104,11 +115,11 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, improvementCategories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         improvementCategory.setAdapter(spinnerAdapter);
-        addItem();
-        deleteItem();
+        setupAddItemButton();
+        setupDeleteItemButton();
         categoryTitleEditListener();
-        silverSeekBar();
-        goalSelection();
+        setupSilverSeekBarListener();
+        setupTodoSelectionListener();
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         tracker = application.getDefaultTracker();
@@ -118,10 +129,11 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         id = getIntent().getLongExtra("ID", -1L);
 
         mSelectedStartDate = new SelectedDate(Calendar.getInstance());
+        notificationDate = null;
         updateStartDateInfoView();
         silverEditTextListener();
         if (id != -1L) {
-            editTODO();
+            editTodo();
         }
     }
 
@@ -156,7 +168,24 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         }
     };
 
-    private void goalSelection() {
+    DatePicker.Callback mNotificationDateTimeFragmentCallback = new DatePicker.Callback() {
+        @Override
+        public void onCancelled() {
+        }
+
+        @Override
+        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+                                            int hourOfDay, int minute,
+                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+                                            String recurrenceRule) {
+            long milliseconds = (hourOfDay*60*60*1000) + (minute*60*1000);
+            notificationDate = new NotificationDate(hourOfDay, minute, milliseconds, selectedDate.getStartDate().getTime());
+            mSelectedNotificationDateTime = selectedDate;
+            updateNotificationDateInfoView();
+        }
+    };
+
+    private void setupTodoSelectionListener() {
         startDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +216,28 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
                 options.setDisplayOptions(SublimeOptions.ACTIVATE_DATE_PICKER);
                 options.setCanPickDateRange(false);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("SUBLIME_OPTIONS", options);
+                pickerFrag.setArguments(bundle);
+
+                pickerFrag.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                pickerFrag.show(getSupportFragmentManager(), "SUBLIME_PICKER");
+
+            }
+        });
+
+        //Onclick Listener for the end date text view
+        notificationDateTimeEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePicker pickerFrag = new DatePicker();
+                pickerFrag.setCallback(mNotificationDateTimeFragmentCallback);
+                SublimeOptions options = new SublimeOptions();
+                options.setPickerToShow(SublimeOptions.Picker.DATE_PICKER);
+                options.setDisplayOptions(SublimeOptions.ACTIVATE_DATE_PICKER | SublimeOptions.ACTIVATE_TIME_PICKER);
+                options.setCanPickDateRange(false);
+                options.setAnimateLayoutChanges(true);
 
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("SUBLIME_OPTIONS", options);
@@ -250,9 +301,13 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         }
     }
 
-    private void updateDateTV(Calendar cal) {
-        endDateEt.setText(applyBoldStyle("END: ")
-                .append(DateFormat.getDateInstance().format(cal.getTime())));
+    private void updateNotificationDateInfoView() {
+        if (mSelectedNotificationDateTime != null) {
+            if (mSelectedNotificationDateTime.getType() == SelectedDate.Type.SINGLE) {
+                notificationDateTimeEt.setText(applyBoldStyle("Notification: ")
+                        .append(DateFormat.getDateInstance().format(mSelectedNotificationDateTime.getEndDate().getTime())));
+            }
+        }
     }
 
     private void silverEditTextListener() {
@@ -286,7 +341,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         return ss;
     }
 
-    private void silverSeekBar() {
+    private void setupSilverSeekBarListener() {
         silverSeekBar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     int progressValue;
@@ -311,8 +366,18 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         );
     }
 
-    private void addItem() {
-        FButton userAcceptTaskGoalBtn = (FButton) findViewById(R.id.btn_user_accept_goal_task);
+    private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
+        int notificationId;
+        if (todoType.equals("Daily")) {
+            notificationId = jobService.setFutureNotificationDailies(notificationDate, userTaskGoalTitle.getText().toString());
+        }
+        else {
+            notificationId = jobService.setFutureNotification(notificationDate, userTaskGoalTitle.getText().toString());
+        }
+        return notificationId;
+    }
+
+    private void setupAddItemButton() {
         userAcceptTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_emerald));
         userAcceptTaskGoalBtn.setShadowColor(getResources().getColor(R.color.fbutton_color_green_sea));
         userAcceptTaskGoalBtn.setShadowEnabled(true);
@@ -321,94 +386,40 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         userAcceptTaskGoalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
-                final CheckBox userHealthExercise = (CheckBox) findViewById(R.id.healthExercise);
-                final CheckBox userWork = (CheckBox) findViewById(R.id.work);
-                final CheckBox userSchool = (CheckBox) findViewById(R.id.school);
-                final CheckBox userFamilyFriends = (CheckBox) findViewById(R.id.familyFriends);
-                final CheckBox userLearning = (CheckBox) findViewById(R.id.learning);
-                final CheckBox userOther = (CheckBox) findViewById(R.id.other);
-
-                HashMap<String, Boolean> improvementType = new HashMap<String, Boolean>();
-                improvementType.put("health_exercise", userHealthExercise.isChecked());
-                improvementType.put("work", userWork.isChecked());
-                improvementType.put("school", userSchool.isChecked());
-                improvementType.put("family_friends", userFamilyFriends.isChecked());
-                improvementType.put("learning", userLearning.isChecked());
-                improvementType.put("other", userOther.isChecked());
-
+                //Checking user input data
                 if (userTaskGoalTitle.getText().toString().isEmpty()) {
                     userTaskGoalTitleLayout.setError("Title must not be blank!");
+                    return;
+                }
+                if (notificationDate != null && (notificationDate.getNotificationDate().getTime() + notificationDate.getMilliseconds()) < (new Date()).getTime()) {
+                    notificationDateTimeLayout.setError("Notification date/time cannot be before current date/time");
+                    return;
                 }
 
-                if (!userTaskGoalTitle.getText().toString().isEmpty()) {
-                    Intent intent = new Intent(DialogAddGoalsAndTasks.this, MainActivity.class);
-                    String deadlineDate = null;
-                    String startDate = null;
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date date = new Date();
-                    if (improvementCategory.getSelectedItem().toString().equals("Goal")) {
-                        if (mSelectedEndDate == null) {
-                            endDateLayout.setError("Select a Deadline Date");
-                            return;
-                        } else if ((mSelectedEndDate.getEndDate().compareTo(Calendar.getInstance())) < 0) {
-                            endDateLayout.setError("Deadline cannot be before or equal to current date");
-                            return;
-                        }
-                        Calendar calendarDeadline = mSelectedEndDate.getEndDate();
-                        deadlineDate = formatter.format(calendarDeadline.getTime());
-                    }
-                    if (improvementCategory.getSelectedItem().toString().equals("Task")) {
-                        if (mSelectedStartDate == null) {
-                            endDateLayout.setError("Select a Start Date");
-                            return;
-                        } else if (getZeroTimeDate(mSelectedStartDate.getEndDate().getTime()).compareTo(getZeroTimeDate(Calendar.getInstance().getTime())) < 0) {
-                            endDateLayout.setError("Start date cannot be before current date");
-                            return;
-                        }
-                        Calendar calendarStartDate = mSelectedStartDate.getEndDate();
-                        startDate = formatter.format(calendarStartDate.getTime());
-                    }
-                    if (id != -1L) {
-                        databaseHelper.updateTodo(id,
-                                userTaskGoalDescription.getText().toString(),
-                                improvementCategory.getSelectedItem().toString(),
-                                userTaskGoalTitle.getText().toString(),
-                                silverAmount,
-                                improvementType,
-                                deadlineDate,
-                                formatter.format(date),
-                                startDate);
-
-                        tracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("ToDo-Update")
-                                .setAction(userTaskGoalTitle.getText().toString())
-                                .setLabel(userTaskGoalDescription.getText().toString())
-                                .build());
-                    } else {
-                        databaseHelper.addData(userTaskGoalDescription.getText().toString(),
-                                improvementCategory.getSelectedItem().toString(),
-                                userTaskGoalTitle.getText().toString(),
-                                Integer.valueOf(silverAmount),
-                                improvementType,
-                                deadlineDate,
-                                formatter.format(date),
-                                startDate,
-                                0,
-                                0);
-                        tracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("ToDo-Addition")
-                                .setAction(userTaskGoalTitle.getText().toString())
-                                .setLabel(userTaskGoalDescription.getText().toString())
-                                .build());
-                    }
-                    startActivity(intent);
+                //Initialize variables
+                String deadlineDateString = null;
+                String startDateString = null;
+                String notificationDateString = null;
+                String creationDateString = DateUtils.getDateString(new Date());
+                TodoType todoType = TodoType.valueOf(improvementCategory.getSelectedItem().toString().toUpperCase());
+                int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
+                final Map<String, Boolean> improvementTypeMap = getImprovementTypeMap();
+                Integer notificationId = null;
+                if (notificationDate != null) {
+                    Calendar calendarNotificationDateTime = mSelectedNotificationDateTime.getEndDate();
+                    notificationDateString = DateUtils.getDateString(calendarNotificationDateTime.getTime());
+                    notificationId = setupFutureNotificiation(improvementCategory.getSelectedItem().toString(), notificationDate);
                 }
+                boolean shouldSave = (id != -1);
+
+                saveOrEditTodo(todoType, shouldSave, silverAmount, improvementTypeMap, deadlineDateString, startDateString, creationDateString, notificationDateString, notificationId);
+                Intent intent = new Intent(DialogAddGoalsAndTasks.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    private void deleteItem() {
+    private void setupDeleteItemButton() {
         FButton userCancelTaskGoalBtn = (FButton) findViewById(R.id.btn_user_cancel_goal_task);
         userCancelTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_alizarin));
         userCancelTaskGoalBtn.setShadowColor(getResources().getColor(R.color.fbutton_color_pomegranate));
@@ -452,7 +463,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         });
     }
 
-    public void editTODO() {
+    public void editTodo() {
         GoalsAndTasks goalsAndTasks = databaseHelper.getTodo(id);
         userTaskGoalTitle.setText(goalsAndTasks.getTitle());
         userTaskGoalDescription.setText(goalsAndTasks.getDescription());
@@ -472,18 +483,125 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             updateStartDateInfoView();
         }
 
+        if(goalsAndTasks.getNotificationDate() != null) {
+            Calendar notificationDate = Calendar.getInstance();
+            notificationDate.setTime(goalsAndTasks.getNotificationDate());
+            mSelectedNotificationDateTime = new SelectedDate(notificationDate);
+            updateNotificationDateInfoView();
+        }
         ((SeekBar) findViewById(R.id.silver_seek_bar)).setProgress(goalsAndTasks.getSilver());
     }
 
-    private Date getZeroTimeDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        date = calendar.getTime();
-        return date;
+    private void saveOrEditTodo(TodoType todoType, boolean shouldSave, int silverAmount, Map<String, Boolean> improvementTypeMap, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        switch (todoType) {
+            case DAILY:
+                saveOrEditDaily(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                break;
+            case TASK:
+                saveOrEditTask(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                break;
+            case GOAL:
+                saveOrEditGoal(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void saveOrEditGoal(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        if (mSelectedEndDate == null) {
+            endDateLayout.setError("Select a Deadline Date");
+            return;
+        } else if ((mSelectedEndDate.getEndDate().compareTo(Calendar.getInstance())) < 0) {
+            endDateLayout.setError("Deadline cannot be before or equal to current date");
+            return;
+        }
+        Calendar calendarDeadline = mSelectedEndDate.getEndDate();
+        deadlineDate = DateUtils.getDateString(calendarDeadline.getTime());
+        if (shouldSave) {
+            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        } else {
+            updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        }
+    }
+
+    private void saveOrEditTask(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        if (mSelectedStartDate == null) {
+            endDateLayout.setError("Select a Start Date");
+            return;
+        } else if (DateUtils.getZeroTimeDate(mSelectedStartDate.getEndDate().getTime()).compareTo(DateUtils.getZeroTimeDate(Calendar.getInstance().getTime())) < 0) {
+            endDateLayout.setError("Start date cannot be before current date");
+            return;
+        }
+        Calendar calendarStartDate = mSelectedStartDate.getEndDate();
+        startDate = DateUtils.getDateString(calendarStartDate.getTime());
+
+        if (shouldSave) {
+            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        } else {
+            updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        }
+    }
+
+    private void saveOrEditDaily(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        if (shouldSave) {
+            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        }
+        else {
+            updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+        }
+    }
+
+    private void saveTodo(int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        databaseHelper.updateTodo(id,
+                userTaskGoalDescription.getText().toString(),
+                improvementCategory.getSelectedItem().toString(),
+                userTaskGoalTitle.getText().toString(),
+                silverAmount,
+                improvementType,
+                deadlineDate,
+                creationDate,
+                startDate,
+                notificationDateString,
+                notificationId);
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ToDo-Update")
+                .setAction(userTaskGoalTitle.getText().toString())
+                .setLabel(userTaskGoalDescription.getText().toString())
+                .build());
+    }
+
+    private void updateTodo(int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+        databaseHelper.addData(userTaskGoalDescription.getText().toString(),
+                improvementCategory.getSelectedItem().toString(),
+                userTaskGoalTitle.getText().toString(),
+                silverAmount,
+                improvementType,
+                deadlineDate,
+                creationDate,
+                startDate,
+                notificationDateString,
+                0,
+                0,
+                notificationId);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ToDo-Addition")
+                .setAction(userTaskGoalTitle.getText().toString())
+                .setLabel(userTaskGoalDescription.getText().toString())
+                .build());
+    }
+
+    private Map<String, Boolean> getImprovementTypeMap() {
+        final Map<String, Boolean> improvementTypeMap = new HashMap<String, Boolean>();
+        improvementTypeMap.put("health_exercise", userHealthExercise.isChecked());
+        improvementTypeMap.put("work", userWork.isChecked());
+        improvementTypeMap.put("school", userSchool.isChecked());
+        improvementTypeMap.put("family_friends", userFamilyFriends.isChecked());
+        improvementTypeMap.put("learning", userLearning.isChecked());
+        improvementTypeMap.put("other", userOther.isChecked());
+
+        return improvementTypeMap;
     }
 }
 

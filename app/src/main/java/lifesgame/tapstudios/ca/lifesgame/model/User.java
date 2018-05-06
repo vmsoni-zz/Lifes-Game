@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.model;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 

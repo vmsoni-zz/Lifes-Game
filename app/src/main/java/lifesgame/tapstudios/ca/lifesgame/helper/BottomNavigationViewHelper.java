@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.helper;
 
 import android.annotation.SuppressLint;
 import android.support.design.internal.BottomNavigationItemView;

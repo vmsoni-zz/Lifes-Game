@@ -12,12 +12,9 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
-import lifesgame.tapstudios.ca.lifesgame.PagerAdapter;
+import lifesgame.tapstudios.ca.lifesgame.adapter.PagerAdapter;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
-import lifesgame.tapstudios.ca.lifesgame.fragment.CompletedToDoFragment;
-import lifesgame.tapstudios.ca.lifesgame.fragment.ImprovementTypeFragment;
-import lifesgame.tapstudios.ca.lifesgame.fragment.SilverFragment;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 

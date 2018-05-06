@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.model;
 
 /**
  * Created by viditsoni on 2017-12-29.

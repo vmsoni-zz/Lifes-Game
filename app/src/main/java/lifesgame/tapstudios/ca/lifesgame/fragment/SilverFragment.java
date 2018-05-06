@@ -31,7 +31,7 @@ import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.R;
-import lifesgame.tapstudios.ca.lifesgame.StatisticFilters;
+import lifesgame.tapstudios.ca.lifesgame.model.StatisticFilters;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 /**

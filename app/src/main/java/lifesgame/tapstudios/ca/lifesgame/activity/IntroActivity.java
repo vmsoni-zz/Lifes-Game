@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 
-import lifesgame.tapstudios.ca.lifesgame.ProfilePicker;
 import lifesgame.tapstudios.ca.lifesgame.fragment.introFragment.IntroFragment1;
 import lifesgame.tapstudios.ca.lifesgame.fragment.introFragment.IntroFragment2;
 import lifesgame.tapstudios.ca.lifesgame.fragment.introFragment.IntroFragment3;

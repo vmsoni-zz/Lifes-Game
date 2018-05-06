@@ -1,15 +1,19 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.holder;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import lifesgame.tapstudios.ca.lifesgame.R;
+import lifesgame.tapstudios.ca.lifesgame.activity.DialogAddRewards;
+import lifesgame.tapstudios.ca.lifesgame.adapter.RewardsAdapter;
 import lifesgame.tapstudios.ca.lifesgame.helper.PurchaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 
@@ -18,17 +22,17 @@ import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
  */
 
 public class RewardsHolder extends RecyclerView.ViewHolder {
-    private final ImageButton editBtn;
-    private final ImageButton deleteBtn;
+    @BindView(R.id.editButton) ImageButton editBtn;
+    @BindView(R.id.deleteButton) ImageButton deleteBtn;
+    @BindView(R.id.reward_title) TextView title;
+    @BindView(R.id.reward_description) TextView description;
+    @BindView(R.id.reward_cost) TextView cost;
+    @BindView(R.id.purchase_reward) LinearLayout lLPurchaseReward;
+    @BindView(R.id.infinity_Ll) LinearLayout infinityLl;
+
     private Context context;
     private RewardsAdapter rewardsAdapter;
     private PurchaseHelper purchaseHelper;
-
-    private TextView title;
-    private TextView description;
-    private TextView cost;
-    private LinearLayout lLPurchaseReward;
-    private LinearLayout infinityLl;
 
     public RewardsHolder(Context context,
                          View itemView,
@@ -37,13 +41,7 @@ public class RewardsHolder extends RecyclerView.ViewHolder {
         this.purchaseHelper = new PurchaseHelper(context);
         this.context = context;
         this.rewardsAdapter = rewardsAdapter;
-        this.title = itemView.findViewById(R.id.reward_title);
-        this.description = itemView.findViewById(R.id.reward_description);
-        this.cost = itemView.findViewById(R.id.reward_cost);
-        this.lLPurchaseReward = itemView.findViewById(R.id.purchase_reward);
-        this.editBtn = (ImageButton) itemView.findViewById(R.id.editButton);
-        this.deleteBtn = (ImageButton) itemView.findViewById(R.id.deleteButton);
-        this.infinityLl = (LinearLayout) itemView.findViewById(R.id.infinity_Ll);
+        ButterKnife.bind(this,  itemView);
     }
 
     public void bindRewards(Rewards rewards, int position) {

@@ -1,6 +1,5 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,18 +7,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,47 +20,42 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInviteInvitation;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import lifesgame.tapstudios.ca.lifesgame.activity.LoginActivity;
-import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
+import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
+import lifesgame.tapstudios.ca.lifesgame.adapter.CustomGridAdapter;
+import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 public class ProfilePicker extends AppCompatActivity {
+    @BindView(R.id.choose_custom_profile_picture) ImageButton chooseCustomProfilePictureButton;
+    @BindView(R.id.save_profile_picture) ImageButton saveProfilePictureButton;
+    @BindView(R.id.invite) ImageButton inviteButton;
+    @BindView(R.id.crop) ImageButton cropButton;
+    @BindView(R.id.username) TextView username;
+    @BindView(R.id.chosen_profile_picture) ImageView chosenProfilePic;
+    @BindView(R.id.signout_ll) LinearLayout signOutLl;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_INVITE = 0;
-    private ImageButton chooseCustomProfilePictureButton;
-    private ImageButton saveProfilePictureButton;
-    private ImageButton inviteButton;
-    private ImageButton cropButton;
-    private TextView username;
     private DatabaseHelper databaseHelper;
-    private ImageView chosenProfilePic;
     private Bitmap profilePicture;
     private Tracker tracker;
     Uri profilePictureUri;
     private ProgressDialog dialog;
-    private LinearLayout signOutLl;
     private int selectedCustomImage;
     private static final Integer[] customImageResources = { R.drawable.chicken,
             R.drawable.cheetah, R.drawable.elephant,
@@ -79,16 +67,10 @@ public class ProfilePicker extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_picker);
-        databaseHelper = new DatabaseHelper(getApplicationContext());
-        chooseCustomProfilePictureButton = (ImageButton) findViewById(R.id.choose_custom_profile_picture);
-        saveProfilePictureButton = (ImageButton) findViewById(R.id.save_profile_picture);
-        inviteButton = (ImageButton) findViewById(R.id.invite);
-        cropButton = (ImageButton) findViewById(R.id.crop);
-        chosenProfilePic = (ImageView) findViewById(R.id.chosen_profile_picture);
-        profilePicture = null;
-        username = (TextView) findViewById(R.id.username);
-        signOutLl = (LinearLayout) findViewById(R.id.signout_ll);
+        ButterKnife.bind(this);
 
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        profilePicture = null;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         dialog = new ProgressDialog(this);
         if (user != null) {
@@ -356,12 +338,4 @@ public class ProfilePicker extends AppCompatActivity {
             }
         });
     }
-
-    // @Override
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    // // Inflate the menu; this adds items to the action bar if it is present.
-    // getMenuInflater().inflate(R.menu.grid, menu);
-    // return true;
-    // }
-    // Here is your custom Adapter
 }

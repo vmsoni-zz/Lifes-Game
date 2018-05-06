@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    tools:context="lifesgame.tapstudios.ca.lifesgame.ProfilePicker">
+    tools:context="lifesgame.tapstudios.ca.lifesgame.activity.ProfilePicker">
 
     <LinearLayout
         android:id="@+id/profile_view_ll"

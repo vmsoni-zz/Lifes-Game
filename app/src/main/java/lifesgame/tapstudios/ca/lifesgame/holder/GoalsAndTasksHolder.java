@@ -1,4 +1,4 @@
-package lifesgame.tapstudios.ca.lifesgame;
+package lifesgame.tapstudios.ca.lifesgame.holder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,34 +20,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import lifesgame.tapstudios.ca.lifesgame.R;
+import lifesgame.tapstudios.ca.lifesgame.adapter.GoalsAndTasksAdapter;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
 
 /**
  * Created by viditsoni on 2017-11-04.
  */
 
 public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private final ImageButton editBtn;
-    private final ImageButton deleteBtn;
-    private final ImageButton completedBtn;
-    private final ImageButton failedBtn;
-    private final TextView goalsAndTasksTitle;
-    private final TextView goalsAndTasksDescription;
-    private final TextView goalsAndTasksRemainingTime;
-    private final TextView todoStartDatetv;
-    private final TextView goalsAndTasksTodoType;
-    private final TextView silverReward;
-    private final TextView completedCountTV;
-    private final TextView failedCountTV;
-    private final View buttonDividerCompleted;
-    private final View buttonDividerFailed;
-    private final LinearLayout goalsAndTasksRemainingTimeLL;
-    private final LinearLayout todoStartDateLl;
-    private final LinearLayout dailyCountLl;
-    private final LinearLayout dynamicLl;
-    private final LinearLayout dailySkipDayLl;
+    @BindView(R.id.editButton) ImageButton editBtn;
+    @BindView(R.id.deleteButton) ImageButton deleteBtn;
+    @BindView(R.id.completedButton) ImageButton completedBtn;
+    @BindView(R.id.failedButton) ImageButton failedBtn;
+    @BindView(R.id.goal_task_title) TextView goalsAndTasksTitle;
+    @BindView(R.id.goal_task_description) TextView goalsAndTasksDescription;
+    @BindView(R.id.goal_task_remaining_time) TextView goalsAndTasksRemainingTime;
+    @BindView(R.id.goal_task_start_date_tv) TextView todoStartDatetv;
+    @BindView(R.id.todo_type) TextView goalsAndTasksTodoType;
+    @BindView(R.id.silver_reward) TextView silverReward;
+    @BindView(R.id.daily_completed_count_tv) TextView completedCountTV;
+    @BindView(R.id.daily_failed_count_tv) TextView failedCountTV;
+    @BindView(R.id.button_divider_completed) View buttonDividerCompleted;
+    @BindView(R.id.button_divider_failed) View buttonDividerFailed;
+    @BindView(R.id.goal_task_remaining_time_ll) LinearLayout goalsAndTasksRemainingTimeLL;
+    @BindView(R.id.goal_task_start_date_ll) LinearLayout todoStartDateLl;
+    @BindView(R.id.daily_count_ll) LinearLayout dailyCountLl;
+    @BindView(R.id.dynamic_ll) LinearLayout dynamicLl;
+    @BindView(R.id.daily_skip_day_Ll) LinearLayout dailySkipDayLl;
+
     private GoalsAndTasks goalsAndTasks;
     private Context context;
     private GoalsAndTasksHelper goalsAndTasksHelper;
@@ -73,26 +79,8 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         this.goalsAndTasksHelper = goalsAndTasksHelper;
         this.goalsAndTasksAdapter = goalsAndTasksAdapter;
         this.gameMechanicsHelper = gameMechanicsHelper;
+        ButterKnife.bind(this, itemView);
 
-        editBtn = (ImageButton) itemView.findViewById(R.id.editButton);
-        deleteBtn = (ImageButton) itemView.findViewById(R.id.deleteButton);
-        completedBtn = (ImageButton) itemView.findViewById(R.id.completedButton);
-        failedBtn = (ImageButton) itemView.findViewById(R.id.failedButton);
-        goalsAndTasksTitle = (TextView) itemView.findViewById(R.id.goal_task_title);
-        goalsAndTasksDescription = (TextView) itemView.findViewById(R.id.goal_task_description);
-        goalsAndTasksRemainingTime = (TextView) itemView.findViewById(R.id.goal_task_remaining_time);
-        todoStartDatetv = (TextView) itemView.findViewById(R.id.goal_task_start_date_tv);
-        goalsAndTasksTodoType = (TextView) itemView.findViewById(R.id.todo_type);
-        silverReward = (TextView) itemView.findViewById(R.id.silver_reward);
-        completedCountTV = (TextView) itemView.findViewById(R.id.daily_completed_count_tv);
-        failedCountTV = (TextView) itemView.findViewById(R.id.daily_failed_count_tv);
-        goalsAndTasksRemainingTimeLL = (LinearLayout) itemView.findViewById(R.id.goal_task_remaining_time_ll);
-        todoStartDateLl = (LinearLayout) itemView.findViewById(R.id.goal_task_start_date_ll);
-        dailyCountLl = (LinearLayout) itemView.findViewById(R.id.daily_count_ll);
-        dynamicLl = (LinearLayout) itemView.findViewById(R.id.dynamic_ll);
-        dailySkipDayLl = (LinearLayout) itemView.findViewById(R.id.daily_skip_day_Ll);
-        buttonDividerCompleted = (View) itemView.findViewById(R.id.button_divider_completed);
-        buttonDividerFailed = (View) itemView.findViewById(R.id.button_divider_failed);
         improvementTypeImageViews = new HashMap<>();
         itemView.setOnClickListener(this);
         initializeImprovementTypeImageViews();
@@ -118,40 +106,19 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         goalsAndTasksTodoType.setText(goalsAndTasks.getCategory().getTodoTypeString());
         silverReward.setText(String.valueOf(goalsAndTasks.getSilver()));
         setupTodoTypeColor(goalsAndTasks);
-        if (goalsAndTasks.getCategory() == TodoType.GOAL) {
-            goalsAndTasksRemainingTimeLL.setVisibility(View.VISIBLE);
-            dailySkipDayLl.setVisibility(View.GONE);
-            dailyCountLl.setVisibility(View.GONE);
-            todoStartDateLl.setVisibility(View.GONE);
-            goalsAndTasksRemainingTime.setText(goalsAndTasks.getDeadlineDateString());
-        }
-        else if(goalsAndTasks.getCategory() == TodoType.DAILY) {
-            dailyCountLl.setVisibility(View.VISIBLE);
-            dailySkipDayLl.setVisibility(View.VISIBLE);
-            completedCountTV.setText(String.valueOf(goalsAndTasks.getCompletedCount()));
-            failedCountTV.setText(String.valueOf(goalsAndTasks.getFailedCount()));
-        }
-        else {
-            dailyCountLl.setVisibility(View.GONE);
-            goalsAndTasksRemainingTimeLL.setVisibility(View.GONE);
-            dailySkipDayLl.setVisibility(View.GONE);
-            todoStartDateLl.setVisibility(View.VISIBLE);
-            setupStartDate();
-        }
-        if (goalsAndTasks.getCategory() == TodoType.DAILY) {
-            Date todayDate = new Date();
-            Date completionDate = goalsAndTasks.getCompletionDate();
-            if (completionDate != null) {
-                int dateComparison = getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(completionDate));
-                if (dateComparison > 0) {
-                    goalsAndTasksAdapter.removeDaily(position, goalsAndTasks.getCompleted(), true);
-                    goalsAndTasks.setCompleted(false);
-                    goalsAndTasks.setId(goalsAndTasksAdapter.addDailyForNewDay(position));
-                }
-                if (dateComparison == 0) {
-                    disableDailyButtonValuesAndUpdateCounts(goalsAndTasks.getCompletedCount(), goalsAndTasks.getFailedCount());
-                }
-            }
+
+        switch (goalsAndTasks.getCategory()) {
+            case TASK:
+                bindTask();
+                break;
+            case GOAL:
+                bindGoal();
+                break;
+            case DAILY:
+                bindDaily(position);
+                break;
+            default:
+                break;
         }
         initializeImprovementTypeImages(goalsAndTasks);
         initializeOnClickListeners(position);
@@ -406,5 +373,43 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                     }
                 });
         snackbar.show();
+    }
+
+    private void bindTask() {
+        dailyCountLl.setVisibility(View.GONE);
+        goalsAndTasksRemainingTimeLL.setVisibility(View.GONE);
+        dailySkipDayLl.setVisibility(View.GONE);
+        todoStartDateLl.setVisibility(View.VISIBLE);
+        setupStartDate();
+    }
+
+    private void bindGoal() {
+        goalsAndTasksRemainingTimeLL.setVisibility(View.VISIBLE);
+        dailySkipDayLl.setVisibility(View.GONE);
+        dailyCountLl.setVisibility(View.GONE);
+        todoStartDateLl.setVisibility(View.GONE);
+        goalsAndTasksRemainingTime.setText(goalsAndTasks.getDeadlineDateString());
+    }
+
+    private void bindDaily(int position) {
+        dailyCountLl.setVisibility(View.VISIBLE);
+        dailySkipDayLl.setVisibility(View.VISIBLE);
+        todoStartDateLl.setVisibility(View.GONE);
+        completedCountTV.setText(String.valueOf(goalsAndTasks.getCompletedCount()));
+        failedCountTV.setText(String.valueOf(goalsAndTasks.getFailedCount()));
+
+        Date todayDate = new Date();
+        Date completionDate = goalsAndTasks.getCompletionDate();
+        if (completionDate != null) {
+            int dateComparison = getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(completionDate));
+            if (dateComparison > 0) {
+                goalsAndTasksAdapter.removeDaily(position, goalsAndTasks.getCompleted(), true);
+                goalsAndTasks.setCompleted(false);
+                goalsAndTasks.setId(goalsAndTasksAdapter.addDailyForNewDay(position));
+            }
+            if (dateComparison == 0) {
+                disableDailyButtonValuesAndUpdateCounts(goalsAndTasks.getCompletedCount(), goalsAndTasks.getFailedCount());
+            }
+        }
     }
 }
