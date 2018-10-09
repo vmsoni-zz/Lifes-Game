@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout skipSignIn;
     private LinearLayout forgotPassword;
     private FirebaseAuth mAuth;
-
     private Button signup;
     private Button loginEmailPassword;
 

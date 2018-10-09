@@ -1,8 +1,12 @@
 package lifesgame.tapstudios.ca.lifesgame.activity;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -50,6 +54,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.model.NotificationDate;
 import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.service.NotificationService;
 import lifesgame.tapstudios.ca.lifesgame.utility.DateUtils;
 
 public class DialogAddGoalsAndTasks extends AppCompatActivity {
@@ -68,29 +73,52 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private SelectedDate mSelectedNotificationDateTime;
     private NotificationDate notificationDate;
 
-    @BindView(R.id.silver_seek_bar) SeekBar silverSeekBar;
-    @BindView(R.id.endDateTv) EditText endDateEt;
-    @BindView(R.id.startDateTv) EditText startDateEt;
-    @BindView(R.id.notificationDateTimeTv) EditText notificationDateTimeEt;
-    @BindView(R.id.silver_amount_edit_text) EditText silverEditText;
-    @BindView(R.id.endDateHolder) LinearLayout endDateLl;
-    @BindView(R.id.startDateHolder) LinearLayout startDateLl;
-    @BindView(R.id.notificationDateTimeHolder) LinearLayout notificationDateTimeLl;
-    @BindView(R.id.textTitle) TextInputEditText userTaskGoalTitle;
-    @BindView(R.id.textTitleLayout) TextInputLayout userTaskGoalTitleLayout;
-    @BindView(R.id.endDateLayout) TextInputLayout endDateLayout;
-    @BindView(R.id.startDateLayout) TextInputLayout startDateLayout;
-    @BindView(R.id.notificationDateTimeLayout) TextInputLayout notificationDateTimeLayout;
-    @BindView(R.id.textDescription) TextInputEditText userTaskGoalDescription;
-    @BindView(R.id.todoTypeDescriptionTV) TextView todoTypeDescription;
-    @BindView(R.id.spinner1) Spinner improvementCategory;
-    @BindView(R.id.btn_user_accept_goal_task) FButton userAcceptTaskGoalBtn;
-    @BindView(R.id.healthExercise) CheckBox userHealthExercise;
-    @BindView(R.id.work) CheckBox userWork;
-    @BindView(R.id.school) CheckBox userSchool;
-    @BindView(R.id.familyFriends) CheckBox userFamilyFriends;
-    @BindView(R.id.learning) CheckBox userLearning;
-    @BindView(R.id.other) CheckBox userOther;
+    @BindView(R.id.silver_seek_bar)
+    SeekBar silverSeekBar;
+    @BindView(R.id.endDateTv)
+    EditText endDateEt;
+    @BindView(R.id.startDateTv)
+    EditText startDateEt;
+    @BindView(R.id.notificationDateTimeTv)
+    EditText notificationDateTimeEt;
+    @BindView(R.id.silver_amount_edit_text)
+    EditText silverEditText;
+    @BindView(R.id.endDateHolder)
+    LinearLayout endDateLl;
+    @BindView(R.id.startDateHolder)
+    LinearLayout startDateLl;
+    @BindView(R.id.notificationDateTimeHolder)
+    LinearLayout notificationDateTimeLl;
+    @BindView(R.id.textTitle)
+    TextInputEditText userTaskGoalTitle;
+    @BindView(R.id.textTitleLayout)
+    TextInputLayout userTaskGoalTitleLayout;
+    @BindView(R.id.endDateLayout)
+    TextInputLayout endDateLayout;
+    @BindView(R.id.startDateLayout)
+    TextInputLayout startDateLayout;
+    @BindView(R.id.notificationDateTimeLayout)
+    TextInputLayout notificationDateTimeLayout;
+    @BindView(R.id.textDescription)
+    TextInputEditText userTaskGoalDescription;
+    @BindView(R.id.todoTypeDescriptionTV)
+    TextView todoTypeDescription;
+    @BindView(R.id.spinner1)
+    Spinner improvementCategory;
+    @BindView(R.id.btn_user_accept_goal_task)
+    FButton userAcceptTaskGoalBtn;
+    @BindView(R.id.healthExercise)
+    CheckBox userHealthExercise;
+    @BindView(R.id.work)
+    CheckBox userWork;
+    @BindView(R.id.school)
+    CheckBox userSchool;
+    @BindView(R.id.familyFriends)
+    CheckBox userFamilyFriends;
+    @BindView(R.id.learning)
+    CheckBox userLearning;
+    @BindView(R.id.other)
+    CheckBox userOther;
 
     private DatabaseHelper databaseHelper;
     private JobService jobService;
@@ -178,7 +206,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                                             int hourOfDay, int minute,
                                             SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
                                             String recurrenceRule) {
-            long milliseconds = (hourOfDay*60*60*1000) + (minute*60*1000);
+            long milliseconds = (hourOfDay * 60 * 60 * 1000) + (minute * 60 * 1000);
             notificationDate = new NotificationDate(hourOfDay, minute, milliseconds, selectedDate.getStartDate().getTime());
             mSelectedNotificationDateTime = selectedDate;
             updateNotificationDateInfoView();
@@ -313,7 +341,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private void silverEditTextListener() {
         silverEditText.addTextChangedListener(new TextWatcher() {
 
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -321,12 +350,11 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                if(count > 0 && Integer.valueOf(s.toString()) > 100) {
+                if (count > 0 && Integer.valueOf(s.toString()) > 100) {
                     silverEditText.setText("100");
                     silverEditText.setSelection(silverEditText.getText().length());
                     silverSeekBar.setProgress(100);
-                }
-                else if (count > 0) {
+                } else if (count > 0) {
                     silverSeekBar.setProgress(Integer.valueOf(s.toString()));
                     silverEditText.setSelection(silverEditText.getText().length());
                 }
@@ -366,13 +394,24 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         );
     }
 
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationService.class);
+        notificationIntent.putExtra(NotificationService.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationService.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
     private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
         int notificationId;
         if (todoType.equals("Daily")) {
-            notificationId = jobService.setFutureNotificationDailies(notificationDate, userTaskGoalTitle.getText().toString());
-        }
-        else {
-            notificationId = jobService.setFutureNotification(notificationDate, userTaskGoalTitle.getText().toString());
+            notificationId = jobService.setFutureNotificationDailies(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
+        } else {
+            notificationId = jobService.setFutureNotification(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
         }
         return notificationId;
     }
@@ -404,7 +443,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 TodoType todoType = TodoType.valueOf(improvementCategory.getSelectedItem().toString().toUpperCase());
                 int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
                 final Map<String, Boolean> improvementTypeMap = getImprovementTypeMap();
-                Integer notificationId = null;
+                Integer notificationId = -1;
                 if (notificationDate != null) {
                     Calendar calendarNotificationDateTime = mSelectedNotificationDateTime.getEndDate();
                     notificationDateString = DateUtils.getDateString(calendarNotificationDateTime.getTime());
@@ -483,7 +522,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             updateStartDateInfoView();
         }
 
-        if(goalsAndTasks.getNotificationDate() != null) {
+        if (goalsAndTasks.getNotificationDate() != null) {
             Calendar notificationDate = Calendar.getInstance();
             notificationDate.setTime(goalsAndTasks.getNotificationDate());
             mSelectedNotificationDateTime = new SelectedDate(notificationDate);
@@ -546,8 +585,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private void saveOrEditDaily(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
         if (shouldSave) {
             saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
-        }
-        else {
+        } else {
             updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
         }
     }

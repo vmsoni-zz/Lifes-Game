@@ -28,10 +28,11 @@ public class ScheduledNotification extends Job {
     protected Result onRunJob(@NonNull Params params) {
         PersistableBundleCompat extras = params.getExtras();
         String notificationTitle = extras.getString("title", "");
+        String notificationMessage = extras.getString("message", notificationTitle);
         PugNotification.with(context)
                 .load()
-                .title("Time for your Todo")
-                .message(notificationTitle)
+                .title(notificationTitle)
+                .message(notificationMessage)
                 .smallIcon(R.mipmap.notification_icon_transparent)
                 .largeIcon(R.mipmap.icon_lifes_game)
                 .flags(Notification.DEFAULT_ALL)

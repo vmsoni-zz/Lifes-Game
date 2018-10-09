@@ -4,11 +4,16 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.orangegangsters.lollipin.lib.managers.AppLock;
 import com.google.android.gms.analytics.HitBuilders;
@@ -22,7 +27,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
-import lifesgame.tapstudios.ca.lifesgame.helper.BottomNavigationViewHelper;
 import lifesgame.tapstudios.ca.lifesgame.NonSwipeableViewPager;
 import lifesgame.tapstudios.ca.lifesgame.adapter.PagerAdapter;
 import lifesgame.tapstudios.ca.lifesgame.fragment.PomodoroTimerFragment;
@@ -33,8 +37,14 @@ import lifesgame.tapstudios.ca.lifesgame.fragment.StoreFragment;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.main_fragment) NonSwipeableViewPager viewPager;
-    @BindView(R.id.NavBot) BottomNavigationView mBottomNavigation;
+    @BindView(R.id.main_fragment)
+    NonSwipeableViewPager viewPager;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.activity_main)
+    DrawerLayout mDrawerLayout;
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -76,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         homeFragmentBundle.putInt("EXPIRED_TODO_COUNT", expiredGoalsAndTasksCount);
 
         if (getIntent() != null) {
-            if(getIntent().getBooleanExtra("PASSCODE_SET", false)) {
+            if (getIntent().getBooleanExtra("PASSCODE_SET", false)) {
                 Intent intent = new Intent(this, CustomPinActivity.class);
                 intent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
                 startActivityForResult(intent, REQUEST_CODE_ENABLE);
@@ -85,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentManager = getFragmentManager();
         setupSwipeFragments();
-        setupBottomNavBar();
+        setupSideNavView();
         scrollToSpecificFragment();
     }
 
@@ -125,9 +135,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setupBottomNavBar() {
-        BottomNavigationViewHelper.disableShiftMode(mBottomNavigation);
-        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+    public void setupSideNavView() {
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        navigationView.setCheckedItem(R.id.home);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -145,7 +159,20 @@ public class MainActivity extends AppCompatActivity {
                         viewPager.setCurrentItem(3, true);
                         break;
                 }
+                mDrawerLayout.closeDrawer(Gravity.START);
                 return true;
+            }
+        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mDrawerLayout.isDrawerOpen(Gravity.START)) {
+                    mDrawerLayout.openDrawer(Gravity.START);
+                }
+                else {
+                    mDrawerLayout.closeDrawer(Gravity.START);
+                }
             }
         });
     }
@@ -154,17 +181,14 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent() != null) {
             Integer fragmentNumber = getIntent().getIntExtra("FRAGMENT_NUMBER", -1);
             if (fragmentNumber != -1) {
-                if(fragmentNumber == 3) {
-                    mBottomNavigation.setSelectedItemId(R.id.store);
-                }
-                else if(fragmentNumber == 2) {
-                    mBottomNavigation.setSelectedItemId(R.id.pomodoro);
-                }
-                else if(fragmentNumber == 1) {
-                    mBottomNavigation.setSelectedItemId(R.id.statistics);
-                }
-                else {
-                    mBottomNavigation.setSelectedItemId(R.id.home);
+                if (fragmentNumber == 3) {
+                    navigationView.setCheckedItem(R.id.store);
+                } else if (fragmentNumber == 2) {
+                    navigationView.setCheckedItem(R.id.pomodoro);
+                } else if (fragmentNumber == 1) {
+                    navigationView.setCheckedItem(R.id.statistics);
+                } else {
+                    navigationView.setCheckedItem(R.id.home);
                 }
                 viewPager.setCurrentItem(fragmentNumber, true);
             }

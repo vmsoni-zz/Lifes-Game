@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.6"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/lightThemeColorPrimary"
         android:padding="15dp">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/lightThemeColorPrimary"
             android:orientation="vertical">
 
             <ImageView
@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary">
+            android:background="@color/lightThemeColorPrimary">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -71,6 +71,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
+            card_view:cardBackgroundColor="@color/lightThemeCardView"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="2dp">
 
@@ -158,12 +159,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/lightThemeColorPrimary"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:gravity="center"
             android:visibility="visible"
             android:text="Select a profile picture by pressing 'Edit'" />
+
+        <LinearLayout
+            android:id="@+id/privacy_policy_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:layout_marginBottom="20dp"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Privacy Policy" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_alignParentBottom="true"
@@ -185,7 +206,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="Sign Out"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/lightThemeColorPrimary" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

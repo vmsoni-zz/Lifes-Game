@@ -27,15 +27,24 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.Rewards;
 
 public class DialogAddRewards extends AppCompatActivity {
-    @BindView(R.id.user_reward_title) TextView rewardTitle;
-    @BindView(R.id.user_reward_description) TextView rewardDescription;
-    @BindView(R.id.user_reward_title_layout) TextInputLayout rewardTitleLayout;
-    @BindView(R.id.singleTime) CheckBox singleTime;
-    @BindView(R.id.unlimited) CheckBox unlimited;
-    @BindView(R.id.color_blue) CheckBox blueColor;
-    @BindView(R.id.color_red) CheckBox redColor;
-    @BindView(R.id.color_green) CheckBox greenColor;
-    @BindView(R.id.color_orange) CheckBox orangeColor;
+    @BindView(R.id.user_reward_title)
+    TextView rewardTitle;
+    @BindView(R.id.user_reward_description)
+    TextView rewardDescription;
+    @BindView(R.id.user_reward_title_layout)
+    TextInputLayout rewardTitleLayout;
+    @BindView(R.id.singleTime)
+    CheckBox singleTime;
+    @BindView(R.id.unlimited)
+    CheckBox unlimited;
+    @BindView(R.id.color_blue)
+    CheckBox blueColor;
+    @BindView(R.id.color_red)
+    CheckBox redColor;
+    @BindView(R.id.color_green)
+    CheckBox greenColor;
+    @BindView(R.id.color_orange)
+    CheckBox orangeColor;
 
     private DatabaseHelper databaseHelper;
     private String checkedColor;

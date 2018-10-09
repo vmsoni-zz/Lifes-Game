@@ -149,21 +149,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (int i = oldVersion; i < newVersion; i++) {
-            switch (i) {
-                case 1:
-                    String addCompletedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_COMPLETED_COUNT + " INTEGER DEFAULT 0;";
-                    String addFailedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_FAILED_COUNT + " INTEGER DEFAULT 0;";
-                    String addStartDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_START_DATE + " DATETIME;";
-                    db.execSQL(addCompletedCountColumn);
-                    db.execSQL(addFailedCountColumn);
-                    db.execSQL(addStartDateColumn);
-                case 2:
-                    String addNotificationIdColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_ID + " INTEGER;";
-                    String addNotificationDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_DATE + " DATETIME;";
-                    db.execSQL(addNotificationIdColumn);
-                    db.execSQL(addNotificationDateColumn);
+        try {
+            for (int i = oldVersion; i < newVersion; i++) {
+                switch (i) {
+                    case 1:
+                        String addCompletedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_COMPLETED_COUNT + " INTEGER DEFAULT 0;";
+                        String addFailedCountColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_FAILED_COUNT + " INTEGER DEFAULT 0;";
+                        String addStartDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_START_DATE + " DATETIME;";
+                        db.execSQL(addCompletedCountColumn);
+                        db.execSQL(addFailedCountColumn);
+                        db.execSQL(addStartDateColumn);
+                    case 2:
+                        String addNotificationIdColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_ID + " INTEGER;";
+                        String addNotificationDateColumn = "ALTER TABLE " + TABLE_TASKS_GOALS + " ADD COLUMN " + TABLE_TASKS_GOALS_NOTIFICATION_DATE + " DATETIME;";
+                        db.execSQL(addNotificationIdColumn);
+                        db.execSQL(addNotificationDateColumn);
+                }
             }
+        }
+        catch (Exception e) {
+
         }
     }
 

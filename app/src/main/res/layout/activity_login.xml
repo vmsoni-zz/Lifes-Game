@@ -29,7 +29,7 @@
         android:fontFamily="@raw/baloo"
         android:shadowColor="#CFCFCF"
         android:text="Make Everyday a Game"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/lightThemeColorPrimary"
         android:textSize="25sp"
         android:textStyle="bold" />
 

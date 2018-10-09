@@ -31,10 +31,11 @@ public class JobService {
         JobManager.create(context).addJobCreator(new JobHelper(context));
     }
 
-    public int setFutureNotification(NotificationDate notificationDate, String notificationTitle) {
+    public int setFutureNotification(NotificationDate notificationDate, String notificationTitle, String notificationMessage) {
         Date currentDateTime = new Date();
         PersistableBundleCompat extra = new PersistableBundleCompat();
         extra.putString("title", notificationTitle);
+        extra.putString("message", notificationMessage);
         long jobRunTimeMillis = DateUtils.getZeroTimeDate(notificationDate.getNotificationDate()).getTime() + notificationDate.getMilliseconds() - currentDateTime.getTime();
         int id = new JobRequest.Builder(TAG)
                 .setExact(jobRunTimeMillis)
@@ -44,9 +45,10 @@ public class JobService {
         return id;
     }
 
-    public int setFutureNotificationDailies(NotificationDate notificationDate, String notificationTitle) {
+    public int setFutureNotificationDailies(NotificationDate notificationDate, String notificationTitle, String notificationMessage) {
         PersistableBundleCompat extra = new PersistableBundleCompat();
         extra.putString("title", notificationTitle);
+        extra.putString("message", notificationMessage);
         long jobStartTimeMillis = notificationDate.getMilliseconds();
         long jobEndTimeMillis = jobStartTimeMillis + TimeUnit.MINUTES.toMillis(30);
 

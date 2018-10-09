@@ -72,7 +72,7 @@ public class LoginEmailPasswordActivity extends AppCompatActivity {
         userAcceptLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!verifyInformation()) {
+                if (!verifyInformation()) {
                     return;
                 }
                 mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
@@ -121,17 +121,17 @@ public class LoginEmailPasswordActivity extends AppCompatActivity {
         String emailString = email.getText().toString();
         String passwordString = password.getText().toString();
 
-        if(emailString == null) {
+        if (emailString == null) {
             emailLl.setError("Email cannot be blank");
             return false;
         }
 
-        if(passwordString == null) {
+        if (passwordString == null) {
             passwordLl.setError("Password cannot be blank");
             return false;
         }
 
-        if(!emailString.matches(emailPattern)) {
+        if (!emailString.matches(emailPattern)) {
             emailLl.setError("Not a valid Email address");
             return false;
         }

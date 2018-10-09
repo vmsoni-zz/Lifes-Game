@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:design="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="lifesgame.tapstudios.ca.lifesgame.activity.MainActivity">
 
-    <lifesgame.tapstudios.ca.lifesgame.NonSwipeableViewPager
-        android:id="@+id/main_fragment"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/NavBot" />
+        android:orientation="vertical">
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/NavBot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        design:itemBackground="@color/navbar"
-        design:itemIconTint="@drawable/selector_navigation"
-        design:itemTextColor="@drawable/selector_navigation"
-        design:menu="@menu/menu_nav" />
-</RelativeLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <lifesgame.tapstudios.ca.lifesgame.NonSwipeableViewPager
+                android:id="@+id/main_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            android:background="@color/navbar"
+            design:itemBackground="@color/navbar"
+            design:itemIconTint="@drawable/selector_navigation"
+            design:itemTextColor="@drawable/selector_navigation"
+            design:menu="@menu/menu_nav" />
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>
+

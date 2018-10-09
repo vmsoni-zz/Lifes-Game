@@ -1,23 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:title="Home"
-        android:icon="@drawable/home"
-        android:id="@+id/home"
-        />
-    <item
-        android:title="Statistics"
-        android:icon="@drawable/statistics"
-        android:id="@+id/statistics"
-        />
-    <item
-        android:title="Pomodoro"
-        android:icon="@drawable/pomodoro"
-        android:id="@+id/pomodoro"
-        />
-    <item
-        android:title="Store"
-        android:icon="@drawable/store"
-        android:id="@+id/store"
-        />
+    <group
+        android:id="@+id/grp1"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+    </group>
+
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/statistics"
+            android:icon="@drawable/statistics"
+            android:title="Statistics" />
+    </group>
+
+    <group
+        android:id="@+id/grp3"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/pomodoro"
+            android:icon="@drawable/pomodoro"
+            android:title="Pomodoro" />
+    </group>
+
+    <group
+        android:id="@+id/grp4"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/store"
+            android:icon="@drawable/store"
+            android:title="Store" />
+    </group>
+    
+    <group android:id="@+id/grp5">
+        <item
+            android:id="@+id/fake_holder"
+            android:title="" />
+    </group>
 </menu>
