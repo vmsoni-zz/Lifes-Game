@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.holder.GoalsAndTasksHolder;
-import lifesgame.tapstudios.ca.lifesgame.JobService;
+import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
@@ -97,7 +97,7 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
             }
             Integer notificationId = goalsAndTask.getNotificationId();
             if (notificationId != null) {
-                jobService.cancelJobById(notificationId);
+                jobService.cancelNotification(notificationId);
             }
         }
         catch (Exception e) {
@@ -110,7 +110,7 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         goalsAndTasks.remove(position);
         Integer notificationId = goalsAndTasks.get(position).getNotificationId();
         if (notificationId != null) {
-            jobService.cancelJobById(notificationId);
+            jobService.cancelNotification(notificationId);
         }
     }
 

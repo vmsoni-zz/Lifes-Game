@@ -1,12 +1,8 @@
 package lifesgame.tapstudios.ca.lifesgame.activity;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.SystemClock;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -48,13 +44,12 @@ import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.DatePicker;
-import lifesgame.tapstudios.ca.lifesgame.JobService;
+import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.model.NotificationDate;
 import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
-import lifesgame.tapstudios.ca.lifesgame.service.NotificationService;
 import lifesgame.tapstudios.ca.lifesgame.utility.DateUtils;
 
 public class DialogAddGoalsAndTasks extends AppCompatActivity {
@@ -392,18 +387,6 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-    private void scheduleNotification(Notification notification, int delay) {
-
-        Intent notificationIntent = new Intent(this, NotificationService.class);
-        notificationIntent.putExtra(NotificationService.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationService.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
