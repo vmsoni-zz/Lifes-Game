@@ -10,7 +10,9 @@
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <!-- permission required to automatically restart a
+           repeating alarm if the user reboots the device -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application xmlns:tools="http://schemas.android.com/tools"
         android:name=".AnalyticsApplication"
         android:allowBackup="true"
@@ -20,6 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <!-- Register the Alarm Receiver -->
+        <receiver android:name=".service.NotificationService"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">

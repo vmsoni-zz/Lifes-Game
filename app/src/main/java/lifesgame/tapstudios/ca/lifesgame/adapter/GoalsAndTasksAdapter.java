@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import lifesgame.tapstudios.ca.lifesgame.holder.GoalsAndTasksHolder;
-import lifesgame.tapstudios.ca.lifesgame.service.JobService;
+//import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
@@ -28,7 +28,7 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
     private Context context;
     private GameMechanicsHelper gameMechanicsHelper;
     private GoalsAndTasksHelper goalsAndTasksHelper;
-    private JobService jobService;
+    //private JobService jobService;
 
     public GoalsAndTasksAdapter(Context context,
                                 int resource,
@@ -44,7 +44,7 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         this.goalsAndTasksHelper = goalsAndTasksHelper;
         goalsAndTasks = objects;
         this.inflater = inflater;
-        jobService = new JobService(context);
+        //jobService = new JobService(context);
     }
 
     @Override
@@ -95,10 +95,10 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
             if (goalsAndTask != null) {
                 databaseHelper.deleteData(goalsAndTask.getId(), completed, currentTime, deleted, completedCount, failedCount);
             }
-            Integer notificationId = goalsAndTask.getNotificationId();
-            if (notificationId != null) {
+/*            Integer notificationId = goalsAndTask.getNotificationId();
+            if (notificationId != -1) {
                 jobService.cancelNotification(notificationId);
-            }
+            }*/
         }
         catch (Exception e) {
 
@@ -108,10 +108,10 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
     public void deleteItemPermanent(int position) {
         databaseHelper.deleteDataPermanent(goalsAndTasks.get(position).getId());
         goalsAndTasks.remove(position);
-        Integer notificationId = goalsAndTasks.get(position).getNotificationId();
-        if (notificationId != null) {
+        //Integer notificationId = goalsAndTasks.get(position).getNotificationId();
+/*        if (notificationId != -1) {
             jobService.cancelNotification(notificationId);
-        }
+        }*/
     }
 
     public void updateDailyCompleted(int position, Boolean completed, Boolean deleted) {

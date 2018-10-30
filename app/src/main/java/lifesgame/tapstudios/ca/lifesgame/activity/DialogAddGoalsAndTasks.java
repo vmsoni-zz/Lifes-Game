@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.DatePicker;
-import lifesgame.tapstudios.ca.lifesgame.service.JobService;
+//import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
@@ -116,7 +116,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     CheckBox userOther;
 
     private DatabaseHelper databaseHelper;
-    private JobService jobService;
+    //private JobService jobService;
     private Long id;
     private Tracker tracker;
 
@@ -125,7 +125,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_goals_and_tasks);
         databaseHelper = new DatabaseHelper(this);
-        jobService = new JobService(this);
+        //jobService = new JobService(this);
         ButterKnife.bind(this);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
@@ -389,7 +389,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         );
     }
 
-    private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
+/*    private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
         int notificationId;
         if (todoType.equals("Daily")) {
             notificationId = jobService.setFutureNotificationDailies(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
@@ -397,7 +397,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             notificationId = jobService.setFutureNotification(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
         }
         return notificationId;
-    }
+    }*/
 
     private void setupAddItemButton() {
         userAcceptTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_emerald));
@@ -427,11 +427,11 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
                 final Map<String, Boolean> improvementTypeMap = getImprovementTypeMap();
                 Integer notificationId = -1;
-                if (notificationDate != null) {
+/*                if (notificationDate != null) {
                     Calendar calendarNotificationDateTime = mSelectedNotificationDateTime.getEndDate();
                     notificationDateString = DateUtils.getDateString(calendarNotificationDateTime.getTime());
                     notificationId = setupFutureNotificiation(improvementCategory.getSelectedItem().toString(), notificationDate);
-                }
+                }*/
                 boolean shouldSave = (id != -1);
 
                 saveOrEditTodo(todoType, shouldSave, silverAmount, improvementTypeMap, deadlineDateString, startDateString, creationDateString, notificationDateString, notificationId);

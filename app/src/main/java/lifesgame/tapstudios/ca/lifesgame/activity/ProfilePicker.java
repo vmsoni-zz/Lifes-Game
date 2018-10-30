@@ -48,6 +48,7 @@ public class ProfilePicker extends AppCompatActivity {
     @BindView(R.id.username) TextView username;
     @BindView(R.id.chosen_profile_picture) ImageView chosenProfilePic;
     @BindView(R.id.signout_ll) LinearLayout signOutLl;
+    @BindView(R.id.privacy_policy_ll) LinearLayout privacyPolicyLl;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_INVITE = 0;
@@ -71,11 +72,11 @@ public class ProfilePicker extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
         profilePicture = null;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         dialog = new ProgressDialog(this);
-        if (user != null) {
+/*        if (user != null) {
             username.setText(user.getDisplayName());
-        }
+        }*/
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         tracker = application.getDefaultTracker();
@@ -124,6 +125,14 @@ public class ProfilePicker extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signOutDialog();
+            }
+        });
+
+        privacyPolicyLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/lifes-game-privacy-policy"));
+                startActivity(browserIntent);
             }
         });
 

@@ -32,7 +32,7 @@ public class JobService {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, jobRunTimeMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, notificationDate.getNotificationDate().getTime(), pendingIntent);
 
         return notificationId;
     }

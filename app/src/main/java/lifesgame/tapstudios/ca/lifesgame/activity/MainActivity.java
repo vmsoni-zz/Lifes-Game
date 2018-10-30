@@ -75,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
         tracker.setScreenName("MainActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+/*        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             displayName = user.getDisplayName();
-        }
+        }*/
 
         databaseHelper = new DatabaseHelper(this);
         expiredGoalsAndTasksCount = databaseHelper.resetExpiredGoalsAndTasks();
