@@ -15,6 +15,7 @@
     <color name="greyDark">#757575</color>
     <color name="error_color">#E7492E</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
     <color name="navbar">#30b7ec</color>
     <color name="navMenu">#20647b</color>
     <color name="fbutton_color_asbestos">#7f8c8d</color>

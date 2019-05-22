@@ -1,3 +1,4 @@
+/*
 package lifesgame.tapstudios.ca.lifesgame.holder;
 
 import android.app.Activity;
@@ -28,36 +29,39 @@ import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.model.TodoType;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TaskTodo;
 
+*/
 /**
  * Created by viditsoni on 2017-11-04.
- */
+ *//*
 
-public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.editButton) ImageButton editBtn;
     @BindView(R.id.deleteButton) ImageButton deleteBtn;
     @BindView(R.id.completedButton) ImageButton completedBtn;
     @BindView(R.id.failedButton) ImageButton failedBtn;
-    @BindView(R.id.goal_task_title) TextView goalsAndTasksTitle;
-    @BindView(R.id.goal_task_description) TextView goalsAndTasksDescription;
-    @BindView(R.id.goal_task_remaining_time) TextView goalsAndTasksRemainingTime;
+    @BindView(R.id.goal_task_title) TextView todoTitle;
+    @BindView(R.id.goal_task_description) TextView todoDescription;
+    @BindView(R.id.goal_task_remaining_time) TextView todoRemainingTime;
     @BindView(R.id.goal_task_start_date_tv) TextView todoStartDatetv;
-    @BindView(R.id.todo_type) TextView goalsAndTasksTodoType;
+    @BindView(R.id.todo_type) TextView todoTodoType;
     @BindView(R.id.silver_reward) TextView silverReward;
     @BindView(R.id.daily_completed_count_tv) TextView completedCountTV;
     @BindView(R.id.daily_failed_count_tv) TextView failedCountTV;
     @BindView(R.id.button_divider_completed) View buttonDividerCompleted;
     @BindView(R.id.button_divider_failed) View buttonDividerFailed;
-    @BindView(R.id.goal_task_remaining_time_ll) LinearLayout goalsAndTasksRemainingTimeLL;
+    @BindView(R.id.goal_task_remaining_time_ll) LinearLayout todoRemainingTimeLL;
     @BindView(R.id.goal_task_start_date_ll) LinearLayout todoStartDateLl;
     @BindView(R.id.daily_count_ll) LinearLayout dailyCountLl;
     @BindView(R.id.dynamic_ll) LinearLayout dynamicLl;
     @BindView(R.id.daily_skip_day_Ll) LinearLayout dailySkipDayLl;
 
-    private GoalsAndTasks goalsAndTasks;
+    private TaskTodo taskTodo;
     private Context context;
-    private GoalsAndTasksHelper goalsAndTasksHelper;
-    private GoalsAndTasksAdapter goalsAndTasksAdapter;
+    private GoalsAndTasksHelper todoHelper;
+    private GoalsAndTasksAdapter todoAdapter;
     private GameMechanicsHelper gameMechanicsHelper;
     private Map<String, ImageView> improvementTypeImageViews;
 
@@ -68,16 +72,16 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
     private static final String TABLE_TASKS_GOALS_LEARNING = "learning";
     private static final String TABLE_TASKS_GOALS_OTHER = "other";
 
-    public GoalsAndTasksHolder(Context context,
-                               View itemView,
-                               GoalsAndTasksHelper goalsAndTasksHelper,
-                               GoalsAndTasksAdapter goalsAndTasksAdapter,
-                               GameMechanicsHelper gameMechanicsHelper) {
+    public TodoHolder(Context context,
+                      View itemView,
+                      GoalsAndTasksHelper todoHelper,
+                      GoalsAndTasksAdapter todoAdapter,
+                      GameMechanicsHelper gameMechanicsHelper) {
         super(itemView);
 
         this.context = context;
-        this.goalsAndTasksHelper = goalsAndTasksHelper;
-        this.goalsAndTasksAdapter = goalsAndTasksAdapter;
+        this.todoHelper = todoHelper;
+        this.todoAdapter = todoAdapter;
         this.gameMechanicsHelper = gameMechanicsHelper;
         ButterKnife.bind(this, itemView);
 
@@ -88,39 +92,30 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View view) {
-        if (this.goalsAndTasks != null) {
-            Toast.makeText(this.context, "Clicked on " + this.goalsAndTasks.getTitle(), Toast.LENGTH_SHORT).show();
+        if (this.taskTodo != null) {
+            Toast.makeText(this.context, "Clicked on " + this.taskTodo.getTitle(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void bindGoalsAndTasks(GoalsAndTasks goalsAndTasks, final int position) {
-        this.goalsAndTasks = goalsAndTasks;
-        goalsAndTasksTitle.setText(goalsAndTasks.getTitle());
-        if(goalsAndTasks.getDescription() == null || goalsAndTasks.getDescription().isEmpty()) {
-            goalsAndTasksDescription.setVisibility(View.GONE);
+    public void bindGoalsAndTasks(TaskTodo taskTodo, final int position) {
+
+        this.taskTodo = taskTodo;
+        todoTitle.setText(taskTodo.getTitle());
+        if(taskTodo.getDescription() == null || taskTodo.getDescription().isEmpty()) {
+            todoDescription.setVisibility(View.GONE);
         }
         else {
-            goalsAndTasksDescription.setVisibility(View.VISIBLE);
-            goalsAndTasksDescription.setText(goalsAndTasks.getDescription());
+            todoDescription.setVisibility(View.VISIBLE);
+            todoDescription.setText(taskTodo.getDescription());
         }
-        goalsAndTasksTodoType.setText(goalsAndTasks.getCategory().getTodoTypeString());
-        silverReward.setText(String.valueOf(goalsAndTasks.getSilver()));
-        setupTodoTypeColor(goalsAndTasks);
+        todoTodoType.setText(taskTodo*/
+/**//*
+.getCategory().getTodoTypeString());
+        silverReward.setText(String.valueOf(taskTodo.getSilver()));
+        setupTodoTypeColor(taskTodo);
 
-        switch (goalsAndTasks.getCategory()) {
-            case TASK:
-                bindTask();
-                break;
-            case GOAL:
-                bindGoal();
-                break;
-            case DAILY:
-                bindDaily(position);
-                break;
-            default:
-                break;
-        }
-        initializeImprovementTypeImages(goalsAndTasks);
+        bindTask();
+        initializeImprovementTypeImages(taskTodo);
         initializeOnClickListeners(position);
     }
 
@@ -133,8 +128,8 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         improvementTypeImageViews.put(TABLE_TASKS_GOALS_OTHER, (ImageView) itemView.findViewById(R.id.other_img));
     }
 
-    private void initializeImprovementTypeImages(GoalsAndTasks goalsAndTasks) {
-        Map<String, Boolean> improvementTypes = goalsAndTasks.getImprovementTypeMap();
+    private void initializeImprovementTypeImages(GoalsAndTasks todo) {
+        Map<String, Boolean> improvementTypes = todo.getImprovementTypeMap();
         for (Map.Entry<String, Boolean> improvement : improvementTypes.entrySet()) {
             if (improvement.getValue()) {
                 improvementTypeImageViews.get(improvement.getKey())
@@ -153,30 +148,30 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goalsAndTasksHelper.displayGoalsAndTasksEditMenu(goalsAndTasks.getId());
+                todoHelper.displayGoalsAndTasksEditMenu(taskTodo.getId());
             }
         });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goalsAndTasksAdapter.deleteItemPermanent(position);
-                goalsAndTasksAdapter.notifyItemRemoved(position);
-                goalsAndTasksAdapter.notifyItemRangeChanged(position, goalsAndTasksAdapter.getItemCount());
+                todoAdapter.deleteItemPermanent(position);
+                todoAdapter.notifyItemRemoved(position);
+                todoAdapter.notifyItemRangeChanged(position, todoAdapter.getItemCount());
             }
         });
 
         completedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (goalsAndTasks.getCategory() == TodoType.DAILY) {
+                if (taskTodo.getCategory() == TodoType.DAILY) {
                     disableUpdateTodoOptions();
                     dailyShowSnackBarUpdateWithUndo(position, true, false, false);
                 }
                 else {
-                    goalsAndTasksAdapter.removeItemFromList(position);
-                    goalsAndTasksAdapter.notifyItemRemoved(position);
-                    goalsAndTasksAdapter.notifyItemRangeChanged(position, goalsAndTasksAdapter.getItemCount());
+                    todoAdapter.removeItemFromList(position);
+                    todoAdapter.notifyItemRemoved(position);
+                    todoAdapter.notifyItemRangeChanged(position, todoAdapter.getItemCount());
                     showSnackBarDeleteWithUndo(position, true, true);
                 }
             }
@@ -185,14 +180,14 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         failedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (goalsAndTasks.getCategory() == TodoType.DAILY) {
+                if (taskTodo.getCategory() == TodoType.DAILY) {
                     disableUpdateTodoOptions();
                     dailyShowSnackBarUpdateWithUndo(position, false, false, false);
                 }
                 else {
-                    goalsAndTasksAdapter.removeItemFromList(position);
-                    goalsAndTasksAdapter.notifyItemRemoved(position);
-                    goalsAndTasksAdapter.notifyItemRangeChanged(position, goalsAndTasksAdapter.getItemCount());
+                    todoAdapter.removeItemFromList(position);
+                    todoAdapter.notifyItemRemoved(position);
+                    todoAdapter.notifyItemRangeChanged(position, todoAdapter.getItemCount());
                     showSnackBarDeleteWithUndo(position, false, true);
                 }
             }
@@ -201,7 +196,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
         dailySkipDayLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (goalsAndTasks.getCategory() == TodoType.DAILY) {
+                if (taskTodo.getCategory() == TodoType.DAILY) {
                     disableUpdateTodoOptions();
                     dailyShowSnackBarUpdateWithUndo(position, true, false, true);
                 }
@@ -242,20 +237,20 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
     }
 
 
-    private void setupTodoTypeColor(GoalsAndTasks goalsAndTasks) {
-        switch (goalsAndTasks.getCategory()) {
+    private void setupTodoTypeColor(GoalsAndTasks todo) {
+        switch (todo.getCategory()) {
             case DAILY:
-                goalsAndTasksTodoType.setTextColor(Color.parseColor("#e67e22"));
+                todoTodoType.setTextColor(Color.parseColor("#e67e22"));
                 buttonDividerCompleted.setBackgroundColor(Color.parseColor("#e67e22"));
                 buttonDividerFailed.setBackgroundColor(Color.parseColor("#e67e22"));
                 break;
             case GOAL:
-                goalsAndTasksTodoType.setTextColor(Color.parseColor("#8e44ad"));
+                todoTodoType.setTextColor(Color.parseColor("#8e44ad"));
                 buttonDividerCompleted.setBackgroundColor(Color.parseColor("#8e44ad"));
                 buttonDividerFailed.setBackgroundColor(Color.parseColor("#8e44ad"));
                 break;
             case TASK:
-                goalsAndTasksTodoType.setTextColor(Color.parseColor("#27ae60"));
+                todoTodoType.setTextColor(Color.parseColor("#27ae60"));
                 buttonDividerCompleted.setBackgroundColor(Color.parseColor("#27ae60"));
                 buttonDividerFailed.setBackgroundColor(Color.parseColor("#27ae60"));
                 break;
@@ -263,23 +258,23 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
     }
 
     private void displayCustomToastXPAndSilver() {
-        gameMechanicsHelper.addSilver(goalsAndTasks.getSilver());
-        Map<String, Boolean> improvementType = goalsAndTasks.getImprovementTypeMap();
+        gameMechanicsHelper.addSilver(taskTodo.getSilver());
+        Map<String, Boolean> improvementType = taskTodo.getImprovementTypeMap();
         for (String type : improvementType.keySet()) {
             if (improvementType.get(type)) {
                 gameMechanicsHelper.addImprovementType(type);
             }
         }
-        Integer xpAmount = goalsAndTasks.getSilver()/10;
-        if(goalsAndTasks.getCategory() == TodoType.GOAL) {
-            long diff = getZeroTimeDate(new Date()).getTime() - getZeroTimeDate(goalsAndTasks.getCreationDate()).getTime();
+        Integer xpAmount = taskTodo.getSilver()/10;
+        if(taskTodo.getCategory() == TodoType.GOAL) {
+            long diff = getZeroTimeDate(new Date()).getTime() - getZeroTimeDate(taskTodo.getCreationDate()).getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000)+1;
             xpAmount += (int) diffDays;
         }
         boolean levelUp = gameMechanicsHelper.addXp(xpAmount);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.custom_toast_layout_xp_silver, null);
-        ((TextView) view.findViewById(R.id.silver_reward_toast)).setText("+ " + String.valueOf(goalsAndTasks.getSilver()));
+        ((TextView) view.findViewById(R.id.silver_reward_toast)).setText("+ " + String.valueOf(todo.getSilver()));
         ((TextView) view.findViewById(R.id.xp_reward_toast)).setText("+ " + xpAmount);
         if (levelUp) {
             ((LinearLayout) view.findViewById(R.id.levelup_ll)).setVisibility(View.VISIBLE);
@@ -303,10 +298,10 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
     }
 
     private void setupStartDate() {
-        if(goalsAndTasks.getStartDateString() != null) {
+        if(taskTodo.getStartDateString() != null) {
             todoStartDateLl.setVisibility(View.VISIBLE);
-            todoStartDatetv.setText(goalsAndTasks.getStartDateString());
-            if (getZeroTimeDate(new Date()).compareTo(getZeroTimeDate(goalsAndTasks.getStartDate())) < 0) {
+            todoStartDatetv.setText(taskTodo.getStartDateString());
+            if (getZeroTimeDate(new Date()).compareTo(getZeroTimeDate(taskTodo.getStartDate())) < 0) {
                 disableUpdateTodoOptions();
             }
         }
@@ -319,16 +314,16 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goalsAndTasksAdapter.addItemToList(position, goalsAndTasks);
-                        goalsAndTasksAdapter.notifyItemInserted(position);
-                        undoList.add(goalsAndTasks);
+                        todoAdapter.addItemToList(position, taskTodo);
+                        todoAdapter.notifyItemInserted(position);
+                        undoList.add(taskTodo);
                     }
                 })
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
                         if (undoList.size() == 0) {
-                            goalsAndTasksAdapter.removeItem(goalsAndTasks, completed, deleted);
+                            todoAdapter.removeItem(taskTodo, completed, deleted);
                             if (completed) {
                                 displayCustomToastXPAndSilver();
                             }
@@ -349,7 +344,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                     @Override
                     public void onClick(View view) {
                         enableUpdateTodoOptions();
-                        undoList.add(goalsAndTasks);
+                        undoList.add(taskTodo);
                     }
                 })
                 .addCallback(new Snackbar.Callback() {
@@ -357,10 +352,10 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                     public void onDismissed(Snackbar snackbar, int event) {
                         if (undoList.size() == 0) {
                             if(skippedDay) {
-                                goalsAndTasksAdapter.updateDailySkippedDaily(position, completed, deleted);
+                                todoAdapter.updateDailySkippedDaily(position, completed, deleted);
                             }
                             else {
-                                goalsAndTasksAdapter.updateDailyCompleted(position, completed, deleted);
+                                todoAdapter.updateDailyCompleted(position, completed, deleted);
                                 if (completed) {
                                     displayCustomToastXPAndSilver();
                                 }
@@ -368,7 +363,7 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
                                     displaySingleCustomToast(10, "Health");
                                 }
                             }
-                            disableDailyButtonValuesAndUpdateCounts(goalsAndTasks.getCompletedCount(), goalsAndTasks.getFailedCount());
+                            disableDailyButtonValuesAndUpdateCounts(taskTodo.getCompletedCount(), taskTodo.getFailedCount());
                         }
                     }
                 });
@@ -377,39 +372,40 @@ public class GoalsAndTasksHolder extends RecyclerView.ViewHolder implements View
 
     private void bindTask() {
         dailyCountLl.setVisibility(View.GONE);
-        goalsAndTasksRemainingTimeLL.setVisibility(View.GONE);
+        todoRemainingTimeLL.setVisibility(View.GONE);
         dailySkipDayLl.setVisibility(View.GONE);
         todoStartDateLl.setVisibility(View.VISIBLE);
         setupStartDate();
     }
 
     private void bindGoal() {
-        goalsAndTasksRemainingTimeLL.setVisibility(View.VISIBLE);
+        todoRemainingTimeLL.setVisibility(View.VISIBLE);
         dailySkipDayLl.setVisibility(View.GONE);
         dailyCountLl.setVisibility(View.GONE);
         todoStartDateLl.setVisibility(View.GONE);
-        goalsAndTasksRemainingTime.setText(goalsAndTasks.getDeadlineDateString());
+        todoRemainingTime.setText(taskTodo.getDeadlineDateString());
     }
 
     private void bindDaily(int position) {
         dailyCountLl.setVisibility(View.VISIBLE);
         dailySkipDayLl.setVisibility(View.VISIBLE);
         todoStartDateLl.setVisibility(View.GONE);
-        completedCountTV.setText(String.valueOf(goalsAndTasks.getCompletedCount()));
-        failedCountTV.setText(String.valueOf(goalsAndTasks.getFailedCount()));
+        completedCountTV.setText(String.valueOf(taskTodo.getCompletedCount()));
+        failedCountTV.setText(String.valueOf(taskTodo.getFailedCount()));
 
         Date todayDate = new Date();
-        Date completionDate = goalsAndTasks.getCompletionDate();
+        Date completionDate = taskTodo.getCompletionDate();
         if (completionDate != null) {
             int dateComparison = getZeroTimeDate(todayDate).compareTo(getZeroTimeDate(completionDate));
             if (dateComparison > 0) {
-                goalsAndTasksAdapter.removeDaily(position, goalsAndTasks.getCompleted(), true);
-                goalsAndTasks.setCompleted(false);
-                goalsAndTasks.setId(goalsAndTasksAdapter.addDailyForNewDay(position));
+                todoAdapter.removeDaily(position, taskTodo.getCompleted(), true);
+                taskTodo.setCompleted(false);
+                taskTodo.setId(todoAdapter.addDailyForNewDay(position));
             }
             if (dateComparison == 0) {
-                disableDailyButtonValuesAndUpdateCounts(goalsAndTasks.getCompletedCount(), goalsAndTasks.getFailedCount());
+                disableDailyButtonValuesAndUpdateCounts(taskTodo.getCompletedCount(), taskTodo.getFailedCount());
             }
         }
     }
 }
+*/

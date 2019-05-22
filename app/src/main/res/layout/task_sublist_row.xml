@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2.5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2.5dp">
+
+    <ImageView
+        android:id="@+id/silver_img_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="15dp"
+        android:src="@drawable/silver" />
+
+    <EditText
+        android:id="@+id/subitem_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorBlack"
+        android:paddingRight="15dp"
+        android:text=""
+        android:textSize="12sp" />
+
+    <ImageButton
+        android:id="@+id/remove_sublist_item_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/silver" />
+</LinearLayout>

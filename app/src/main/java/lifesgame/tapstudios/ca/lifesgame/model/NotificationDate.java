@@ -8,13 +8,13 @@ import java.util.Date;
 
 public class NotificationDate {
     private int hour;
-    private int seconds;
+    private int minute;
     private long milliseconds;
     private Date notificationDate;
 
-    public NotificationDate(int hour, int seconds, long milliseconds, Date notificationDate) {
+    public NotificationDate(int hour, int minute, long milliseconds, Date notificationDate) {
         this.hour = hour;
-        this.seconds = seconds;
+        this.minute = minute;
         this.milliseconds = milliseconds;
         this.notificationDate = notificationDate;
     }
@@ -23,8 +23,8 @@ public class NotificationDate {
         this.hour = hour;
     }
 
-    public void setSeconds(int seconds) {
-        this.seconds = seconds;
+    public void setSeconds(int minute) {
+        this.minute = minute;
     }
 
     public void setMilliseconds(long milliseconds) {
@@ -39,8 +39,8 @@ public class NotificationDate {
         return hour;
     }
 
-    public int getSeconds() {
-        return seconds;
+    public int getMinute() {
+        return minute;
     }
 
     public long getMilliseconds() {

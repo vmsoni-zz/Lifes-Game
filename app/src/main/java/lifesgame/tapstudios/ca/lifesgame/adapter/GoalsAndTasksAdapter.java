@@ -1,6 +1,8 @@
 package lifesgame.tapstudios.ca.lifesgame.adapter;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,53 +12,76 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import lifesgame.tapstudios.ca.lifesgame.holder.GoalsAndTasksHolder;
-//import lifesgame.tapstudios.ca.lifesgame.service.JobService;
+import lifesgame.tapstudios.ca.lifesgame.R;
+import lifesgame.tapstudios.ca.lifesgame.holder.TaskTodoHolder;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.DailyTodo;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.HabitTodo;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.JoinModel.TaskTodoAndTag;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.JoinModel.generic.TodoAndTag;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TaskTodo;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TodoTypes;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.generic.Todo;
+import lifesgame.tapstudios.ca.lifesgame.repository.TodoRepository;
+import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
-import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
 
 /**
  * Created by Vidit Soni on 5/24/2017.
  */
-public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHolder> {
-    public List<GoalsAndTasks> goalsAndTasks;
+public class GoalsAndTasksAdapter extends RecyclerView.Adapter<TaskTodoHolder> {
+    public List<Object> todoList;
     public LayoutInflater inflater;
     public DatabaseHelper databaseHelper;
-    private int resource;
     private Context context;
     private GameMechanicsHelper gameMechanicsHelper;
     private GoalsAndTasksHelper goalsAndTasksHelper;
-    //private JobService jobService;
+    private JobService jobService;
+    private TodoRepository todoRepository;
 
     public GoalsAndTasksAdapter(Context context,
-                                int resource,
                                 GameMechanicsHelper gameMechanicsHelper,
                                 DatabaseHelper databaseHelper,
-                                List<GoalsAndTasks> objects,
+                                List<Object> todoList,
                                 GoalsAndTasksHelper goalsAndTasksHelper,
                                 LayoutInflater inflater) {
         this.context = context;
-        this.resource = resource;
         this.gameMechanicsHelper = gameMechanicsHelper;
         this.databaseHelper = databaseHelper;
         this.goalsAndTasksHelper = goalsAndTasksHelper;
-        goalsAndTasks = objects;
+        this.todoList = todoList;
         this.inflater = inflater;
-        //jobService = new JobService(context);
+        this.todoRepository = ViewModelProviders.of((FragmentActivity) context).get(TodoRepository.class);
+        jobService = new JobService(context);
     }
 
     @Override
-    public GoalsAndTasksHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(resource, parent, false);
-        return new GoalsAndTasksHolder(context, view, goalsAndTasksHelper, this, gameMechanicsHelper);
+    public int getItemViewType(int position) {
+        return ((TodoAndTag) todoList.get(position)).getTodo().getTodoType().ordinal();
+    }
+
+
+    @Override
+    public TaskTodoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        int resource;
+        switch(TodoTypes.TodoType.values()[viewType]) {
+            case TASK:
+                View view = inflater.inflate(R.layout.todo_task_row, parent, false);
+                return new TaskTodoHolder(context, view, goalsAndTasksHelper, this, gameMechanicsHelper);
+            case HABIT:
+                break;
+            case DAILY:
+                break;
+        }
+
+        return new TaskTodoHolder(context, null, goalsAndTasksHelper, this, gameMechanicsHelper);
     }
 
     @Override
-    public void onBindViewHolder(GoalsAndTasksHolder holder, int position) {
-        GoalsAndTasks goalsAndTasks = this.goalsAndTasks.get(position);
-        holder.bindGoalsAndTasks(goalsAndTasks, position);
+    public void onBindViewHolder(TaskTodoHolder holder, int position) {
+        Object todo = this.todoList.get(position);
+        holder.bindGoalsAndTasks(((TodoAndTag) todo).getTodo(), position);
     }
 
     @Override
@@ -66,20 +91,20 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
 
     @Override
     public int getItemCount() {
-        return goalsAndTasks.size();
+        return todoList.size();
     }
 
-    public GoalsAndTasks removeItemFromList(int position) {
-        GoalsAndTasks goalsAndTask = goalsAndTasks.get(position);
-        goalsAndTasks.remove(position);
-        return goalsAndTask;
+    public Object removeItemFromList(int position) {
+        Object todo = todoList.get(position);
+        todoList.remove(position);
+        return todo;
     }
 
-    public void addItemToList(int position, GoalsAndTasks goalsAndTask) {
-        goalsAndTasks.add(position, goalsAndTask);
+    public void addItemToList(int position, Object goalsAndTask) {
+        todoList.add(position, goalsAndTask);
     }
 
-    public void removeItem(GoalsAndTasks goalsAndTask, Boolean completed, Boolean deleted) {
+    public void removeItem(Todo todo, Boolean completed, Boolean deleted) {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(dt);
@@ -92,10 +117,22 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
             failedCount++;
         }
         try {
-            if (goalsAndTask != null) {
-                databaseHelper.deleteData(goalsAndTask.getId(), completed, currentTime, deleted, completedCount, failedCount);
+            if (todo != null) {
+                switch (todo.getTodoType()) {
+                    case TASK:
+                        todoRepository.deleteTaskTodo((TaskTodo) todo);
+                        break;
+                    case DAILY:
+                        todoRepository.deleteDailyTodo((DailyTodo) todo);
+                        break;
+                    case HABIT:
+                        todoRepository.deleteHabitTodo((HabitTodo) todo);
+                        break;
+                }
+                databaseHelper.deleteData(todo.getId(), completed, currentTime, deleted, completedCount, failedCount);
             }
-/*            Integer notificationId = goalsAndTask.getNotificationId();
+            //TODO: Fix notification stuff
+/*            Integer notificationId = taskTodo.getNotificationId();
             if (notificationId != -1) {
                 jobService.cancelNotification(notificationId);
             }*/
@@ -105,13 +142,14 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         }
     }
 
-    public void deleteItemPermanent(int position) {
+    //TODO: Fix daily functionality
+/*    public void deleteItemPermanent(int position) {
         databaseHelper.deleteDataPermanent(goalsAndTasks.get(position).getId());
         goalsAndTasks.remove(position);
-        //Integer notificationId = goalsAndTasks.get(position).getNotificationId();
-/*        if (notificationId != -1) {
+        Integer notificationId = goalsAndTasks.get(position).getNotificationId();
+        if (notificationId != -1) {
             jobService.cancelNotification(notificationId);
-        }*/
+        }
     }
 
     public void updateDailyCompleted(int position, Boolean completed, Boolean deleted) {
@@ -126,13 +164,13 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
             goalsAndTasks.get(position).setFailedCount((goalsAndTasks.get(position).getFailedCount()) + 1);
         }
         databaseHelper.deleteData(goalsAndTasks.get(position).getId(), completed, currentTime, deleted, goalsAndTasks.get(position).getCompletedCount(), goalsAndTasks.get(position).getFailedCount());
-    }
+    }*/
 
     public Long addDailyForNewDay(int position) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return databaseHelper.addData(
+/*        return databaseHelper.addData(
                 goalsAndTasks.get(position).getDescription(),
                 goalsAndTasks.get(position).getCategory().getTodoTypeString(),
                 goalsAndTasks.get(position).getTitle(),
@@ -145,10 +183,12 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
                 goalsAndTasks.get(position).getCompletedCount(),
                 goalsAndTasks.get(position).getFailedCount(),
                 goalsAndTasks.get(position).getNotificationId()
-        );
+        );*/
+        return 1L;
     }
 
-    public void updateDailySkippedDaily(int position, Boolean completed, Boolean deleted) {
+    //TODO: Fix Daily functionality
+/*    public void updateDailySkippedDaily(int position, Boolean completed, Boolean deleted) {
         try {
             if (goalsAndTasks.get(position) != null) {
                 Date date = new Date();
@@ -172,5 +212,14 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<GoalsAndTasksHold
         }
         catch (Exception e) {
         }
+    }*/
+
+    public void setData(List<?> newData) {
+        todoList.clear();
+        if (newData != null) {
+            todoList.addAll(newData);
+            this.notifyDataSetChanged();
+        }
+
     }
 }

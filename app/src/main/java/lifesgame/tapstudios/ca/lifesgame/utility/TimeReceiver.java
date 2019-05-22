@@ -21,11 +21,12 @@ import lifesgame.tapstudios.ca.lifesgame.activity.MainActivity;
 public class TimeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("RECIEVED2");
         Intent i = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pIntent = PendingIntent.getActivity(context, 0, i, 0);
 
-        NotificationCompat.Builder b = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder b = new NotificationCompat.Builder(context, "default");
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         b.setSound(notification)
                 .setContentTitle("Lifes Game")

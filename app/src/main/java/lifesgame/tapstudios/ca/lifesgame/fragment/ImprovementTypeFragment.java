@@ -1,10 +1,10 @@
 package lifesgame.tapstudios.ca.lifesgame.fragment;
 
-import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;

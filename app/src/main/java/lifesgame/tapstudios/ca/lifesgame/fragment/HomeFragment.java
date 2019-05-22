@@ -1,12 +1,13 @@
 package lifesgame.tapstudios.ca.lifesgame.fragment;
 
-import android.app.Fragment;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GameMechanicsHelper;
 import lifesgame.tapstudios.ca.lifesgame.helper.GoalsAndTasksHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
+import lifesgame.tapstudios.ca.lifesgame.repository.TodoRepository;
 
 /**
  * Created by Vidit Soni on 8/12/2017.
@@ -45,13 +47,14 @@ public class HomeFragment extends Fragment {
     private TextView silverAmountTextView;
     private TextView noTodosTv;
     private TextView username;
-    private List<GoalsAndTasks> arrayList;
+    private List<Object> todoList;
     private ImageView profilePictureIV;
     private ImageButton todoFilterBtn;
     private FloatingActionButton addItemToListBtn;
     private GoalsAndTasksAdapter goalsAndTasksAdapter;
     private GoalsAndTasksHelper goalsAndTasksHelper;
     private GameMechanicsHelper gameMechanicsHelper;
+    private TodoRepository todoRepository;
     private DatabaseHelper databaseHelper;
     private RoundCornerProgressBar healthBar;
     private RoundCornerProgressBar xpBar;
@@ -69,13 +72,16 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layoutInflater = inflater;
         homeFragment = inflater.inflate(R.layout.home_layout, container, false);
+
+        todoRepository = ViewModelProviders.of(this).get(TodoRepository.class);
+
         expiredGoalsAndTasksCount = getArguments().getInt("EXPIRED_TODO_COUNT");
         setupFragmentElements();
         goalsAndTasksHelper = new GoalsAndTasksHelper(addItemToListBtn, getActivity());
-        arrayList = new ArrayList<GoalsAndTasks>();
+        todoList = new ArrayList<>();
         databaseHelper = new DatabaseHelper(getActivity());
         gameMechanicsHelper = new GameMechanicsHelper(charHealth, charXp, charLevel, silverAmountTextView, databaseHelper, healthBar, xpBar, getActivity());
-        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper, inflater);
+        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), gameMechanicsHelper, databaseHelper, todoList, goalsAndTasksHelper, inflater);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(linearLayoutManager);
@@ -101,10 +107,16 @@ public class HomeFragment extends Fragment {
                     .show();
         }
         //Setup listview with all goals and tasks
-        arrayList.addAll(databaseHelper.loadAllCompletedGoalsAndTask());
-        if (arrayList != null) {
+        todoRepository.getAllTaskTodo().observe(this, todos -> {
+            if (todos != null) {
+                goalsAndTasksAdapter.setData(todos);
+                checkAndDisplayNoTodosAddedTv();
+            }
+        });
+        //todoList.addAll(databaseHelper.loadAllCompletedGoalsAndTask());
+/*        if (todoList != null) {
             goalsAndTasksAdapter.notifyDataSetChanged();
-        }
+        }*/
         hideFABOnScroll();
         setupProfilePicture();
         setupListeners();
@@ -146,7 +158,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void checkAndDisplayNoTodosAddedTv() {
-        if (arrayList.size() == 0) {
+        if (todoList.size() == 0) {
             noTodosTv.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
         } else {
@@ -229,9 +241,9 @@ public class HomeFragment extends Fragment {
         switch (filter) {
             case 0:
                 todoTypeTv.setText("All");
-                arrayList.clear();
-                arrayList.addAll(databaseHelper.loadAllCompletedGoalsAndTask());
-                goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper, layoutInflater);
+                todoList.clear();
+                todoList.addAll(databaseHelper.loadAllCompletedGoalsAndTask());
+                goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), gameMechanicsHelper, databaseHelper, todoList, goalsAndTasksHelper, layoutInflater);
                 listView.setAdapter(goalsAndTasksAdapter);
                 break;
             case 1:
@@ -251,13 +263,13 @@ public class HomeFragment extends Fragment {
     private void filterTodoList(TodoType todoType) {
         todoTypeTv.setText(todoType.getTodoTypeString());
         List<GoalsAndTasks> allTodos = databaseHelper.loadAllCompletedGoalsAndTask();
-        arrayList.clear();
+        todoList.clear();
         for (GoalsAndTasks goalsAndTasks : allTodos) {
             if (goalsAndTasks.getCategory() == todoType) {
-                arrayList.add(goalsAndTasks);
+                todoList.add(goalsAndTasks);
             }
         }
-        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), R.layout.goal_and_task_row, gameMechanicsHelper, databaseHelper, arrayList, goalsAndTasksHelper, layoutInflater);
+        goalsAndTasksAdapter = new GoalsAndTasksAdapter(getActivity(), gameMechanicsHelper, databaseHelper, todoList, goalsAndTasksHelper, layoutInflater);
         listView.setAdapter(goalsAndTasksAdapter);
     }
 }

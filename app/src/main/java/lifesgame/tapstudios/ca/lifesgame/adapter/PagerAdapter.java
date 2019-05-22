@@ -1,8 +1,8 @@
 package lifesgame.tapstudios.ca.lifesgame.adapter;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;

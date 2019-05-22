@@ -39,8 +39,8 @@ dependencies {
     compile 'com.google.firebase:firebase-core:16.0.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:26.0.1'
-    compile 'com.android.support:support-v13:26.1.0'
+    compile 'com.android.support:support-v4:27.1.0'
+    compile 'com.android.support:support-v13:27.1.0'
     compile 'com.android.support:support-vector-drawable:26.1.0'
     testCompile 'junit:junit:4.12'
     compile('com.weiwangcn.betterspinner:library:1.1.0') {
@@ -55,8 +55,8 @@ dependencies {
     compile ('com.timqi.sectorprogressview:library:2.0.1'){
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:design:27.1.0'
     compile 'com.akexorcist:RoundCornerProgressBar:2.0.3'
     compile ('com.diogobernardino:williamchart:2.5.0') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -97,4 +97,15 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.github.halysongoncalves:pugnotification:1.8.1'
+
+
+    //Room and LiveData Dependencies
+    def room_live_data_version = "1.1.1"
+    implementation "android.arch.persistence.room:runtime:$room_live_data_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_live_data_version" // use kapt for Kotlin
+    implementation "android.arch.persistence.room:rxjava2:$room_live_data_version"
+    implementation "android.arch.persistence.room:guava:$room_live_data_version"
+    testImplementation "android.arch.persistence.room:testing:$room_live_data_version"
+    implementation "android.arch.lifecycle:extensions:$room_live_data_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$room_live_data_version"
 }

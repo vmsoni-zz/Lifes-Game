@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
+import lifesgame.tapstudios.ca.lifesgame.activity.AddTaskTodoActivity;
 import lifesgame.tapstudios.ca.lifesgame.activity.DialogAddGoalsAndTasks;
 import lifesgame.tapstudios.ca.lifesgame.R;
 
@@ -32,7 +33,7 @@ public class GoalsAndTasksHelper {
     }
 
     public void displayGoalsAndTasksAddMenu() {
-        Intent intent = new Intent(context, DialogAddGoalsAndTasks.class);
+        Intent intent = new Intent(context, AddTaskTodoActivity.class);
         Activity activity = (Activity) context;
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_up, R.anim.no_anim);

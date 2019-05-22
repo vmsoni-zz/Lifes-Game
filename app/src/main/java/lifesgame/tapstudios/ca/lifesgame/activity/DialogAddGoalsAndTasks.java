@@ -1,5 +1,6 @@
 package lifesgame.tapstudios.ca.lifesgame.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -44,7 +45,12 @@ import butterknife.ButterKnife;
 import info.hoang8f.widget.FButton;
 import lifesgame.tapstudios.ca.lifesgame.AnalyticsApplication;
 import lifesgame.tapstudios.ca.lifesgame.DatePicker;
-//import lifesgame.tapstudios.ca.lifesgame.service.JobService;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TaskTodo;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TodoTag;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.TodoTypes;
+import lifesgame.tapstudios.ca.lifesgame.modelV2.generic.Todo;
+import lifesgame.tapstudios.ca.lifesgame.repository.TodoRepository;
+import lifesgame.tapstudios.ca.lifesgame.service.JobService;
 import lifesgame.tapstudios.ca.lifesgame.R;
 import lifesgame.tapstudios.ca.lifesgame.helper.DatabaseHelper;
 import lifesgame.tapstudios.ca.lifesgame.model.GoalsAndTasks;
@@ -67,6 +73,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     private SelectedDate mSelectedStartDate;
     private SelectedDate mSelectedNotificationDateTime;
     private NotificationDate notificationDate;
+    private TodoRepository todoRepository;
 
     @BindView(R.id.silver_seek_bar)
     SeekBar silverSeekBar;
@@ -116,7 +123,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
     CheckBox userOther;
 
     private DatabaseHelper databaseHelper;
-    //private JobService jobService;
+    private JobService jobService;
     private Long id;
     private Tracker tracker;
 
@@ -125,7 +132,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_add_goals_and_tasks);
         databaseHelper = new DatabaseHelper(this);
-        //jobService = new JobService(this);
+        jobService = new JobService(this);
         ButterKnife.bind(this);
 
         endDateEt.setInputType(InputType.TYPE_NULL);
@@ -143,6 +150,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         categoryTitleEditListener();
         setupSilverSeekBarListener();
         setupTodoSelectionListener();
+
+        todoRepository = ViewModelProviders.of(this).get(TodoRepository.class);
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         tracker = application.getDefaultTracker();
@@ -389,7 +398,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         );
     }
 
-/*    private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
+    private int setupFutureNotificiation(String todoType, NotificationDate notificationDate) {
         int notificationId;
         if (todoType.equals("Daily")) {
             notificationId = jobService.setFutureNotificationDailies(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
@@ -397,7 +406,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             notificationId = jobService.setFutureNotification(notificationDate, userTaskGoalTitle.getText().toString(), userTaskGoalDescription.getText().toString());
         }
         return notificationId;
-    }*/
+    }
 
     private void setupAddItemButton() {
         userAcceptTaskGoalBtn.setButtonColor(getResources().getColor(R.color.fbutton_color_emerald));
@@ -425,16 +434,16 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 String creationDateString = DateUtils.getDateString(new Date());
                 TodoType todoType = TodoType.valueOf(improvementCategory.getSelectedItem().toString().toUpperCase());
                 int silverAmount = silverEditText.getText().toString().isEmpty() ? 0 : Integer.valueOf(silverEditText.getText().toString());
-                final Map<String, Boolean> improvementTypeMap = getImprovementTypeMap();
+                final Map<TodoTag.Tag, Boolean> improvementTypeMap = getImprovementTypeMap();
                 Integer notificationId = -1;
-/*                if (notificationDate != null) {
+                if (notificationDate != null) {
                     Calendar calendarNotificationDateTime = mSelectedNotificationDateTime.getEndDate();
                     notificationDateString = DateUtils.getDateString(calendarNotificationDateTime.getTime());
                     notificationId = setupFutureNotificiation(improvementCategory.getSelectedItem().toString(), notificationDate);
-                }*/
-                boolean shouldSave = (id != -1);
+                }
+                boolean shouldSave = (id == -1);
 
-                saveOrEditTodo(todoType, shouldSave, silverAmount, improvementTypeMap, deadlineDateString, startDateString, creationDateString, notificationDateString, notificationId);
+                saveOrEditTodo(todoType, shouldSave, silverAmount, improvementTypeMap, null, null, new Date(), null, notificationId);
                 Intent intent = new Intent(DialogAddGoalsAndTasks.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -514,23 +523,23 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
         ((SeekBar) findViewById(R.id.silver_seek_bar)).setProgress(goalsAndTasks.getSilver());
     }
 
-    private void saveOrEditTodo(TodoType todoType, boolean shouldSave, int silverAmount, Map<String, Boolean> improvementTypeMap, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+    private void saveOrEditTodo(TodoType todoType, boolean shouldSave, int silverAmount, Map<TodoTag.Tag, Boolean> tagMap, Date deadlineDate, Date startDate, Date creationDate, Date notificationDateString, int notificationId) {
         switch (todoType) {
             case DAILY:
-                saveOrEditDaily(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                saveOrEditDaily(shouldSave, silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
                 break;
             case TASK:
-                saveOrEditTask(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                saveOrEditTask(shouldSave, silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
                 break;
             case GOAL:
-                saveOrEditGoal(shouldSave, silverAmount, improvementTypeMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+                saveOrEditGoal(shouldSave, silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
                 break;
             default:
                 break;
         }
     }
 
-    private void saveOrEditGoal(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+    private void saveOrEditGoal(boolean shouldSave, int silverAmount, Map<TodoTag.Tag, Boolean> improvementType, Date deadlineDate, Date startDate, Date creationDate, Date notificationDateString, int notificationId) {
         if (mSelectedEndDate == null) {
             endDateLayout.setError("Select a Deadline Date");
             return;
@@ -539,15 +548,15 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             return;
         }
         Calendar calendarDeadline = mSelectedEndDate.getEndDate();
-        deadlineDate = DateUtils.getDateString(calendarDeadline.getTime());
+        deadlineDate = calendarDeadline.getTime();
         if (shouldSave) {
-            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+            saveTodo(TodoTypes.TodoType.HABIT, silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
         } else {
             updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
         }
     }
 
-    private void saveOrEditTask(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+    private void saveOrEditTask(boolean shouldSave, int silverAmount, Map<TodoTag.Tag, Boolean> tagMap, Date deadlineDate, Date startDate, Date creationDate, Date notificationDateString, int notificationId) {
         if (mSelectedStartDate == null) {
             endDateLayout.setError("Select a Start Date");
             return;
@@ -556,25 +565,25 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
             return;
         }
         Calendar calendarStartDate = mSelectedStartDate.getEndDate();
-        startDate = DateUtils.getDateString(calendarStartDate.getTime());
+        startDate = calendarStartDate.getTime();
 
         if (shouldSave) {
-            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+            saveTodo(TodoTypes.TodoType.TASK, silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
         } else {
-            updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+            updateTodo(silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
         }
     }
 
-    private void saveOrEditDaily(boolean shouldSave, int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
+    private void saveOrEditDaily(boolean shouldSave, int silverAmount, Map<TodoTag.Tag, Boolean> tagMap, Date deadlineDate, Date startDate, Date creationDate, Date notificationDate, int notificationId) {
         if (shouldSave) {
-            saveTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+            saveTodo(TodoTypes.TodoType.DAILY, silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDate, notificationId);
         } else {
-            updateTodo(silverAmount, improvementType, deadlineDate, startDate, creationDate, notificationDateString, notificationId);
+            updateTodo(silverAmount, tagMap, deadlineDate, startDate, creationDate, notificationDate, notificationId);
         }
     }
 
-    private void saveTodo(int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
-        databaseHelper.updateTodo(id,
+    private void saveTodo(TodoTypes.TodoType todoType, int silverAmount, Map<TodoTag.Tag, Boolean> tagMap, Date deadlineDate, Date startDate, Date creationDate, Date notificationDate, int notificationId) {
+        /*databaseHelper.updateTodo(id,
                 userTaskGoalDescription.getText().toString(),
                 improvementCategory.getSelectedItem().toString(),
                 userTaskGoalTitle.getText().toString(),
@@ -584,7 +593,39 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 creationDate,
                 startDate,
                 notificationDateString,
-                notificationId);
+                notificationId);*/
+
+        TodoTag todoTag = new TodoTag (
+            tagMap.get(TodoTag.Tag.WORK),
+            tagMap.get(TodoTag.Tag.EXERCISE),
+            tagMap.get(TodoTag.Tag.HEALTH_WELLNESS),
+            tagMap.get(TodoTag.Tag.SCHOOL),
+            tagMap.get(TodoTag.Tag.TEAMS),
+            tagMap.get(TodoTag.Tag.CHORES),
+            tagMap.get(TodoTag.Tag.CREATIVITY),
+            tagMap.get(TodoTag.Tag.HOME),
+            tagMap.get(TodoTag.Tag.OTHER)
+        );
+
+        switch (todoType) {
+            case TASK:
+                TaskTodo taskTodo = new TaskTodo (
+                        userTaskGoalTitle.getText().toString(),
+                        userTaskGoalDescription.getText().toString(),
+                        silverAmount,
+                        0,
+                        false,
+                        deadlineDate,
+                        notificationDate,
+                        todoType
+                );
+                todoRepository.insertTaskTodo(todoTag, false, null, (taskTodo));
+                break;
+            case DAILY:
+                break;
+            case HABIT:
+                break;
+        }
 
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("ToDo-Update")
@@ -593,8 +634,8 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 .build());
     }
 
-    private void updateTodo(int silverAmount, Map<String, Boolean> improvementType, String deadlineDate, String startDate, String creationDate, String notificationDateString, int notificationId) {
-        databaseHelper.addData(userTaskGoalDescription.getText().toString(),
+    private void updateTodo(int silverAmount, Map<TodoTag.Tag, Boolean> improvementType, Date deadlineDate, Date startDate, Date creationDate, Date notificationDateString, int notificationId) {
+/*        databaseHelper.addData(userTaskGoalDescription.getText().toString(),
                 improvementCategory.getSelectedItem().toString(),
                 userTaskGoalTitle.getText().toString(),
                 silverAmount,
@@ -605,7 +646,7 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 notificationDateString,
                 0,
                 0,
-                notificationId);
+                notificationId);*/
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("ToDo-Addition")
                 .setAction(userTaskGoalTitle.getText().toString())
@@ -613,14 +654,17 @@ public class DialogAddGoalsAndTasks extends AppCompatActivity {
                 .build());
     }
 
-    private Map<String, Boolean> getImprovementTypeMap() {
-        final Map<String, Boolean> improvementTypeMap = new HashMap<String, Boolean>();
-        improvementTypeMap.put("health_exercise", userHealthExercise.isChecked());
-        improvementTypeMap.put("work", userWork.isChecked());
-        improvementTypeMap.put("school", userSchool.isChecked());
-        improvementTypeMap.put("family_friends", userFamilyFriends.isChecked());
-        improvementTypeMap.put("learning", userLearning.isChecked());
-        improvementTypeMap.put("other", userOther.isChecked());
+    private Map<TodoTag.Tag, Boolean> getImprovementTypeMap() {
+        final Map<TodoTag.Tag, Boolean> improvementTypeMap = new HashMap<TodoTag.Tag, Boolean>();
+        improvementTypeMap.put(TodoTag.Tag.EXERCISE, userHealthExercise.isChecked());
+        improvementTypeMap.put(TodoTag.Tag.WORK, userWork.isChecked());
+        improvementTypeMap.put(TodoTag.Tag.SCHOOL, userSchool.isChecked());
+        improvementTypeMap.put(TodoTag.Tag.HOME, userFamilyFriends.isChecked());
+        improvementTypeMap.put(TodoTag.Tag.CREATIVITY, userLearning.isChecked());
+        improvementTypeMap.put(TodoTag.Tag.HEALTH_WELLNESS, true);
+        improvementTypeMap.put(TodoTag.Tag.TEAMS, true);
+        improvementTypeMap.put(TodoTag.Tag.CHORES, true);
+        improvementTypeMap.put(TodoTag.Tag.OTHER, userOther.isChecked());
 
         return improvementTypeMap;
     }
