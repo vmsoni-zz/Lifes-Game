@@ -61,7 +61,6 @@ public class GoalsAndTasksAdapter extends RecyclerView.Adapter<TaskTodoHolder> {
         return ((TodoAndTag) todoList.get(position)).getTodo().getTodoType().ordinal();
     }
 
-
     @Override
     public TaskTodoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int resource;
